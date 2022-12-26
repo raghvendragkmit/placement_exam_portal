@@ -11,6 +11,8 @@ module.exports = (sequelize, Sequelize) => {
      */
     static associate(models) {
       // define association here
+      this.belongsToMany(models.Exam, { through: models.ExamUserPaperSetMapping, foreignKey: 'user_id' });
+
     }
   }
   User.init({

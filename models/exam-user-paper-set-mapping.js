@@ -3,7 +3,7 @@ const {
   Model, Sequelize
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class PaperSetQuestionMapping extends Model {
+  class ExamUserPaperSetMapping extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,11 +11,29 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Question, { foreignKey: 'question_id', targetKey: 'id' });
+      this.belongsTo(models.Exam, { foreignKey: 'exam_id', targetKey: 'id' });
       this.belongsTo(models.PaperSet, { foreignKey: 'paper_set_id', targetKey: 'id' });
+      this.belongsTo(models.User, { foreignKey: 'user_id', targetKey: 'id' });
     }
   }
-  PaperSetQuestionMapping.init({
+  ExamUserPaperSetMapping.init({
+    exam_id: {
+      allowNull: false,
+      type: Sequelize.UUID,
+      references: {
+        model: "exam",
+        key: 'id'
+      }
+    },
+    user_id: {
+      allowNull: false,
+      type: Sequelize.UUID,
+      references: {
+        model: "user",
+        key: 'id'
+      }
+    },
+
     paper_set_id: {
       allowNull: false,
       type: Sequelize.UUID,
@@ -24,19 +42,10 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       }
     },
-    question_id: {
-      allowNull: false,
-      type: Sequelize.UUID,
-      references: {
-        model: "question",
-        key: 'id'
-      }
-    },
   }, {
     sequelize,
-    modelName: 'PaperSetQuestionMapping',
-    tableName: 'paper_set_question_mapping',
-    paranoid: true,
+    modelName: 'ExamUserPaperSetMapping',
+    tableName: 'exam_user_paper_set_mapping'
   });
-  return PaperSetQuestionMapping;
+  return ExamUserPaperSetMapping;
 };

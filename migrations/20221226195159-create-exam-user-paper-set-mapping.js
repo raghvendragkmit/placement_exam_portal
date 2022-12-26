@@ -2,26 +2,35 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('paper_set_question_mapping', {
+    await queryInterface.createTable('exam_user_paper_set_mapping', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('uuid_generate_v4()')
       },
+      exam_id: {
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: "exam",
+          key: 'id'
+        }
+      },
+      user_id: {
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: "user",
+          key: 'id'
+        }
+      },
+
       paper_set_id: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
           model: "paper_set",
-          key: 'id'
-        }
-      },
-      question_id: {
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: "question",
           key: 'id'
         }
       },
@@ -43,6 +52,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('paper_set_question_mapping');
+      await queryInterface.dropTable('exam_user_paper_set_mapping');
   }
 };
