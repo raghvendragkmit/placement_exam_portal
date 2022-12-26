@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.hasMany(models.Question, { foreignKey: 'subject_id', targetKey: 'id' });
       this.hasMany(models.PaperSet, { foreignKey: 'subject_id', targetKey: 'id' });
+      this.hasOne(models.Exam, { foreignKey: 'subject_id', targetKey: 'id' });
     }
   }
   Subject.init({
