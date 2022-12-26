@@ -1,0 +1,29 @@
+{
+  "name": "placement_exam_portal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raghvendragkmit/placement_exam_portal.git"
+  },
+  "author": "Raghvendra Khatri",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/raghvendragkmit/placement_exam_portal/issues"
+  },
+  "homepage": "https://github.com/raghvendragkmit/placement_exam_portal#readme",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "helmet": "^6.0.1"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.20"
+  }
+}
