@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       this.belongsTo(models.Subject, { foreignKey: 'subject_id', targetKey: 'id' });
 
+      this.belongsToMany(models.Question, { through: models.PaperSetQuestionMapping, foreignKey:'paper_set_id' })
+
     }
   }
   PaperSet.init({

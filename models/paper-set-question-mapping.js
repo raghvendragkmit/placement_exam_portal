@@ -3,7 +3,7 @@ const {
   Model,Sequelize
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Question extends Model {
+  class PaperSetQuestionMapping extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,30 +11,30 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Subject, { foreignKey: 'subject_id', targetKey: 'id' });
-      this.hasMany(models.Answer, { foreignKey: 'question_id', targetKey: 'id' });
-      this.belongsToMany(models.PaperSet, { through: models.PaperSetQuestionMapping, foreignKey: 'question_id' })
-
+      this.belongsTo(models.Question, {foreignKey:'question_id',targetKey:'id'});
+      this.belongsTo(models.PaperSet, {foreignKey:'paper_set_id',targetKey:'id'});
     }
   }
-  Question.init({
-    question_description: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    subject_id: {
+  PaperSetQuestionMapping.init({
+    paper_set_id: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
-        model: "subject",
+        model: "paper_set",
+        key: 'id'
+      }
+    },
+    question_id: {
+      allowNull: false,
+      type: Sequelize.UUID,
+      references: {
+        model: "question",
         key: 'id'
       }
     },
   }, {
     sequelize,
-    modelName: 'Question',
-    tableName: 'question',
-    paranoid: true
+    modelName: 'PaperSetQuestionMapping',
   });
-  return Question;
+  return PaperSetQuestionMapping;
 };
