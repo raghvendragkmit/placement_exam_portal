@@ -17,11 +17,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Answer.init({
-    answer_description: {
+    answerDescription: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    question_id: {
+    questionId: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       }
     },
-    is_correct: {
+    isCorrect: {
       type: Sequelize.BOOLEAN,
       allowNull: false
     }
