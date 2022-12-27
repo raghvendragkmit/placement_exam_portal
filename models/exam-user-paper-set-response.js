@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   ExamUserPaperSetResponse.init({
-    exam_user_paper_set_mapping_id: {
+    examUserPaperSetMappingId: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
 
-    question_id: {
+    questionId: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
 
-    answer_id: {
+    answerId: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
