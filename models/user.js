@@ -49,6 +49,20 @@ module.exports = (sequelize, Sequelize) => {
         isAlpha: true
       }
     },
+    contactNumber: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      validate: {
+        isNumeric: true
+      }
+    },
+    role: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      validate: {
+        isAlpha: true
+      }
+    },
   }, {
     sequelize,
     modelName: 'User',

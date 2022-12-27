@@ -49,6 +49,13 @@ module.exports = {
          isNumeric:true
         }
       },
+      role: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          isAlpha: true
+        }
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
