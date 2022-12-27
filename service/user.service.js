@@ -16,8 +16,44 @@ const createUser = async (payload) => {
     return userCreated;
 }
 
+const loginUser = async (payload) => {
+    const { email, password } = payload;
+
+    console.log(payload);
+
+    const user = await models.User.findOne({
+        where: {
+            email: email
+        }
+    });
+
+    if (!user) {
+        throw new Error('User Not Found!');
+    }
+
+    const match = await bcrypt.compare(password, user.dataValues.password);
+    if (!match) {
+        throw new Error('Wrong credentials');
+    }
+
+    const accessToken = jwt.sign({ userId: user.dataValues.id }, process.env.SECRET_KEY_ACCESS,
+    );
+    const refreshToken = jwt.sign({ userId: user.dataValues.id }, process.env.SECRET_KEY_REFRESH,
+    );
+
+    delete user.dataValues.password;
+
+    return {
+        id: user.id,
+        email: user.email,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+    }
+}
+
 
 module.exports = {
     createUser,
-    
+    loginUser
+
 }

@@ -14,4 +14,9 @@ router.post(
 );
 
 
+router.post('/login',
+    controllers.userController.loginUser,
+    genericResponse.sendResponse
+);
+
 module.exports = router;
