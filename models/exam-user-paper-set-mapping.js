@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   ExamUserPaperSetMapping.init({
-    exam_id: {
+    examId: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       }
     },
-    user_id: {
+    userId: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
 
-    paper_set_id: {
+    paperSetId: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
@@ -45,30 +45,30 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
 
-    attempt_time: {
+    attemptTime: {
       allowNull: true,
       type: Sequelize.DATE
     },
 
 
-    submit_time: {
+    submitTime: {
       allowNull: true,
       type: Sequelize.DATE
     },
 
-    total_questions: {
+    totalQuestions: {
       allowNull: false,
       type: Sequelize.INTEGER,
       defaultValue: 0
     },
 
-    total_question_attempted: {
+    totalQuestionAttempted: {
       allowNull: false,
       type: Sequelize.INTEGER,
       defaultValue: 0
     },
 
-    marks_obtained: {
+    marksObtained: {
       allowNull: false,
       type: Sequelize.INTEGER,
       defaultValue: 0
