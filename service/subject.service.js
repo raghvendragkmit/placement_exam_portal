@@ -19,8 +19,6 @@ const deleteSubject = async (payload, params) => {
     return 'subject deleted successfully';
 }
 
-
-
 module.exports = {
     createSubject,
     deleteSubject
