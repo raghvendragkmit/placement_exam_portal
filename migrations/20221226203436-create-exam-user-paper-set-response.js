@@ -1,0 +1,59 @@
+'use strict';
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('exam_user_paper_set_response', {
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.literal('uuid_generate_v4()')
+      },
+      exam_user_paper_set_mapping_id: {
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: "exam_user_paper_set_mapping",
+          key: 'id'
+        }
+      },
+
+      question_id: {
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: "question",
+          key: 'id'
+        },
+      },
+
+      answer_id: {
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: "answer",
+          key: 'id'
+        },
+      },
+      
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
+      },
+      deleted_at: {
+        allowNull: true,
+        type: Sequelize.DATE,
+        defaultValue: null
+      },
+    });
+  },
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('exam_user_paper_set_response');
+  }
+};
