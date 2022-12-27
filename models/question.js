@@ -19,11 +19,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Question.init({
-    question_description: {
+    questionDescription: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    subject_id: {
+    subjectId: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
