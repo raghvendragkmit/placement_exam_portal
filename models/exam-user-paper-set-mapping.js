@@ -14,6 +14,8 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Exam, { foreignKey: 'exam_id', targetKey: 'id' });
       this.belongsTo(models.PaperSet, { foreignKey: 'paper_set_id', targetKey: 'id' });
       this.belongsTo(models.User, { foreignKey: 'user_id', targetKey: 'id' });
+
+      this.hasMany(models.ExamUserPaperSetResponse, { foreignKey: 'exam_user_paper_set_mapping_id',targetKey:'id' });
     }
   }
   ExamUserPaperSetMapping.init({
