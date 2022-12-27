@@ -57,5 +57,14 @@ router.post(
 
 
 
+router.delete(
+    '/subject/:subjectId',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.subjectController.deleteSubject,
+    genericResponse.sendResponse
+);
+
+
 
 module.exports = router;
