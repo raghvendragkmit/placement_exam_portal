@@ -1,18 +1,20 @@
 const models = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { sendMail } = require('../helper/mailer');
 const createUser = async (payload) => {
-
     const userExist = await models.User.findOne({ where: { email: payload.email } });
     if (userExist) {
         throw new Error('user already exist');
     }
 
+    const userEmail = payload.email;
+    const userPassword = payload.password;
     payload.password = await bcrypt.hash(payload.password, 10);
-
-    console.log(payload);
     const userCreated = await models.User.create(payload);
-    console.log(userCreated);
+
+    const mailBody = `Login Credentails \nemail: ${userEmail}\npassword: ${userPassword}`;
+    await sendMail(mailBody, 'User login credentials', userEmail);
     return userCreated;
 }
 
