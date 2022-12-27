@@ -26,7 +26,20 @@ const loginUser = async (req, res, next) => {
 };
 
 
+const updateUser = async (req, res, next) => {
+    try {
+        const { body: payload, params } = req;
+        const response = await services.userService.updateUser(payload, params);
+        res.data = response;
+        next();
+    } catch (error) {
+        commonErrorHandler(req, res, error.message, 400, error);
+    }
+};
+
+
 module.exports = {
     createUser,
-    loginUser
+    loginUser,
+    updateUser
 }

@@ -52,8 +52,22 @@ const loginUser = async (payload) => {
 }
 
 
+const updateUser = async (payload, params) => {
+    const userId = params.userId;
+    const userExist = await models.User.findOne({ where: { id: userId } });
+    if (!userExist) {
+        throw new Error('user not found');
+    }
+    const updatedUser = await models.User.update(payload, { where: { id: userId } });
+    const user = await models.User.findOne({ where: { id: userId } });
+    return user;
+}
+
+
+
 module.exports = {
     createUser,
-    loginUser
-
+    loginUser,
+    updateUser,
+    
 }

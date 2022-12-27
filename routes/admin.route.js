@@ -19,4 +19,13 @@ router.post('/login',
     genericResponse.sendResponse
 );
 
+
+router.patch(
+    '/user/:userId',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.userController.updateUser,
+    genericResponse.sendResponse
+);
+
 module.exports = router;
