@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Exam.init({
-    subject_id: {
+    subjectId: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
@@ -24,17 +24,17 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       }
     },
-    exam_start_time: {
+    examStartTime: {
       allowNull: true,
       type: Sequelize.DATE,
       defaultValue: Sequelize.NOW
     },
-    exam_end_time: {
+    examEndTime: {
       allowNull: true,
       type: Sequelize.DATE,
       defaultValue: Sequelize.NOW
     },
-    exam_duration: {
+    examDuration: {
       type: Sequelize.INTEGER,
       allowNull: false
     },
