@@ -38,5 +38,13 @@ router.delete(
 );
 
 
+router.get(
+    '/users',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.userController.getAllUser,
+    genericResponse.sendResponse
+);
+
 
 module.exports = router;

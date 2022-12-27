@@ -76,10 +76,17 @@ const deleteUser = async (payload, params) => {
 }
 
 
+const getAllUser = async () => {
+    const users = await models.User.findAll({
+        attributes: { exclude: ['password', 'created_at', 'updated_at', 'deleted_at'] },
+    });
+    return users;
+}
 
 module.exports = {
     createUser,
     loginUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getAllUser
 }
