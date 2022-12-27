@@ -15,13 +15,6 @@ module.exports = {
         validate: {
           isAlpha: true
         }
-      },
-      sets: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        validate: {
-          isInt: true
-        }
       }, 
       created_at: {
         allowNull: false,

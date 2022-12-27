@@ -17,18 +17,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Subject.init({
-    subject_name: {
+    subjectName: {
       type: Sequelize.STRING,
       allowNull: false,
       validate: {
         isAlpha: true
-      }
-    },
-    sets: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      validate: {
-        isInt: true
       }
     },
   }, {
