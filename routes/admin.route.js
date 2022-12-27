@@ -47,4 +47,15 @@ router.get(
 );
 
 
+router.post(
+    '/subject',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.subjectController.createSubject,
+    genericResponse.sendResponse
+);
+
+
+
+
 module.exports = router;
