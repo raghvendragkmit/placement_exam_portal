@@ -35,11 +35,25 @@ const updateUser = async (req, res, next) => {
     } catch (error) {
         commonErrorHandler(req, res, error.message, 400, error);
     }
+}
+
+
+const deleteUser = async (req, res, next) => {
+    try {
+        const { body: payload, params } = req;
+        const response = await services.userService.deleteUser(payload, params);
+        res.data = response;
+        next();
+    } catch (error) {
+        commonErrorHandler(req, res, error.message, 400, error);
+    }
 };
+
 
 
 module.exports = {
     createUser,
     loginUser,
-    updateUser
+    updateUser,
+    deleteUser
 }

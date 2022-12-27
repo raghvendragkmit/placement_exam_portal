@@ -28,4 +28,15 @@ router.patch(
     genericResponse.sendResponse
 );
 
+
+router.delete(
+    '/user/:userId',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.userController.deleteUser,
+    genericResponse.sendResponse
+);
+
+
+
 module.exports = router;
