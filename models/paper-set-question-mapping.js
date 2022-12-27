@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   PaperSetQuestionMapping.init({
-    paper_set_id: {
+    paperSetId: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       }
     },
-    question_id: {
+    questionId: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
