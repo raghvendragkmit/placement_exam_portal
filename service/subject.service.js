@@ -19,7 +19,17 @@ const deleteSubject = async (payload, params) => {
     return 'subject deleted successfully';
 }
 
+
+
+const getAllSubject = async () => {
+    const subjects = await models.Subject.findAll({
+        attributes: { exclude: ['deleted_at'] },
+    });
+    return subjects;
+}
+
 module.exports = {
     createSubject,
-    deleteSubject
+    deleteSubject,
+    getAllSubject
 }

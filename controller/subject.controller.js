@@ -25,7 +25,20 @@ const deleteSubject = async (req, res, next) => {
     }
 };
 
+
+const getAllSubject = async (req, res, next) => {
+    try {
+        const { body: payload } = req;
+        const response = await services.subjectService.getAllSubject();
+        res.data = response;
+        next();
+    } catch (error) {
+        commonErrorHandler(req, res, error.message, 400, error);
+    }
+};
+
 module.exports = {
     createSubject,
-    deleteSubject
+    deleteSubject,
+    getAllSubject
 }
