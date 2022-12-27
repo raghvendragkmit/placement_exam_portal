@@ -34,6 +34,41 @@ module.exports = {
           key: 'id'
         }
       },
+
+      attempt_time: {
+        allowNull: true,
+        type:Sequelize.DATE
+      },
+
+
+      submit_time: {
+        allowNull: true,
+        type: Sequelize.DATE
+      },
+
+      total_questions: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        defaultValue:0
+      },
+
+      total_question_attempted: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+      },
+
+      marks_obtained: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+      },
+
+      result: {
+        allowNull: true,
+        type:Sequelize.BOOLEAN,
+      },
+
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
