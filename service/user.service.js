@@ -2,6 +2,7 @@ const models = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { generateRandom } = require('../helper/random-string');
+const redisClient = require('../helper/redis');
 const { sendMail } = require('../helper/mailer');
 const createUser = async (payload) => {
     const userExist = await models.User.findOne({ where: { email: payload.email } });
@@ -55,7 +56,7 @@ const loginUser = async (payload) => {
     }
 
     const accessToken = jwt.sign({ userId: user.dataValues.id }, process.env.SECRET_KEY_ACCESS);
-     refreshToken = jwt.sign({ userId: user.dataValues.id }, process.env.SECRET_KEY_REFRESH);
+    refreshToken = jwt.sign({ userId: user.dataValues.id }, process.env.SECRET_KEY_REFRESH);
 
     delete user.dataValues.password;
     await redisClient.set(key, refreshToken, 60 * 24);

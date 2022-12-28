@@ -5,8 +5,11 @@ const createSubject = async (payload) => {
     if (subjectExist) {
         throw new Error('subject already exist');
     }
-    const userCreated = await models.Subject.create(payload);
-    return userCreated;
+    const subjectCreated = await models.Subject.create(payload);
+    return {
+        id: subjectCreated.id,
+        subjectName: subjectCreated.subjectName
+    }
 }
 
 const deleteSubject = async (payload, params) => {
@@ -23,7 +26,7 @@ const deleteSubject = async (payload, params) => {
 
 const getAllSubject = async () => {
     const subjects = await models.Subject.findAll({
-        attributes: { exclude: ['deleted_at'] },
+        attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
     });
     return subjects;
 }
