@@ -5,6 +5,10 @@ const { validateRequest } = require("../helper/validate");
 const complexityOptions = {
     min: 4,
     max: 16,
+    lowerCase: 1,
+    upperCase: 1,
+    numeric: 1,
+    symbol: 1,
 };
 
 module.exports = {
@@ -15,7 +19,8 @@ module.exports = {
             email: Joi.string().email().lowercase().required(),
             password: passwordComplexity(complexityOptions).required(),
             organization: Joi.string().min(1).required(),
-            role: Joi.string().valid("Admin","User").required(),
+            role: Joi.string().valid("Admin", "User").required(),
+            contactNumber: Joi.string().length(10).pattern(/^[0-9]+$/).required(),
         });
 
         validateRequest(req, res, next, schema, "body");
@@ -28,4 +33,27 @@ module.exports = {
         });
         validateRequest(req, res, next, schema, "body");
     },
+
+
+    userIdSchema: async (req, res, next) => {
+        const schema = Joi.object({
+            userId: Joi.string().guid().required()
+        });
+        validateRequest(req, res, next, schema, 'params');
+    },
+
+
+    forgetPassword : async (req, res, next) => {
+        const schema = Joi.object({
+            email: Joi.string().email().lowercase().required(),
+        });
+        validateRequest(req, res, next, schema, "body");
+    },
+
+    resetPasswordSchema : async (req, res, next) => {
+        const schema = Joi.object({
+            token: Joi.string().alphanum().min(5).required(),
+        });
+        validateRequest(req, res, next, schema, "params");
+    }
 };

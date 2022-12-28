@@ -1,5 +1,4 @@
 const { Router } = require("express");
-
 const controllers = require("../controller");
 const genericResponse = require("../helper/generic-response");
 const authMiddleware = require('../middleware/auth');
@@ -10,6 +9,7 @@ router.post(
     '/user',
     authMiddleware.checkAccessToken,
     authMiddleware.verifyAdmin,
+    validator.userValidator.createUserSchema,
     controllers.userController.createUser,
     genericResponse.sendResponse
 );
@@ -22,19 +22,13 @@ router.post('/login',
 );
 
 
-router.patch(
-    '/user/:userId',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.userController.updateUser,
-    genericResponse.sendResponse
-);
 
 
 router.delete(
     '/user/:userId',
     authMiddleware.checkAccessToken,
     authMiddleware.verifyAdmin,
+    validator.userValidator.userIdSchema,
     controllers.userController.deleteUser,
     genericResponse.sendResponse
 );
@@ -47,5 +41,28 @@ router.get(
     controllers.userController.getAllUser,
     genericResponse.sendResponse
 );
+
+
+router.get(
+    "/refresh-token",
+    authMiddleware.checkRefreshToken,
+    controllers.userController.refreshToken,
+    genericResponse.sendResponse
+);
+
+router.post(
+    "/forget-password",
+    validator.userValidator.forgetPassword,
+    controllers.userController.forgetPassword,
+    genericResponse.sendResponse
+);
+
+router.post(
+    "/reset-password/:token",
+    validator.userValidator.resetPasswordSchema,
+    controllers.userController.resetPassword,
+    genericResponse.sendResponse
+);
+
 
 module.exports = router;
