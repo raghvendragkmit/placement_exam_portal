@@ -94,14 +94,21 @@ router.post(
     genericResponse.sendResponse
 );
 
-
-
-
 router.get(
     '/paper-sets',
     authMiddleware.checkAccessToken,
     authMiddleware.verifyAdmin,
     controllers.paperSetController.getAllPaperSet,
+    genericResponse.sendResponse
+);
+
+
+
+router.delete(
+    '/paper-set/:paperSetId',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.paperSetController.deletePaperSet,
     genericResponse.sendResponse
 );
 module.exports = router;

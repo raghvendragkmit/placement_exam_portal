@@ -11,6 +11,16 @@ const createPaperSet = async (payload) => {
     return paperSetCreated;
 }
 
+const deletePaperSet = async (payload, params) => {
+    const paperSetId = params.paperSetId;
+    const paperSetExist = await models.PaperSet.findOne({ where: { id: paperSetId } });
+    if (!paperSetExist) {
+        throw new Error('paperSet not found');
+    }
+    await models.PaperSet.destroy({ where: { id: paperSetId } });
+    return 'PaperSet deleted successfully';
+}
+
 
 const getAllPaperSet = async () => {
     const paperSets = await models.PaperSet.findAll({
@@ -26,5 +36,6 @@ const getAllPaperSet = async () => {
 
 module.exports = {
     createPaperSet,
-    getAllPaperSet
+    getAllPaperSet,
+    deletePaperSet
 }

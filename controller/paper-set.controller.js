@@ -15,6 +15,16 @@ const createPaperSet = async (req, res, next) => {
 
 
 
+const deletePaperSet = async (req, res, next) => {
+    try {
+        const { body: payload, params } = req;
+        const response = await services.paperSetService.deletePaperSet(payload, params);
+        res.data = response;
+        next();
+    } catch (error) {
+        commonErrorHandler(req, res, error.message, 400, error);
+    }
+};
 
 
 const getAllPaperSet = async (req, res, next) => {
@@ -30,5 +40,6 @@ const getAllPaperSet = async (req, res, next) => {
 
 module.exports = {
     createPaperSet,
-    getAllPaperSet
+    getAllPaperSet,
+    deletePaperSet
 }
