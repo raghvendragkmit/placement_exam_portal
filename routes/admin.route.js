@@ -3,6 +3,7 @@ const { Router } = require("express");
 const controllers = require("../controller");
 const genericResponse = require("../helper/generic-response");
 const authMiddleware = require('../middleware/auth');
+const validator = require('../validator/index');
 const router = Router();
 
 router.post(
@@ -15,6 +16,7 @@ router.post(
 
 
 router.post('/login',
+    validator.userValidator.loginSchema,
     controllers.userController.loginUser,
     genericResponse.sendResponse
 );
@@ -46,78 +48,4 @@ router.get(
     genericResponse.sendResponse
 );
 
-
-router.post(
-    '/subject',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.subjectController.createSubject,
-    genericResponse.sendResponse
-);
-
-
-
-router.delete(
-    '/subject/:subjectId',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.subjectController.deleteSubject,
-    genericResponse.sendResponse
-);
-
-
-
-router.get(
-    '/subjects',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.subjectController.getAllSubject,
-    genericResponse.sendResponse
-);
-
-
-router.post(
-    '/question',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.questionController.createQuestionAnswer,
-    genericResponse.sendResponse
-);
-
-
-router.get(
-    '/questions',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.questionController.getAllQuestionAnswer,
-    genericResponse.sendResponse
-);
-
-
-
-router.post(
-    '/paper-set',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.paperSetController.createPaperSet,
-    genericResponse.sendResponse
-);
-
-router.get(
-    '/paper-sets',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.paperSetController.getAllPaperSet,
-    genericResponse.sendResponse
-);
-
-
-
-router.delete(
-    '/paper-set/:paperSetId',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.paperSetController.deletePaperSet,
-    genericResponse.sendResponse
-);
 module.exports = router;
