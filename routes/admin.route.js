@@ -108,6 +108,10 @@ router.get(
     authMiddleware.checkAccessToken,
     authMiddleware.verifyAdmin,
     controllers.paperSetController.getAllPaperSet,
+    "/reset-password/:token",
+    validator.userValidator.resetPasswordTokenSchema,
+    validator.userValidator.resetPasswordSchema,
+    controllers.userController.resetPassword,
     genericResponse.sendResponse
 );
 
