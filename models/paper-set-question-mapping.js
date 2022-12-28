@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Question, { foreignKey: 'question_id', targetKey: 'id' });
-      this.belongsTo(models.PaperSet, { foreignKey: 'paper_set_id', targetKey: 'id' });
+      this.belongsTo(models.Question, { foreignKey: 'questionId', targetKey: 'id' });
+      this.belongsTo(models.PaperSet, { foreignKey: 'paperSetId', targetKey: 'id' });
     }
   }
   PaperSetQuestionMapping.init({
@@ -22,7 +22,8 @@ module.exports = (sequelize, DataTypes) => {
       references: {
         model: "paper_set",
         key: 'id'
-      }
+      },
+      field:'paper_set_id'
     },
     questionId: {
       allowNull: false,
@@ -30,8 +31,27 @@ module.exports = (sequelize, DataTypes) => {
       references: {
         model: "question",
         key: 'id'
-      }
+      },
+      field:'question_id'
     },
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+      // defaultValue: Sequelize.NOW,
+      field: 'created_at'
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+      // defaultValue: Sequelize.NOW,
+      field: 'updated_at'
+    },
+    deletedAt: {
+      allowNull: true,
+      type: Sequelize.DATE,
+      defaultValue: null,
+      field: 'deleted_at'
+    }
   }, {
     sequelize,
     modelName: 'PaperSetQuestionMapping',

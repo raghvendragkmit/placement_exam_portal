@@ -11,9 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.ExamUserPaperSetMapping, { foreignKey: 'exam_user_paper_set_mapping_id', targetKey: 'id' });
-      this.belongsTo(models.Question, { foreignKey: 'question_id', targetKey: 'id' });
-      this.belongsTo(models.Answer, { foreignKey: 'answer_id', targetKey: 'id' });
+      this.belongsTo(models.ExamUserPaperSetMapping, { foreignKey: 'examUserPaperSetMappingId', targetKey: 'id' });
+      this.belongsTo(models.Question, { foreignKey: 'questionId', targetKey: 'id' });
+      this.belongsTo(models.Answer, { foreignKey: 'answerId', targetKey: 'id' });
       
     }
   }
@@ -24,7 +24,8 @@ module.exports = (sequelize, DataTypes) => {
       references: {
         model: "exam_user_paper_set_mapping",
         key: 'id'
-      }
+      },
+      field:'exam_user_paper_set_mapping_id'
     },
 
     questionId: {
@@ -34,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         model: "question",
         key: 'id'
       },
+      field:'question_id'
     },
 
     answerId: {
@@ -43,7 +45,27 @@ module.exports = (sequelize, DataTypes) => {
         model: "answer",
         key: 'id'
       },
+      field:'answer_id'
     },
+
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+      // defaultValue: Sequelize.NOW,
+      field: 'created_at'
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+      // defaultValue: Sequelize.NOW,
+      field: 'updated_at'
+    },
+    deletedAt: {
+      allowNull: true,
+      type: Sequelize.DATE,
+      defaultValue: null,
+      field: 'deleted_at'
+    }
   }, {
     sequelize,
     modelName: 'ExamUserPaperSetResponse',

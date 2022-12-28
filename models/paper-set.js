@@ -11,9 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Subject, { foreignKey: 'subject_id', targetKey: 'id' });
-      this.belongsToMany(models.Question, { through: models.PaperSetQuestionMapping, foreignKey: 'paper_set_id' });
-      this.hasMany(models.ExamUserPaperSetMapping, { foreignKey: 'paper_set_id', targetKey: 'id' });
+      this.belongsTo(models.Subject, { foreignKey: 'subjectId', targetKey: 'id' });
+      this.belongsToMany(models.Question, { through: models.PaperSetQuestionMapping, foreignKey: 'paperSetId' });
+      this.hasMany(models.ExamUserPaperSetMapping, { foreignKey: 'paperSetId', targetKey: 'id' });
 
     }
     toJSON() {
@@ -30,6 +30,24 @@ module.exports = (sequelize, DataTypes) => {
       },
       field: 'subject_id'
     },
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.NOW,
+      field: 'created_at'
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.NOW,
+      field: 'updated_at'
+    },
+    deletedAt: {
+      allowNull: true,
+      type: Sequelize.DATE,
+      defaultValue: null,
+      field: 'deleted_at'
+    }
 
   }, {
     sequelize,

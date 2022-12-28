@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Question, { foreignKey: 'question_id', targetKey: 'id' });
-      this.hasMany(models.ExamUserPaperSetResponse, { foreignKey: 'answer_id', targetKey: 'id' });
+      this.belongsTo(models.Question, { foreignKey: 'questionId', targetKey: 'id' });
+      this.hasMany(models.ExamUserPaperSetResponse, { foreignKey: 'answerId', targetKey: 'id' });
 
     }
     toJSON() {
@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     answerDescription: {
       type: Sequelize.STRING,
       allowNull: false,
+      field:'answer_description'
     },
     questionId: {
       allowNull: false,
@@ -30,11 +31,31 @@ module.exports = (sequelize, DataTypes) => {
       references: {
         model: "question",
         key: 'id'
-      }
+      },
+      field:'question_id'
     },
     isCorrect: {
       type: Sequelize.BOOLEAN,
-      allowNull: false
+      allowNull: false,
+      field:'is_correct'
+    },
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+      // defaultValue: Sequelize.NOW,
+      field: 'created_at'
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+      // defaultValue: Sequelize.NOW,
+      field: 'updated_at'
+    },
+    deletedAt: {
+      allowNull: true,
+      type: Sequelize.DATE,
+      defaultValue: null,
+      field: 'deleted_at'
     }
   }, {
     sequelize,
