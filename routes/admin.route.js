@@ -84,4 +84,13 @@ router.post(
     genericResponse.sendResponse
 );
 
+
+
+router.post(
+    '/paper-set',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.paperSetController.createPaperSet,
+    genericResponse.sendResponse
+);
 module.exports = router;

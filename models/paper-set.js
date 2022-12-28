@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   PaperSet.init({
 
-    subject_id: {
+    subjectId: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
