@@ -14,29 +14,21 @@ const createPaperSet = async (req, res, next) => {
 };
 
 
-// const deleteSubject = async (req, res, next) => {
-//     try {
-//         const { body: payload, params } = req;
-//         const response = await services.subjectService.deleteSubject(payload, params);
-//         res.data = response;
-//         next();
-//     } catch (error) {
-//         commonErrorHandler(req, res, error.message, 400, error);
-//     }
-// };
 
 
-// const getAllSubject = async (req, res, next) => {
-//     try {
-//         const { body: payload } = req;
-//         const response = await services.subjectService.getAllSubject();
-//         res.data = response;
-//         next();
-//     } catch (error) {
-//         commonErrorHandler(req, res, error.message, 400, error);
-//     }
-// };
+
+const getAllPaperSet = async (req, res, next) => {
+    try {
+        const { body: payload } = req;
+        const response = await services.paperSetService.getAllPaperSet();
+        res.data = response;
+        next();
+    } catch (error) {
+        commonErrorHandler(req, res, error.message, 400, error);
+    }
+};
 
 module.exports = {
-    createPaperSet
+    createPaperSet,
+    getAllPaperSet
 }

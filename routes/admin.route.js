@@ -93,4 +93,15 @@ router.post(
     controllers.paperSetController.createPaperSet,
     genericResponse.sendResponse
 );
+
+
+
+
+router.get(
+    '/paper-sets',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.paperSetController.getAllPaperSet,
+    genericResponse.sendResponse
+);
 module.exports = router;

@@ -12,21 +12,23 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.Subject, { foreignKey: 'subject_id', targetKey: 'id' });
-
       this.belongsToMany(models.Question, { through: models.PaperSetQuestionMapping, foreignKey: 'paper_set_id' });
       this.hasMany(models.ExamUserPaperSetMapping, { foreignKey: 'paper_set_id', targetKey: 'id' });
 
     }
+    toJSON() {
+      return { ...this.get(), createdAt: undefined, updatedAt: undefined, deletedAt: undefined }
+    }
   }
   PaperSet.init({
-
     subjectId: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
         model: "subject",
         key: 'id'
-      }
+      },
+      field: 'subject_id'
     },
 
   }, {
