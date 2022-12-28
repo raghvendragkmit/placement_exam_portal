@@ -1,38 +1,34 @@
 const { Router } = require("express");
-
 const controllers = require("../controller");
 const genericResponse = require("../helper/generic-response");
 const authMiddleware = require('../middleware/auth');
+const validator = require('../validator/index');
 const router = Router();
 
 router.post(
     '/user',
     authMiddleware.checkAccessToken,
     authMiddleware.verifyAdmin,
+    validator.userValidator.createUserSchema,
     controllers.userController.createUser,
     genericResponse.sendResponse
 );
 
 
 router.post('/login',
+    validator.userValidator.loginSchema,
     controllers.userController.loginUser,
     genericResponse.sendResponse
 );
 
 
-router.patch(
-    '/user/:userId',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.userController.updateUser,
-    genericResponse.sendResponse
-);
 
 
 router.delete(
     '/user/:userId',
     authMiddleware.checkAccessToken,
     authMiddleware.verifyAdmin,
+    validator.userValidator.userIdSchema,
     controllers.userController.deleteUser,
     genericResponse.sendResponse
 );
@@ -47,67 +43,21 @@ router.get(
 );
 
 
-router.post(
-    '/subject',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.subjectController.createSubject,
-    genericResponse.sendResponse
-);
-
-
-
-router.delete(
-    '/subject/:subjectId',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.subjectController.deleteSubject,
-    genericResponse.sendResponse
-);
-
-
-
 router.get(
-    '/subjects',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.subjectController.getAllSubject,
+    "/refresh-token",
+    authMiddleware.checkRefreshToken,
+    controllers.userController.refreshToken,
     genericResponse.sendResponse
 );
-
 
 router.post(
-    '/question',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.questionController.createQuestionAnswer,
+    "/forget-password",
+    validator.userValidator.forgetPassword,
+    controllers.userController.forgetPassword,
     genericResponse.sendResponse
 );
-
-
-router.get(
-    '/questions',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.questionController.getAllQuestionAnswer,
-    genericResponse.sendResponse
-);
-
-
 
 router.post(
-    '/paper-set',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.paperSetController.createPaperSet,
-    genericResponse.sendResponse
-);
-
-router.get(
-    '/paper-sets',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.paperSetController.getAllPaperSet,
     "/reset-password/:token",
     validator.userValidator.resetPasswordTokenSchema,
     validator.userValidator.resetPasswordSchema,
@@ -116,12 +66,12 @@ router.get(
 );
 
 
-
-router.delete(
-    '/paper-set/:paperSetId',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.paperSetController.deletePaperSet,
+router.post(
+    '/subject',
+    validator.subjectValidator.createSubjectSchema,
+    controllers.subjectController.createSubject,
     genericResponse.sendResponse
 );
+
+
 module.exports = router;
