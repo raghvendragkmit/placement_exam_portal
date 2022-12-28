@@ -2,7 +2,6 @@ const services = require('../service');
 const { commonErrorHandler } = require("../helper/error-handler");
 
 
-
 const createUser = async (req, res, next) => {
     try {
         const { body: payload } = req;
