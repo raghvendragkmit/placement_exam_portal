@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Subject, { foreignKey: 'subject_id', targetKey: 'id' });
-      this.belongsToMany(models.User, { through: models.ExamUserPaperSetMapping, foreignKey: 'exam_id' });
+      this.belongsTo(models.Subject, { foreignKey: 'subjectId', targetKey: 'id' });
+      this.belongsToMany(models.User, { through: models.ExamUserPaperSetMapping, foreignKey: 'examId' });
     }
   }
   Exam.init({
@@ -22,22 +22,44 @@ module.exports = (sequelize, DataTypes) => {
       references: {
         model: "subject",
         key: 'id'
-      }
+      },
+      field:'subject_id'
     },
     examStartTime: {
       allowNull: true,
       type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW
+      defaultValue: Sequelize.NOW,
+      field:'exam_start_time'
     },
     examEndTime: {
       allowNull: true,
       type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW
+      defaultValue: Sequelize.NOW,
+      field:'exam_end_time'
     },
     examDuration: {
       type: Sequelize.INTEGER,
-      allowNull: false
+      allowNull: false,
+      field:'exam_duration'
     },
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+      // defaultValue: Sequelize.NOW,
+      field: 'created_at'
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+      // defaultValue: Sequelize.NOW,
+      field: 'updated_at'
+    },
+    deletedAt: {
+      allowNull: true,
+      type: Sequelize.DATE,
+      defaultValue: null,
+      field: 'deleted_at'
+    }
   }, {
     sequelize,
     modelName: 'Exam',
