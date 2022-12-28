@@ -59,6 +59,7 @@ router.post(
 
 router.post(
     "/reset-password/:token",
+    validator.userValidator.resetPasswordTokenSchema,
     validator.userValidator.resetPasswordSchema,
     controllers.userController.resetPassword,
     genericResponse.sendResponse

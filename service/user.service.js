@@ -1,6 +1,7 @@
 const models = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { generateRandom } = require('../helper/random-string');
 const { sendMail } = require('../helper/mailer');
 const redisClient = require("../helper/redis");
 
@@ -44,7 +45,7 @@ const loginUser = async (payload) => {
     let key = user.dataValues.id + "-refresh-token";
     let refreshToken = await redisClient.get(key);
     if (!refreshToken) {
-        const match = await bcrypt.compareSync(password, user.dataValues.password);
+        const match = await bcrypt.compare(password, user.dataValues.password);
         if (!match) {
             throw new Error("Wrong email or password");
         }
@@ -65,7 +66,7 @@ const loginUser = async (payload) => {
         }
     );
 
-    await redisClient.set(key, refreshToken,60*24);
+    await redisClient.set(key, refreshToken, 60 * 24);
 
     return {
         id: user.id,
@@ -126,16 +127,16 @@ const forgetPassword = async (payload) => {
         throw new Error("User Not Found!");
     }
 
-    let randomToken = UniqueStringGenerator.UniqueString();
+    let randomToken = generateRandom(32, true);
     let resetPassawordLink = `${process.env.BASE_URL}/api/user/reset-password/${randomToken}`;
     let key = randomToken + "-reset-password-link";
-    await redisClient.set(key, user.dataValues.id);
+    await redisClient.set(key, user.dataValues.id, 20);
 
     let recipient = email;
     let subject = "Reset Password Link";
     let body = `Password Reset Link:- ${resetPassawordLink}`;
 
-    await mailer.sendMail(body, subject, recipient);
+    await sendMail(body, subject, recipient);
     return "send reset password link successfully";
 };
 
@@ -160,7 +161,7 @@ const resetPassword = async (payload, params) => {
     );
     const email_body = `Password reset successfull`;
     const email_subject = `Password reset`;
-    await mailer.sendMail(email_body, email_subject, userExist.dataValues.email);
+    await sendMail(email_body, email_subject, userExist.dataValues.email);
     return "Password reset successfully";
 };
 
