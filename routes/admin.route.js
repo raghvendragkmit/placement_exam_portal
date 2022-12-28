@@ -76,4 +76,12 @@ router.get(
 );
 
 
+router.post(
+    '/question',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.questionController.createQuestionAnswer,
+    genericResponse.sendResponse
+);
+
 module.exports = router;
