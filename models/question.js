@@ -1,6 +1,6 @@
 'use strict';
 const {
-  Model,Sequelize
+  Model, Sequelize
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Question extends Model {
@@ -15,8 +15,11 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.Answer, { foreignKey: 'question_id', targetKey: 'id' });
       this.hasMany(models.ExamUserPaperSetResponse, { foreignKey: 'question_id', targetKey: 'id' });
       this.belongsToMany(models.PaperSet, { through: models.PaperSetQuestionMapping, foreignKey: 'question_id' })
-
     }
+    toJSON() {
+      return { ...this.get(), createdAt: undefined, updatedAt: undefined, deletedAt: undefined }
+    }
+
   }
   Question.init({
     questionDescription: {

@@ -45,8 +45,28 @@ const createQuestionAnswer = async (payload) => {
     }
 }
 
+const getAllQuestionAnswer = async (payload) => {
+    const trans = await sequelize.transaction();
+    try {
+        const questions = await models.Question.findAll(
+            {
+                include: [{
+                    model: models.Answer
+                }]
+            },
+            { transaction: trans });
+
+        await trans.commit();
+        return { data: questions, error: null };
+    } catch (error) {
+        await trans.rollback();
+        return { data: null, error: error };
+    }
+}
+
 
 module.exports = {
 
-    createQuestionAnswer
+    createQuestionAnswer,
+    getAllQuestionAnswer
 }

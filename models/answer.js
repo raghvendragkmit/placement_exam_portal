@@ -1,6 +1,6 @@
 'use strict';
 const {
-  Model,Sequelize
+  Model, Sequelize
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Answer extends Model {
@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Question, { foreignKey: 'question_id', targetKey: 'id' });
       this.hasMany(models.ExamUserPaperSetResponse, { foreignKey: 'answer_id', targetKey: 'id' });
 
+    }
+    toJSON() {
+      return { ...this.get(), createdAt: undefined, updatedAt: undefined, deletedAt: undefined }
     }
   }
   Answer.init({
@@ -37,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Answer',
     tableName: 'answer',
-    paranoid:true
+    paranoid: true
   });
   return Answer;
 };

@@ -85,6 +85,15 @@ router.post(
 );
 
 
+router.get(
+    '/questions',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.questionController.getAllQuestionAnswer,
+    genericResponse.sendResponse
+);
+
+
 
 router.post(
     '/paper-set',
