@@ -74,4 +74,21 @@ router.post(
 );
 
 
+router.get(
+    '/subjects',
+    controllers.subjectController.getAllSubject,
+    genericResponse.sendResponse
+);
+
+
+router.delete(
+    '/subject/:subjectId',
+    validator.subjectValidator.subjectIdSchema,
+    controllers.subjectController.deleteSubject,
+    genericResponse.sendResponse
+)
+
+
+
+
 module.exports = router;

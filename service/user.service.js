@@ -2,6 +2,7 @@ const models = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { generateRandom } = require('../helper/random-string');
+const redisClient = require('../helper/redis');
 const { sendMail } = require('../helper/mailer');
 const createUser = async (payload) => {
     const userExist = await models.User.findOne({ where: { email: payload.email } });
