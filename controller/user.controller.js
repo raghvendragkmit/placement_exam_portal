@@ -49,16 +49,18 @@ const deleteUser = async (req, res, next) => {
     }
 };
 
-const getAllUser = async (req, res, next) => {
-    try {
-        const { body: payload } = req;
-        const response = await services.userService.getAllUser();
-        res.data = response;
-        next();
-    } catch (error) {
-        commonErrorHandler(req, res, error.message, 400, error);
-    }
-};
+// const getAllUser = async (req, res, next) => {
+//     try {
+//         const { body: payload } = req;
+//         const response = await services.userService.getAllUser();
+//         res.data = response;
+//         next();
+//     } catch (error) {
+//         commonErrorHandler(req, res, error.message, 400, error);
+//     }
+// };
+
+jasbka
 
 
 module.exports = {
