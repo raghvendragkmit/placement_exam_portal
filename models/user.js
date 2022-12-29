@@ -11,26 +11,22 @@ module.exports = (sequelize, Sequelize) => {
      */
     static associate(models) {
       // define association here
-      this.belongsToMany(models.Exam, { through: models.ExamUserPaperSetMapping, foreignKey: 'userId' });
-
-    }
+      User.belongsToMany(models.Exam, { through: models.ExamUserMapping, foreignKey: 'user_id', as: 'exams' });    }
   }
   User.init({
-    firstName: {
+    first_name: {
       type: Sequelize.STRING,
       allowNull: false,
       validate: {
         isAlpha: true
       },
-      field: 'first_name'
     },
-    lastName: {
+    last_name: {
       type: Sequelize.STRING,
       allowNull: false,
       validate: {
         isAlpha: true
       },
-      field: 'last_name'
     },
     email: {
       type: Sequelize.STRING,
@@ -39,12 +35,10 @@ module.exports = (sequelize, Sequelize) => {
       validate: {
         isEmail: true
       },
-      field: 'email'
     },
     password: {
       type: Sequelize.STRING,
       allowNull: false,
-      field: 'password'
     },
     organization: {
       type: Sequelize.STRING,
@@ -52,42 +46,18 @@ module.exports = (sequelize, Sequelize) => {
       validate: {
         isAlpha: true
       },
-      field: 'organization'
     },
-    contactNumber: {
+    contact_number: {
       type: Sequelize.STRING,
       allowNull: false,
       validate: {
         isNumeric: true
       },
-      field: 'contact_number'
     },
     role: {
       type: Sequelize.STRING,
       allowNull: false,
-      validate: {
-        isAlpha: true
-      },
-      field: 'role'
     },
-    createdAt: {
-      allowNull: false,
-      type: Sequelize.DATE,
-      // defaultValue: Sequelize.NOW,
-      field: 'created_at'
-    },
-    updatedAt: {
-      allowNull: false,
-      type: Sequelize.DATE,
-      // defaultValue: Sequelize.NOW,
-      field: 'updated_at'
-    },
-    deletedAt: {
-      allowNull: true,
-      type: Sequelize.DATE,
-      defaultValue: null,
-      field: 'deleted_at'
-    }
   }, {
     sequelize,
     modelName: 'User',

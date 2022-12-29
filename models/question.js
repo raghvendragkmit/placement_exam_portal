@@ -11,48 +11,26 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Subject, { foreignKey: 'subjectId', targetKey: 'id' });
-      this.hasMany(models.Answer, { foreignKey: 'questionId', targetKey: 'id' });
-      this.hasMany(models.ExamUserPaperSetResponse, { foreignKey: 'questionId', targetKey: 'id' });
-      this.belongsToMany(models.PaperSet, { through: models.PaperSetQuestionMapping, foreignKey: 'questionId' })
+      Question.hasMany(models.Answer, { foreignKey: 'question_id', sourceKey: 'id', as:'answers'});
+      Question.hasMany(models.ExamUserResponse, { foreignKey: 'question_id', sourceKey: 'id' ,as:'exam_user_responses'});
+      Question.belongsTo(models.PaperSet, { foreignKey: 'paper_set_id', targetKey:'id',as:'paper_sets' })
     }
-    toJSON() {
-      return { ...this.get(), createdAt: undefined, updatedAt: undefined, deletedAt: undefined }
-    }
+    
   }
   Question.init({
-    questionDescription: {
+    question_description: {
       type: Sequelize.STRING,
       allowNull: false,
-      field: 'question_description'
     },
-    subjectId: {
+    paper_set_id: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
-        model: "subject",
+        model: "paper_set",
         key: 'id'
       },
-      field: 'subject_id'
     },
-    createdAt: {
-      allowNull: false,
-      type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW,
-      field: 'created_at'
-    },
-    updatedAt: {
-      allowNull: false,
-      type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW,
-      field: 'updated_at'
-    },
-    deletedAt: {
-      allowNull: true,
-      type: Sequelize.DATE,
-      defaultValue: null,
-      field: 'deleted_at'
-    }
+    
   }, {
     sequelize,
     modelName: 'Question',
