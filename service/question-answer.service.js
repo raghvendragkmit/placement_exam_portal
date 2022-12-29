@@ -1,4 +1,3 @@
-const { errorMonitor } = require('nodemailer/lib/xoauth2');
 const models = require('../models');
 const { sequelize } = require('../models');
 const createQuestionAnswer = async (payload) => {
