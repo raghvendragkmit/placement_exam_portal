@@ -2,29 +2,45 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('paper_set_question_mapping', {
+    await queryInterface.createTable('exam_user_response', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('uuid_generate_v4()')
       },
-      paper_set_id: {
+      exam_user_mapping_id: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
-          model: "paper_set",
+          model: "exam_user_mapping",
           key: 'id'
         }
       },
+
       question_id: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
           model: "question",
           key: 'id'
-        }
+        },
       },
+
+      answer_id: {
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: "answer",
+          key: 'id'
+        },
+      },
+
+      is_correct: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+      },
+      
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -43,6 +59,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('paper_set_question_mapping');
+    await queryInterface.dropTable('exam_user_response');
   }
 };
