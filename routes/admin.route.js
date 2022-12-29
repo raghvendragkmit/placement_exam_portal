@@ -68,6 +68,8 @@ router.post(
 
 router.post(
     '/subject',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
     validator.subjectValidator.createSubjectSchema,
     controllers.subjectController.createSubject,
     genericResponse.sendResponse
@@ -76,6 +78,8 @@ router.post(
 
 router.get(
     '/subjects',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
     controllers.subjectController.getAllSubject,
     genericResponse.sendResponse
 );
@@ -83,12 +87,61 @@ router.get(
 
 router.delete(
     '/subject/:subjectId',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
     validator.subjectValidator.subjectIdSchema,
     controllers.subjectController.deleteSubject,
     genericResponse.sendResponse
-)
+);
+
+router.post(
+    '/question-answer',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.questionAnswerController.createQuestionAnswer,
+    genericResponse.sendResponse
+);
+
+
+router.post(
+    '/question-answers',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.questionAnswerController.createQuestionAnswers,
+    genericResponse.sendResponse
+);
+
+router.get(
+    '/question-answers',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.questionAnswerController.getAllQuestionAnswer,
+    genericResponse.sendResponse
+);
+
+router.get(
+    '/question-answer/:questionId',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.questionAnswerController.getQuestionAnswerById,
+    genericResponse.sendResponse
+);
+
+router.patch(
+    '/question/:questionId',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.questionAnswerController.updateQuestionDescription,
+    genericResponse.sendResponse
+);
 
 
 
-
+router.patch(
+    '/answer/:answerId',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.questionAnswerController.updateAnswerDescription,
+    genericResponse.sendResponse
+);
 module.exports = router;
