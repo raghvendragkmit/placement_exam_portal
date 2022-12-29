@@ -1,7 +1,7 @@
 const models = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { generateRandom } = require('../helpers/random-string');
+const { generateRandom } = require('../helpers/common-function.helper');
 const { sendMail } = require('../helpers/mailer.helper');
 const redisClient = require("../helpers/redis.helper");
 
