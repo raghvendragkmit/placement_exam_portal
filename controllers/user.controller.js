@@ -1,5 +1,5 @@
-const services = require('../service');
-const { commonErrorHandler } = require("../helper/error-handler");
+const services = require('../services');
+const { commonErrorHandler } = require("../helpers/common-function.helper");
 
 
 const createUser = async (req, res, next) => {
@@ -74,8 +74,8 @@ const forgetPassword = async (req, res, next) => {
 
 const resetPassword = async (req, res, next) => {
     try {
-        const { body: payload,params } = req;
-        const data = await services.userService.resetPassword(payload,params);
+        const { body: payload, params } = req;
+        const data = await services.userService.resetPassword(payload, params);
         res.data = data;
         next();
     } catch (error) {

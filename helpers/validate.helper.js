@@ -1,4 +1,4 @@
-const { commonErrorHandler } = require('./error-handler');
+const { commonErrorHandler } = require('./common-function.helper');
 const _ = require("lodash");
 
 const validateRequest = (req, res, next, schema, requestParamterType) => {
