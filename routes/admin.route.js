@@ -1,8 +1,8 @@
 const { Router } = require("express");
-const controllers = require("../controller");
-const genericResponse = require("../helper/generic-response");
-const authMiddleware = require('../middleware/auth');
-const validator = require('../validator/index');
+const controllers = require("../controllers");
+const genericResponse = require("../helpers/common-function.helper");
+const authMiddleware = require('../middlewares/auth');
+const validator = require('../validators/index');
 const router = Router();
 
 router.post(
@@ -68,6 +68,8 @@ router.post(
 
 router.post(
     '/subject',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
     validator.subjectValidator.createSubjectSchema,
     controllers.subjectController.createSubject,
     genericResponse.sendResponse
@@ -76,6 +78,8 @@ router.post(
 
 router.get(
     '/subjects',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
     controllers.subjectController.getAllSubject,
     genericResponse.sendResponse
 );
@@ -83,11 +87,12 @@ router.get(
 
 router.delete(
     '/subject/:subjectId',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
     validator.subjectValidator.subjectIdSchema,
     controllers.subjectController.deleteSubject,
     genericResponse.sendResponse
 )
-
 
 
 
