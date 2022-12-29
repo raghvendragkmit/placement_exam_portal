@@ -14,7 +14,18 @@ const createUser = async (payload) => {
     const userEmail = payload.email;
     const userPassword = payload.password;
     payload.password = await bcrypt.hash(payload.password, 10);
-    const userCreated = await models.User.create(payload);
+
+    const userPayload = {
+        first_name: payload.firstName,
+        last_name: payload.lastName,
+        email: payload.email,
+        password: payload.password,
+        contact_number: payload.contactNumber,
+        role: payload.role,
+        organization: payload.organization
+    }
+
+    const userCreated = await models.User.create(userPayload);
 
     const mailBody = `Login Credentails \nemail: ${userEmail}\npassword: ${userPassword}`;
     await sendMail(mailBody, 'User login credentials', userEmail);
@@ -22,8 +33,8 @@ const createUser = async (payload) => {
 
     return {
         id: userCreated.id,
-        firstName: userCreated.firstName,
-        lastName: userCreated.lastName,
+        firstName: userCreated.first_name,
+        lastName: userCreated.last_name,
         email: userCreated.email,
         role: userCreated.role,
         organization: userCreated.organization,
@@ -41,6 +52,7 @@ const loginUser = async (payload) => {
             email: email
         }
     });
+    console.log(user);
 
     let key = user.dataValues.id + "-refresh-token";
     let refreshToken = await redisClient.get(key);
