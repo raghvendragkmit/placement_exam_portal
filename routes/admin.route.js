@@ -144,4 +144,39 @@ router.patch(
     controllers.questionAnswerController.updateAnswerDescription,
     genericResponse.sendResponse
 );
+
+
+router.post(
+    '/paper-set',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    validator.paperSetValidator.createPaperSetSchema,
+    controllers.paperSetController.createPaperSet,
+    genericResponse.sendResponse
+);
+
+
+
+router.get(
+    '/paper-sets',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.paperSetController.getAllPaperSet,
+    genericResponse.sendResponse
+);
+
+router.delete(
+    '/paper-set/:paperSetId',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    validator.paperSetValidator.paperSetIdSchema,
+    controllers.paperSetController.deletePaperSet,
+    genericResponse.sendResponse
+);
+
+
+
+
+
+
 module.exports = router;
