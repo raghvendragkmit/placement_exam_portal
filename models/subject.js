@@ -11,38 +11,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasMany(models.Question, { foreignKey: 'subjectId', targetKey: 'id' });
-      this.hasMany(models.PaperSet, { foreignKey: 'subjectId', targetKey: 'id' });
-      this.hasOne(models.Exam, { foreignKey: 'subjectId', targetKey: 'id' });
+      Subject.hasMany(models.PaperSet, { foreignKey: 'subject_id', sourceKey: 'id',as:'paper_sets' });
+      Subject.hasMany(models.Exam, { foreignKey: 'subject_id', sourceKey: 'id',as:'exams' });
     }
   }
   Subject.init({
-    subjectName: {
+    subject_name: {
       type: Sequelize.STRING,
       allowNull: false,
       validate: {
         isAlpha: true
       },
-      field:'subject_name'
     },
-    createdAt: {
-      allowNull: false,
-      type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW,
-      field: 'created_at'
-    },
-    updatedAt: {
-      allowNull: false,
-      type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW,
-      field: 'updated_at'
-    },
-    deletedAt: {
-      allowNull: true,
-      type: Sequelize.DATE,
-      defaultValue: null,
-      field: 'deleted_at'
-    }
   }, {
     sequelize,
     modelName: 'Subject',
