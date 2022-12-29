@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { validateRequest } = require("../helper/validate");
+const { validateRequest } = require("../helpers/validate.helper");
 module.exports = {
     createSubjectSchema: async (req, res, next) => {
         const schema = Joi.object({

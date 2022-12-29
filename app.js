@@ -3,7 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 const routes = require('./routes');
-const { commonErrorHandler } = require("./helper/error-handler");
+const { commonErrorHandler } = require("./helpers/common-function.helper");
 
 const app = express();
 app.use(express.json());
