@@ -1,6 +1,5 @@
-const services = require('../service');
-const { commonErrorHandler } = require("../helper/error-handler");
-
+const services = require('../services');
+const { commonErrorHandler } = require("../helpers/common-function.helper");
 
 const createUser = async (req, res, next) => {
     try {
@@ -89,7 +88,7 @@ const logoutUser = async (req, res, next) => {
         res.data = data;
         next();
     } catch (error) {
-        console.log('-----', error);
+        commonErrorHandler(req, res, error.message, 400, error);
     }
 }
 

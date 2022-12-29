@@ -1,7 +1,7 @@
 require("dotenv").config();
 const app = require("./app");
 const { sequelize } = require("./models");
-const redis = require("./helper/redis");
+const redis = require("./helpers/redis.helper");
 
 const startServer = async function () {
     try {

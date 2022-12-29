@@ -15,21 +15,19 @@ module.exports = {
         references: {
           model: "subject",
           key: 'id'
-        }
-      }, 
+        },
+      },
       exam_start_time: {
         allowNull: true,
         type: Sequelize.DATE,
-        defaultValue:Sequelize.NOW
       },
       exam_end_time: {
         allowNull: true,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
       },
-      exam_duration: {
-        type: Sequelize.INTEGER,
-        allowNull:false
+      exam_passing_pecentage: {
+        allowNull: false,
+        type: Sequelize.DECIMAL(12, 2),
       },
       created_at: {
         allowNull: false,

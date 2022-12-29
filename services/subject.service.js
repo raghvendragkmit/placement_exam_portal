@@ -1,14 +1,18 @@
 const models = require('../models');
 
 const createSubject = async (payload) => {
-    const subjectExist = await models.Subject.findOne({ where: { subjectName: payload.subjectName } });
+    const subjectExist = await models.Subject.findOne({ where: { subject_name: payload.subjectName } });
     if (subjectExist) {
         throw new Error('subject already exist');
     }
-    const subjectCreated = await models.Subject.create(payload);
+
+    const subjectPayload = {
+        subject_name: payload.subjectName
+    }
+    const subjectCreated = await models.Subject.create(subjectPayload);
     return {
         id: subjectCreated.id,
-        subjectName: subjectCreated.subjectName
+        subjectName: subjectCreated.subject_name
     }
 }
 
@@ -26,7 +30,7 @@ const deleteSubject = async (payload, params) => {
 
 const getAllSubject = async () => {
     const subjects = await models.Subject.findAll({
-        attributes: { exclude: ['deletedAt', 'createdAt', 'updatedAt'] },
+        attributes: { exclude: ['deleted_at', 'created_at', 'updated_at'] },
     });
     return subjects;
 }

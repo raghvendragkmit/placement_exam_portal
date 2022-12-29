@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
-const { validateRequest } = require("../helper/validate");
+const { validateRequest } = require("../helpers/validate.helper");
 
 const complexityOptions = {
     min: 4,

@@ -3,7 +3,7 @@ const {
   Model, Sequelize
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class ExamUserPaperSetMapping extends Model {
+  class ExamUserMapping extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,104 +11,92 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Exam, { foreignKey: 'examId', targetKey: 'id' });
-      this.belongsTo(models.PaperSet, { foreignKey: 'paperSetId', targetKey: 'id' });
-      this.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' });
-      this.hasMany(models.ExamUserPaperSetResponse, { foreignKey: 'examUserPaperSetMappingId',targetKey:'id' });
+      ExamUserMapping.belongsTo(models.Exam, { foreignKey: 'exam_id', targetKey: 'id',as:'exams' });
+      ExamUserMapping.belongsTo(models.PaperSet, { foreignKey: 'paper_set_id', targetKey: 'id',as:'paper_sets' });
+      ExamUserMapping.belongsTo(models.User, { foreignKey: 'user_id', targetKey: 'id', as:'users' });
+      ExamUserMapping.hasMany(models.ExamUserResponse, { foreignKey: 'exam_user_mapping_id', sourceKey: 'id', as:'exam_users' });
     }
   }
-  ExamUserPaperSetMapping.init({
-    examId: {
+  ExamUserMapping.init({
+    exam_id: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
         model: "exam",
         key: 'id'
-      },
-      field:'exam_id'
-
+      }
     },
-    userId: {
+    user_id: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
         model: "user",
         key: 'id'
-      },
-      field:'user_id'
+      }
     },
 
-    paperSetId: {
+    paper_set_id: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
         model: "paper_set",
         key: 'id'
-      },
-      field:'paper_set_id'
+      }
     },
 
-    attemptTime: {
+    start_time: {
       allowNull: true,
-      type: Sequelize.DATE,
-      field:'attempt_time'
+      type: Sequelize.DATE
     },
 
 
-    submitTime: {
+    submit_time: {
       allowNull: true,
-      type: Sequelize.DATE,
-      field:'submit_time'
+      type: Sequelize.DATE
     },
 
-    totalQuestions: {
+    total_questions: {
       allowNull: false,
       type: Sequelize.INTEGER,
-      defaultValue: 0,
-      field:'total_questions'
+      defaultValue: 0
     },
 
-    totalQuestionAttempted: {
+    total_question_attempted: {
       allowNull: false,
       type: Sequelize.INTEGER,
-      defaultValue: 0,
-      field:'total_question_attempted'
+      defaultValue: 0
     },
 
-    marksObtained: {
+    marks_obtained: {
       allowNull: false,
       type: Sequelize.INTEGER,
-      defaultValue: 0,
-      field:'marks_obtained'
+      defaultValue: 0
     },
 
     result: {
       allowNull: true,
       type: Sequelize.BOOLEAN,
-      field:'result'
     },
+
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,
-      // defaultValue: Sequelize.NOW,
-      field: 'created_at'
+      defaultValue: Sequelize.NOW,
     },
     updatedAt: {
       allowNull: false,
       type: Sequelize.DATE,
-      // defaultValue: Sequelize.NOW,
-      field: 'updated_at'
+      defaultValue: Sequelize.NOW,
     },
     deletedAt: {
       allowNull: true,
       type: Sequelize.DATE,
       defaultValue: null,
-      field: 'deleted_at'
     }
   }, {
     sequelize,
-    modelName: 'ExamUserPaperSetMapping',
-    tableName: 'exam_user_paper_set_mapping'
+    modelName: 'ExamUserMapping',
+    tableName: 'exam_user_mapping'
   });
-  return ExamUserPaperSetMapping;
+  return ExamUserMapping;
 };

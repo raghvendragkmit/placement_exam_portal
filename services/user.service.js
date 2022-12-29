@@ -1,9 +1,10 @@
 const models = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { generateRandom } = require('../helper/random-string');
-const redisClient = require('../helper/redis');
-const { sendMail } = require('../helper/mailer');
+const { generateRandom } = require('../helpers/common-function.helper');
+const { sendMail } = require('../helpers/mailer.helper');
+const redisClient = require("../helpers/redis.helper");
+
 const createUser = async (payload) => {
     const userExist = await models.User.findOne({ where: { email: payload.email } });
     if (userExist) {
@@ -13,11 +14,32 @@ const createUser = async (payload) => {
     const userEmail = payload.email;
     const userPassword = payload.password;
     payload.password = await bcrypt.hash(payload.password, 10);
-    const userCreated = await models.User.create(payload);
+
+    const userPayload = {
+        first_name: payload.firstName,
+        last_name: payload.lastName,
+        email: payload.email,
+        password: payload.password,
+        contact_number: payload.contactNumber,
+        role: payload.role,
+        organization: payload.organization
+    }
+
+    const userCreated = await models.User.create(userPayload);
 
     const mailBody = `Login Credentails \nemail: ${userEmail}\npassword: ${userPassword}`;
     await sendMail(mailBody, 'User login credentials', userEmail);
-    return userCreated;
+
+
+    return {
+        id: userCreated.id,
+        firstName: userCreated.first_name,
+        lastName: userCreated.last_name,
+        email: userCreated.email,
+        role: userCreated.role,
+        organization: userCreated.organization,
+        contactNumber: userCreated.contactNumber,
+    };
 }
 
 const loginUser = async (payload) => {
@@ -30,10 +52,8 @@ const loginUser = async (payload) => {
             email: email
         }
     });
+    console.log(user);
 
-    if (!user) {
-        throw new Error('User Not Found!');
-    }
     let key = user.dataValues.id + "-refresh-token";
     let refreshToken = await redisClient.get(key);
     if (!refreshToken) {
@@ -50,15 +70,14 @@ const loginUser = async (payload) => {
         );
     }
 
-    const match = await bcrypt.compare(password, user.dataValues.password);
-    if (!match) {
-        throw new Error('Wrong credentials');
-    }
+    const accessToken = jwt.sign(
+        { userId: user.dataValues.id },
+        process.env.SECRET_KEY_ACCESS,
+        {
+            expiresIn: process.env.JWT_ACCESS_EXPIRATION,
+        }
+    );
 
-    const accessToken = jwt.sign({ userId: user.dataValues.id }, process.env.SECRET_KEY_ACCESS);
-    refreshToken = jwt.sign({ userId: user.dataValues.id }, process.env.SECRET_KEY_REFRESH);
-
-    delete user.dataValues.password;
     await redisClient.set(key, refreshToken, 60 * 24);
 
     return {
@@ -68,19 +87,6 @@ const loginUser = async (payload) => {
         refreshToken: refreshToken,
     }
 }
-
-
-const updateUser = async (payload, params) => {
-    const userId = params.userId;
-    const userExist = await models.User.findOne({ where: { id: userId } });
-    if (!userExist) {
-        throw new Error('user not found');
-    }
-    const updatedUser = await models.User.update(payload, { where: { id: userId } });
-    const user = await models.User.findOne({ where: { id: userId } });
-    return user;
-}
-
 
 
 const deleteUser = async (payload, params) => {
@@ -96,7 +102,7 @@ const deleteUser = async (payload, params) => {
 
 const getAllUser = async () => {
     const users = await models.User.findAll({
-        attributes: { exclude: ['password', 'created_at', 'updated_at', 'deleted_at'] },
+        attributes: { exclude: ['password', 'createdAt', 'updatedAt', 'deletedAt'] },
     });
     return users;
 }
@@ -175,10 +181,9 @@ const resetPassword = async (payload, params) => {
 module.exports = {
     createUser,
     loginUser,
-    updateUser,
     deleteUser,
     getAllUser,
+    refreshToken,
     resetPassword,
-    forgetPassword,
-    refreshToken
+    forgetPassword
 }
