@@ -25,16 +25,20 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     exam_start_time: {
-      allowNull: true,
-      type: Sequelize.DATE,
+      allowNull: false,
+      type: Sequelize.TIME,
     },
     exam_end_time: {
-      allowNull: true,
-      type: Sequelize.DATE,
-    },
-    exam_passing_pecentage: {
       allowNull: false,
-      type: Sequelize.DECIMAL(12, 2),
+      type: Sequelize.TIME,
+    },
+    exam_date: {
+      allowNull: false,
+      type: Sequelize.TIME,
+    },
+    exam_passing_percentage: {
+      allowNull: false,
+      type: Sequelize.FLOAT,
     },
   }, {
     sequelize,
