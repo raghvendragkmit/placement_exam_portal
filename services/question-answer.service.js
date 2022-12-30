@@ -1,11 +1,14 @@
 const models = require('../models');
 const { sequelize } = require('../models');
+const { Op } = require("sequelize");
+const { commonErrorHandler } = require('../helpers/common-function.helper');
 const createQuestionAnswer = async (payload) => {
 
     const trans = await sequelize.transaction();
     try {
+
         const paperSetExist = await models.PaperSet.findOne({
-            where: { id: payload.paperSetId },
+            where: { paper_set_name: payload.paperSetName },
         }, { transaction: trans });
 
         if (!paperSetExist) {
@@ -13,11 +16,16 @@ const createQuestionAnswer = async (payload) => {
         }
 
         const questionExist = await models.Question.findOne({
-            where: { question_description: payload.questionDescription }
+            where: {
+                [Op.and]: [
+                    { question_description: payload.questionDescription },
+                    { paper_set_id: paperSetExist.dataValues.id }
+                ]
+            }
         });
 
         if (questionExist) {
-            throw new Error('Question already exist');
+            throw new Error('Question already exist in paperSet');
         }
 
         const questionCreated = await models.Question.create({
@@ -146,6 +154,45 @@ const updateAnswerDescription = async (payload, params) => {
     }, { where: { id: answerId } });
 
     return 'answer description update success';
+};
+
+
+
+
+const deleteAnswerById = async (payload, params) => {
+    const trans = await sequelize.transaction();
+    try {
+        const answerId = params.answerId;
+        const answerExist = await models.Answer.findOne({ where: { id: answerId } }, { transaction: trans });
+        if (!answerExist) {
+            throw new Error('answer not found');
+        }
+        await models.Answer.destroy({ where: { id: answerId } }, { transaction: trans });
+        await trans.commit();
+        return { data: 'asnwer deleted successfully', error: null };
+    } catch (error) {
+        await trans.rollback();
+        return { data: null, error: error.message };
+    }
+}
+
+
+const deleteQuestionById = async (payload, params) => {
+    const trans = await sequelize.transaction();
+    try {
+        const questionId = params.questionId;
+        const questionExist = await models.Question.findOne({ where: { id: questionId } }, { transaction: trans });
+        if (!questionExist) {
+            throw new Error('question not found');
+        }
+        await models.Question.destroy({ where: { id: questionId } }, { transaction: trans });
+        await models.Answer.destroy({ where: { question_id: questionId } }, { transaction: trans });
+        await trans.commit();
+        return { data: 'question asnwer deleted successfully', error: null };
+    } catch (error) {
+        await trans.rollback();
+        return { data: null, error: error.message };
+    }
 }
 
 
@@ -156,5 +203,6 @@ module.exports = {
     createQuestionAnswers,
     updateQuestionDescription,
     updateAnswerDescription,
-    getQuestionAnswerById
+    deleteQuestionById,
+    deleteAnswerById
 }

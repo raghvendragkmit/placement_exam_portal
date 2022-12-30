@@ -9,6 +9,7 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('uuid_generate_v4()')
       },
+      
       exam_id: {
         allowNull: false,
         type: Sequelize.UUID,
@@ -17,6 +18,8 @@ module.exports = {
           key: 'id'
         }
       },
+
+
       user_id: {
         allowNull: false,
         type: Sequelize.UUID,
@@ -37,13 +40,16 @@ module.exports = {
 
       start_time: {
         allowNull: true,
-        type:Sequelize.DATE
+        type:Sequelize.TIME
       },
-
-
       submit_time: {
         allowNull: true,
-        type: Sequelize.DATE
+        type: Sequelize.TIME
+      },
+
+      date: {
+        allowNull: true,
+        type: Sequelize.DATEONLY
       },
 
       total_questions: {
@@ -58,7 +64,13 @@ module.exports = {
         defaultValue: 0
       },
 
-      marks_obtained: {
+      total_correct_answers: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+      },
+
+      total_marks_obtained: {
         allowNull: false,
         type: Sequelize.INTEGER,
         defaultValue: 0

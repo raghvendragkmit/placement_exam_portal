@@ -18,11 +18,11 @@ const createQuestionAnswer = async (req, res, next) => {
 }
 
 
-const getQuestionAnswerById =  async (req, res, next) => {
+const getQuestionAnswerById = async (req, res, next) => {
     try {
-        const { body: payload,params } = req;
+        const { body: payload, params } = req;
         console.log(payload);
-        const response = await services.questionAnswerService.getQuestionAnswerById(payload,params);
+        const response = await services.questionAnswerService.getQuestionAnswerById(payload, params);
         res.data = response;
         next();
     } catch (error) {
@@ -65,13 +65,35 @@ const updateQuestionDescription = async (req, res, next) => {
     } catch (error) {
         commonErrorHandler(req, res, error.message, 400, error);
     }
-}
-
+};
 
 const updateAnswerDescription = async (req, res, next) => {
     try {
         const { body: payload, params } = req;
         const response = await services.questionAnswerService.updateAnswerDescription(payload, params);
+        res.data = response;
+        next();
+    } catch (error) {
+        commonErrorHandler(req, res, error.message, 400, error);
+    }
+};
+
+const deleteQuestionById = async (req, res, next) => {
+    try {
+        const { body: payload, params } = req;
+        const response = await services.questionAnswerService.deleteQuestionById(payload, params);
+        res.data = response;
+        next();
+    } catch (error) {
+        commonErrorHandler(req, res, error.message, 400, error);
+    }
+}
+
+
+const deleteAnswerById = async (req, res, next) => {
+    try {
+        const { body: payload, params } = req;
+        const response = await services.questionAnswerService.deleteAnswerById(payload, params);
         res.data = response;
         next();
     } catch (error) {
@@ -86,6 +108,8 @@ module.exports = {
     createQuestionAnswers,
     updateQuestionDescription,
     updateAnswerDescription,
-    getQuestionAnswerById
+    getQuestionAnswerById,
+    deleteQuestionById,
+    deleteAnswerById
 }
 

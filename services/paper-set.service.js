@@ -3,24 +3,37 @@ const { sequelize } = require('../models');
 
 const createPaperSet = async (payload) => {
 
-    const subjectExist = await models.Subject.findOne({ where: { subject_name: payload.subject_name } });
+    const subjectExist = await models.Subject.findOne({ where: { subject_name: payload.subjectName } });
     if (!subjectExist) {
         throw new Error('subject not found');
     }
-    const paperSetCreated = await models.PaperSet.create({ subject_id: subjectExist.dataValues.id });
+
+    const paperSetNameExist = await models.PaperSet.findOne({ where: { paper_set_name: payload.paperSetName } });
+    if (paperSetNameExist) {
+        throw new Error('paperSet name already exist');
+    }
+
+    const paperSetPayload = {
+        paper_set_name: payload.paperSetName,
+        subject_id: subjectExist.dataValues.id,
+        marks_per_question: payload.marksPerQuestion
+    }
+    const paperSetCreated = await models.PaperSet.create(paperSetPayload);
 
 
     return {
         id: paperSetCreated.id,
-        subject_id: paperSetCreated.subject_id
+        subjectId: paperSetCreated.subject_id,
+        paperSetName: paperSetCreated.paper_set_name,
+        marksPerQuestion: paperSetCreated.marks_per_question
     }
 }
 
 const deletePaperSet = async (payload, params) => {
     const paperSetId = params.paperSetId;
-    const paperSetExist = await models.PaperSet.findOne({ where: { id: paperSetId } });
-    if (!paperSetExist) {
-        throw new Error('paperSet not found');
+    const questionPaperSetExist = await models.Question.findOne({ where: { paper_set_id: paperSetId } });
+    if (questionPaperSetExist) {
+        throw new Error('cannot delete paperSet having questions');
     }
     await models.PaperSet.destroy({ where: { id: paperSetId } });
     return 'PaperSet deleted successfully';
