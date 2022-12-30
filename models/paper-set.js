@@ -11,13 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      PaperSet.belongsTo(models.Subject, { foreignKey: 'subject_id', targetKey: 'id',as:'subjects' });
-      PaperSet.hasMany(models.Question, {  foreignKey: 'paper_set_id',sourceKey:'id',as:'questions' });
+      PaperSet.belongsTo(models.Subject, { foreignKey: 'subject_id', targetKey: 'id', as: 'subjects' });
+      PaperSet.hasMany(models.Question, { foreignKey: 'paper_set_id', sourceKey: 'id', as: 'questions' });
       PaperSet.hasMany(models.ExamUserMapping, { foreignKey: 'paper_set_id', sourceKey: 'id', as: 'exam_users' });
     }
-    toJSON() {
-      return { ...this.get(), createdAt: undefined, updatedAt: undefined, deletedAt: undefined }
-    }
+
   }
   PaperSet.init({
     subject_id: {
@@ -27,8 +25,15 @@ module.exports = (sequelize, DataTypes) => {
         model: "subject",
         key: 'id'
       },
-      field: 'subject_id'
     },
+    paper_set_name: {
+      allowNull: false,
+      type: Sequelize.STRING,
+    },
+    marks_per_question: {
+      allowNull: false,
+      type: Sequelize.INTEGER,
+    }
   }, {
     sequelize,
     modelName: 'PaperSet',

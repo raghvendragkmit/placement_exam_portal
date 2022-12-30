@@ -6,7 +6,9 @@ const { validateRequest } = require("../helpers/validate.helper");
 module.exports = {
     createPaperSetSchema: async (req, res, next) => {
         const schema = Joi.object({
-            subject_name: Joi.string().min(1).required(),
+            subjectName: Joi.string().min(1).required(),
+            paperSetName: Joi.string().min(1).required(),
+            marksPerQuestion: Joi.number().min(1).required(),
         });
 
         validateRequest(req, res, next, schema, "body");
