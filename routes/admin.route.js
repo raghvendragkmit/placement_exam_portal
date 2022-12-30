@@ -181,7 +181,17 @@ router.get(
     authMiddleware.verifyAdmin,
     controllers.paperSetController.getAllPaperSetQuestions,
     genericResponse.sendResponse
-)
+);
+
+
+
+router.post(
+    '/exam',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.examController.createExam,
+    genericResponse.sendResponse
+);
 
 
 

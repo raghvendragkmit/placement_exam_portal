@@ -1,6 +1,5 @@
 const models = require('../models');
 const { sequelize } = require('../models');
-const { snakeCaseToCamelCase } = require('../helpers/common-function.helper');
 
 const createPaperSet = async (payload) => {
 
