@@ -12,7 +12,7 @@ module.exports = {
         })
 
         const schema = Joi.object({
-            paperSetId: Joi.string().guid().required(),
+            paperSetName: Joi.string().min(1).required(),
             questionDescription: Joi.string().min(10).required(),
             options: Joi.array().items(service)
         });

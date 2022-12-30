@@ -104,22 +104,6 @@ router.post(
 );
 
 
-// router.post(
-//     '/question-answers',
-//     authMiddleware.checkAccessToken,
-//     authMiddleware.verifyAdmin,
-//     controllers.questionAnswerController.createQuestionAnswers,
-//     genericResponse.sendResponse
-// );
-
-router.get(
-    '/question-answers',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.questionAnswerController.getAllQuestionAnswer,
-    genericResponse.sendResponse
-);
-
 router.get(
     '/question-answer/:questionId',
     authMiddleware.checkAccessToken,
@@ -128,23 +112,30 @@ router.get(
     genericResponse.sendResponse
 );
 
-router.patch(
-    '/question/:questionId',
+router.delete(
+    '/question-answer/:questionId',
     authMiddleware.checkAccessToken,
     authMiddleware.verifyAdmin,
-    controllers.questionAnswerController.updateQuestionDescription,
+    controllers.questionAnswerController.deleteQuestionById,
     genericResponse.sendResponse
 );
 
-
-
-router.patch(
+router.delete(
     '/answer/:answerId',
     authMiddleware.checkAccessToken,
     authMiddleware.verifyAdmin,
-    controllers.questionAnswerController.updateAnswerDescription,
+    controllers.questionAnswerController.deleteAnswerById,
     genericResponse.sendResponse
 );
+
+
+// router.patch(
+//     '/answer/:answerId',
+//     authMiddleware.checkAccessToken,
+//     authMiddleware.verifyAdmin,
+//     controllers.questionAnswerController.updateAnswerDescription,
+//     genericResponse.sendResponse
+// );
 
 
 router.post(
@@ -176,7 +167,7 @@ router.delete(
 );
 
 router.get(
-    '/paper-set-questions/:paperSetId',
+    '/paper-set-question-answers/:paperSetId',
     authMiddleware.checkAccessToken,
     authMiddleware.verifyAdmin,
     controllers.paperSetController.getAllPaperSetQuestions,
