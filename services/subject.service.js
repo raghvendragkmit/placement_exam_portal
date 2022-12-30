@@ -22,6 +22,12 @@ const deleteSubject = async (payload, params) => {
     if (!subjectExist) {
         throw new Error('subject not found');
     }
+
+    const paperSetExist = await models.PaperSet.count({ where: { subject_id: subjectId } });
+    if (paperSetExist > 0) {
+        throw new Error('paper sets exist for subject');
+    }
+
     await models.Subject.destroy({ where: { id: subjectId } });
     return 'subject deleted successfully';
 }

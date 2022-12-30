@@ -26,6 +26,8 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       }
     },
+
+
     user_id: {
       allowNull: false,
       type: Sequelize.UUID,
@@ -46,13 +48,22 @@ module.exports = (sequelize, DataTypes) => {
 
     start_time: {
       allowNull: true,
-      type: Sequelize.DATE
+      type: Sequelize.TIME
+    },
+    submit_time: {
+      allowNull: true,
+      type: Sequelize.TIME
+    },
+
+    date: {
+      allowNull: true,
+      type: Sequelize.DATEONLY
     },
 
 
-    submit_time: {
-      allowNull: true,
-      type: Sequelize.DATE
+    marks_per_question: {
+      allowNull: false,
+      type: Sequelize.INTEGER
     },
 
     total_questions: {
@@ -67,7 +78,13 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 0
     },
 
-    marks_obtained: {
+    total_correct_answers: {
+      allowNull: false,
+      type: Sequelize.INTEGER,
+      defaultValue: 0
+    },
+
+    total_marks_obtained: {
       allowNull: false,
       type: Sequelize.INTEGER,
       defaultValue: 0
@@ -78,17 +95,17 @@ module.exports = (sequelize, DataTypes) => {
       type: Sequelize.BOOLEAN,
     },
 
-    createdAt: {
+    created_at: {
       allowNull: false,
       type: Sequelize.DATE,
       defaultValue: Sequelize.NOW,
     },
-    updatedAt: {
+    updated_at: {
       allowNull: false,
       type: Sequelize.DATE,
       defaultValue: Sequelize.NOW,
     },
-    deletedAt: {
+    deleted_at: {
       allowNull: true,
       type: Sequelize.DATE,
       defaultValue: null,
@@ -96,7 +113,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'ExamUserMapping',
-    tableName: 'exam_user_mapping'
+    tableName: 'exam_user_mapping',
+    paranoid:true
   });
   return ExamUserMapping;
 };
