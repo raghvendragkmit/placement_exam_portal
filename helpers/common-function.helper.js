@@ -1,5 +1,4 @@
 const fs = require('fs');
-
 const commonErrorHandler = async (req, res, message, statusCode = 500, error = null) => {
   let errorMessage = 'Something went wrong. Please try again';
   if (message) {
@@ -52,5 +51,5 @@ const sendResponse = async (req, res) => {
 module.exports = {
   commonErrorHandler,
   generateRandom,
-  sendResponse
+  sendResponse,
 };

@@ -98,18 +98,19 @@ router.post(
     '/question-answer',
     authMiddleware.checkAccessToken,
     authMiddleware.verifyAdmin,
+    validator.questionAnswerValidator.createQuestionAnswerSchema,
     controllers.questionAnswerController.createQuestionAnswer,
     genericResponse.sendResponse
 );
 
 
-router.post(
-    '/question-answers',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.questionAnswerController.createQuestionAnswers,
-    genericResponse.sendResponse
-);
+// router.post(
+//     '/question-answers',
+//     authMiddleware.checkAccessToken,
+//     authMiddleware.verifyAdmin,
+//     controllers.questionAnswerController.createQuestionAnswers,
+//     genericResponse.sendResponse
+// );
 
 router.get(
     '/question-answers',
@@ -174,7 +175,13 @@ router.delete(
     genericResponse.sendResponse
 );
 
-
+router.get(
+    '/paper-set-questions/:paperSetId',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.paperSetController.getAllPaperSetQuestions,
+    genericResponse.sendResponse
+)
 
 
 

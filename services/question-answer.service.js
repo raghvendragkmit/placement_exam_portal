@@ -4,16 +4,16 @@ const createQuestionAnswer = async (payload) => {
 
     const trans = await sequelize.transaction();
     try {
-        const subjectExist = await models.Subject.findOne({
-            where: { subjectName: payload.subjectName },
+        const paperSetExist = await models.PaperSet.findOne({
+            where: { id: payload.paperSetId },
         }, { transaction: trans });
 
-        if (!subjectExist) {
-            throw new Error(" subject not found");
+        if (!paperSetExist) {
+            throw new Error(" paperSet not found");
         }
 
         const questionExist = await models.Question.findOne({
-            where: { questionDescription: payload.questionDescription }
+            where: { question_description: payload.questionDescription }
         });
 
         if (questionExist) {
@@ -21,8 +21,8 @@ const createQuestionAnswer = async (payload) => {
         }
 
         const questionCreated = await models.Question.create({
-            questionDescription: payload.questionDescription,
-            subjectId: subjectExist.dataValues.id
+            question_description: payload.questionDescription,
+            paper_set_id: paperSetExist.dataValues.id
         },
             { transaction: trans }
         );
@@ -37,9 +37,9 @@ const createQuestionAnswer = async (payload) => {
             const isCorrect = answerOptions[i].isCorrect;
 
             const answerCreated = await models.Answer.create({
-                answerDescription: answerDescription,
-                isCorrect: isCorrect,
-                questionId: questionCreated.dataValues.id
+                answer_description: answerDescription,
+                is_correct: isCorrect,
+                question_id: questionCreated.dataValues.id
             }, { transaction: trans });
 
             if (!answerCreated) {
@@ -79,7 +79,8 @@ const getAllQuestionAnswer = async (payload) => {
         const questions = await models.Question.findAll(
             {
                 include: [{
-                    model: models.Answer
+                    model: models.Answer,
+                    as: 'answers'
                 }]
             },
             { transaction: trans });
@@ -101,7 +102,8 @@ const getQuestionAnswerById = async (payload, params) => {
         {
             include: [{
                 model: models.Answer,
-                where: { questionId: questionId }
+                as: 'answers',
+                where: { question_id: questionId }
             }]
         },
         {
@@ -123,7 +125,7 @@ const updateQuestionDescription = async (payload, params) => {
         throw new Error('question not found');
     }
     const questionUpdated = await models.Question.update({
-        questionDescription: payload.questionDescription
+        question_description: payload.questionDescription
     }, { where: { id: questionId } });
 
     return 'question description update success';
@@ -140,7 +142,7 @@ const updateAnswerDescription = async (payload, params) => {
         throw new Error('answer not found');
     }
     const answerUpdated = await models.Answer.update({
-        answerDescription: payload.answerDescription
+        answer_description: payload.answerDescription
     }, { where: { id: answerId } });
 
     return 'answer description update success';

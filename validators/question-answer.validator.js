@@ -4,9 +4,17 @@ const { validateRequest } = require("../helpers/validate.helper");
 
 
 module.exports = {
-    createPaperSetSchema: async (req, res, next) => {
+    createQuestionAnswerSchema: async (req, res, next) => {
+
+        let service = Joi.object().keys({
+            answerDescription: Joi.string().required().min(1),
+            isCorrect: Joi.bool().required()
+        })
+
         const schema = Joi.object({
-            subject_name: Joi.string().min(1).required(),
+            paperSetId: Joi.string().guid().required(),
+            questionDescription: Joi.string().min(10).required(),
+            options: Joi.array().items(service)
         });
 
         validateRequest(req, res, next, schema, "body");

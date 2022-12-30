@@ -1,5 +1,5 @@
-const services = require('../service');
-const { commonErrorHandler } = require("../helper/error-handler");
+const services = require('../services');
+const { commonErrorHandler } = require("../helpers/common-function.helper");
 
 
 const createQuestionAnswer = async (req, res, next) => {
