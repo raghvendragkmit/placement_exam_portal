@@ -64,10 +64,45 @@ const startExam = async (req, res, next) => {
     }
 }
 
+
+
+
+const submitExam = async (req, res, next) => {
+    try {
+        const { body: payload, params } = req;
+        const response = await services.examService.submitExam(payload, params);
+        if (response.error) {
+            throw new Error(response.error);
+        }
+        res.data = response.data;
+        next();
+    } catch (error) {
+        commonErrorHandler(req, res, error.message, 400, error);
+    }
+}
+
+
+const logResponse = async (req, res, next) => {
+    try {
+        const { body: payload, params } = req;
+        const response = await services.examService.logResponse(payload, params);
+        if (response.error) {
+            throw new Error(response.error);
+        }
+        res.data = response.data;
+        next();
+    } catch (error) {
+        commonErrorHandler(req, res, error.message, 400, error);
+    }
+}
+
+
 module.exports = {
     createExam,
     deleteExam,
     getAllExam,
     getAllUpcomingExam,
-    startExam
+    startExam,
+    submitExam,
+    logResponse
 }

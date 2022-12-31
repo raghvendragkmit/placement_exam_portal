@@ -21,4 +21,13 @@ router.post('/start-exam/:examId',
 );
 
 
+router.post('/submit-exam',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyUser,
+    validator.examValidator.submitExam,
+    controllers.examController.submitExam,
+    genericResponse.sendResponse
+);
+
+
 module.exports = router;

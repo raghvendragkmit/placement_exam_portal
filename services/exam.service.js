@@ -178,11 +178,359 @@ const startExam = async (payload, params) => {
 }
 
 
+const submitExam = async (payload, user) => {
+    const trans = await sequelize.transaction();
+    try {
+        const examId = payload.examId;
+        const userId = payload.userId;
+        const paperSetId = payload.paperSetId;
+
+        console.log(examId, paperSetId, userId);
+
+        const currentTime = new Date();
+
+        const examExist = await models.Exam.findOne({
+            where: {
+                id: examId
+            }
+        }, { transaction: trans });
+
+        if (!examExist) {
+            throw new Error('exam not found');
+        }
+
+        const userExist = await models.User.findOne({
+            where: {
+                id: userId
+            }
+        }, { transaction: trans });
+
+        if (!userExist) {
+            throw new Error('user not found');
+        }
+
+        const paperSetExist = await models.PaperSet.findOne({
+            where: { id: paperSetId }
+        }, { transaction: trans });
+
+        if (!paperSetExist) {
+            throw new Error('paperSet not found');
+        }
+
+        const examUserMappingExist = await models.ExamUserMapping.findOne({
+            where: {
+                [Op.and]: [
+                    { exam_id: examId },
+                    { user_id: userId },
+                    { paper_set_id: paperSetId },
+                    {
+                        submit_time: {
+                            [Op.eq]: null
+                        }
+                    }
+                ]
+            },
+            attributes: { include: ["id"] }
+        }, { transaction: trans });
+
+
+
+        if (!examUserMappingExist) {
+            throw new Error("exam submitted");
+        }
+        const attempt_id = examUserMappingExist.dataValues.id;
+
+
+        if (examExist.exam_end_time < currentTime) {
+
+            const correctAnswers = await models.ExamUserResponse.count({
+                where: {
+                    [Op.and]: [
+                        { exam_user_attempt_id: attempt_id },
+                        { is_correct: true }
+                    ]
+                }
+
+            }, { transaction: trans });
+
+
+            const questionsAttempted = await models.ExamUserResponse.count({
+                where: {
+                    exam_user_attempt_id: attempt_id,
+                }
+            }, { transaction: trans });
+
+
+            console.log(correctAnswers, questionsAttempted);
+
+
+            const marksPerQuestion = paperSetExist.marks_per_question;
+            const totalMarksObtained = marksPerQuestion * correctAnswers;
+            const passingPercentage = examExist.exam_passing_percentage;
+            const totalQuestions = examUserMappingExist.total_questions;
+            const percentageObtained = (totalMarksObtained / totalQuestions * marksPerQuestion) * 100;
+            const studenResult = (percentageObtained >= passingPercentage ? true : false);
+
+            const updatedResult = await models.ExamUserMapping.update({
+                total_question_attempted: questionsAttempted,
+                total_correct_answers: correctAnswers,
+                total_marks_obtained: totalMarksObtained,
+                submit_time: new Date(),
+                result: studenResult
+            }, {
+                where: {
+                    id: attempt_id
+                }
+            }, { transaction: trans });
+            await trans.commit();
+            return "Response logged";
+        }
+
+
+        const userResponse = payload.response;
+        console.log(userResponse);
+        console.log(attempt_id);
+
+        let questionsAttempted = userResponse.length;
+        let correctAnswers = 0;
+
+        for (let i = 0; i < userResponse.length; ++i) {
+            const questionId = userResponse[i].questionId;
+            const answerId = userResponse[i].answerId;
+
+            const questionExist = await models.Question.findOne({
+                where: {
+                    [Op.and]: [
+                        { id: questionId },
+                        { paper_set_id: paperSetId }
+                    ]
+                },
+                include: [{
+                    model: models.Answer,
+                    as: 'answers',
+                    where: {
+                        id: answerId
+                    }
+                }]
+            }, { transaction: trans });
+
+
+            if (questionExist == null) {
+                questionsAttempted--;
+                continue;
+            }
+
+            const correctAnswer = questionExist.answers[0].is_correct;
+            if (correctAnswer) {
+                correctAnswers++;
+            }
+
+            const alreadySubmitted = await models.ExamUserResponse.findOne({
+                where: {
+                    [Op.and]: [
+                        { exam_user_attempt_id: attempt_id },
+                        { question_id: questionId }
+                    ]
+                }
+            }, { transaction: trans });
+
+
+            if (alreadySubmitted) {
+                await models.ExamUserResponse.update({
+                    answer_id: answerId,
+                    is_correct: correctAnswer
+                }, {
+                    where: {
+                        [Op.and]: [
+                            { exam_user_attempt_id: attempt_id },
+                            { question_id: questionId }
+                        ]
+                    }
+                }, { transaction: trans });
+
+            } else {
+                await models.ExamUserResponse.create({
+                    answer_id: answerId,
+                    is_correct: correctAnswer,
+                    exam_user_attempt_id: attempt_id,
+                    question_id: questionId
+                }, { transaction: trans });
+
+            }
+        }
+
+        const marksPerQuestion = paperSetExist.marks_per_question;
+        const totalMarksObtained = marksPerQuestion * correctAnswers;
+        const passingPercentage = examExist.exam_passing_percentage;
+        const totalQuestions = examUserMappingExist.total_questions;
+        const percentageObtained = (totalMarksObtained / totalQuestions * marksPerQuestion) * 100;
+        const studenResult = (percentageObtained >= passingPercentage ? true : false);
+
+        const updatedResult = await models.ExamUserMapping.update({
+            total_question_attempted: questionsAttempted,
+            total_correct_answers: correctAnswers,
+            total_marks_obtained: totalMarksObtained,
+            submit_time: new Date(),
+            result: studenResult
+        }, {
+            where: {
+                id: attempt_id
+            }
+        }, { transaction: trans });
+
+        await trans.commit();
+
+        return { data: "Exam submitted successfully", error: null };
+    } catch (error) {
+        await trans.rollback();
+        console.log(error.message);
+        return { data: null, error: error.message };
+    }
+}
+
+
+
+const logResponse = async (payload) => {
+    const trans = await sequelize.transaction();
+    try {
+        const examId = payload.examId;
+        const userId = payload.userId;
+        const paperSetId = payload.paperSetId;
+        const questionId = payload.questionId;
+        const answerId = payload.answerId;
+
+        console.log(examId, paperSetId, userId, questionId, answerId);
+
+        const currentTime = new Date();
+
+        const examExist = await models.Exam.findOne({
+            where: {
+                id: examId
+            }
+        }, { transaction: trans });
+
+        if (!examExist) {
+            throw new Error('exam not found');
+        }
+
+        if (currentTime > examExist.exam_end_time) {
+            throw new Error("Cannot submit after end time");
+        }
+
+
+        const userExist = await models.User.findOne({
+            where: {
+                id: userId
+            }
+        }, { transaction: trans });
+
+        if (!userExist) {
+            throw new Error('user not found');
+        }
+
+        const paperSetExist = await models.PaperSet.findOne({
+            where: { id: paperSetId }
+        }, { transaction: trans });
+
+        if (!paperSetExist) {
+            throw new Error('paperSet not found');
+        }
+
+        const examUserMappingExist = await models.ExamUserMapping.findOne({
+            where: {
+                [Op.and]: [
+                    { exam_id: examId },
+                    { user_id: userId },
+                    { paper_set_id: paperSetId },
+                    {
+                        submit_time: {
+                            [Op.eq]: null
+                        }
+                    }
+                ]
+            },
+            attributes: { include: ["id"] }
+        }, { transaction: trans });
+
+        if (!examUserMappingExist) {
+            throw new Error('either exam not started or already submitted');
+        }
+
+        const attempt_id = examUserMappingExist.dataValues.id;
+
+        const questionExist = await models.Question.findOne({
+            where: {
+                [Op.and]: [
+                    { id: questionId },
+                    { paper_set_id: paperSetId }
+                ]
+            },
+            include: [{
+                model: models.Answer,
+                as: 'answers',
+                where: {
+                    id: answerId
+                }
+            }]
+        }, { transaction: trans });
+
+        if (questionExist == null) {
+            throw new Error("Invalid input");
+        }
+
+
+        const correctAnswer = questionExist.answers[0].is_correct;
+
+
+        const alreadySubmitted = await models.ExamUserResponse.findOne({
+            where: {
+                [Op.and]: [
+                    { exam_user_attempt_id: attempt_id },
+                    { question_id: questionId }
+                ]
+            }
+        }, { transaction: trans });
+
+
+        if (alreadySubmitted) {
+            await models.ExamUserResponse.update({
+                answer_id: answerId,
+                is_correct: correctAnswer
+            }, {
+                where: {
+                    [Op.and]: [
+                        { exam_user_attempt_id: attempt_id },
+                        { question_id: questionId }
+                    ]
+                }
+            }, { transaction: trans });
+
+        } else {
+            await models.ExamUserResponse.create({
+                answer_id: answerId,
+                is_correct: correctAnswer,
+                exam_user_attempt_id: attempt_id,
+                question_id: questionId
+            }, { transaction: trans });
+
+        }
+
+        await trans.commit();
+        return { data: 'response logged successfully', error: null };
+    } catch (error) {
+        await trans.rollback();
+        return { data: null, error: error.message };
+    }
+}
+
+
 
 module.exports = {
     createExam,
     deleteExam,
     getAllExam,
     getAllUpcomingExam,
-    startExam
+    startExam,
+    submitExam,
+    logResponse
 }
