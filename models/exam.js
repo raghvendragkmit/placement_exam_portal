@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Exam.belongsTo(models.Subject, { foreignKey: 'subject_id', targetKey:'id',as:'subjects'});
-      Exam.belongsToMany(models.User, { through: models.ExamUserMapping, foreignKey: 'exam_id', as:'users' });
+      Exam.belongsTo(models.Subject, { foreignKey: 'subject_id', targetKey: 'id', as: 'subjects' });
+      Exam.belongsToMany(models.User, { through: models.ExamUserMapping, foreignKey: 'exam_id', as: 'users' });
     }
   }
   Exam.init({
@@ -26,15 +26,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     exam_start_time: {
       allowNull: false,
-      type: Sequelize.TIME,
+      type: Sequelize.DATE,
     },
     exam_end_time: {
       allowNull: false,
-      type: Sequelize.TIME,
-    },
-    exam_date: {
-      allowNull: false,
-      type: Sequelize.TIME,
+      type: Sequelize.DATE,
     },
     exam_passing_percentage: {
       allowNull: false,

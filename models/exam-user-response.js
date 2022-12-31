@@ -11,19 +11,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ExamUserResponse.belongsTo(models.ExamUserMapping, { foreignKey: 'exam_user_mapping_id', targetKey: 'id', as:'exam_users' });
-      ExamUserResponse.belongsTo(models.Question, { foreignKey: 'question_id', targetKey: 'id', as:'questions' });
+      ExamUserResponse.belongsTo(models.ExamUserMapping, { foreignKey: 'exam_user_attempt_id', targetKey: 'id', as: 'exam_user_attempt' });
+      ExamUserResponse.belongsTo(models.Question, { foreignKey: 'question_id', targetKey: 'id', as: 'questions' });
       ExamUserResponse.belongsTo(models.Answer, { foreignKey: 'answer_id', targetKey: 'id', as: 'answers' });
-      
+
     }
   }
   ExamUserResponse.init({
-    exam_user_mapping_id: {
+    exam_user_attempt_id: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
         model: "exam_user_mapping",
-        key: 'id'
+        key: ' id'
       }
     },
 

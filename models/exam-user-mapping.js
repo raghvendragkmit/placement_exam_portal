@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ExamUserMapping.belongsTo(models.Exam, { foreignKey: 'exam_id', targetKey: 'id',as:'exams' });
-      ExamUserMapping.belongsTo(models.PaperSet, { foreignKey: 'paper_set_id', targetKey: 'id',as:'paper_sets' });
-      ExamUserMapping.belongsTo(models.User, { foreignKey: 'user_id', targetKey: 'id', as:'users' });
-      ExamUserMapping.hasMany(models.ExamUserResponse, { foreignKey: 'exam_user_mapping_id', sourceKey: 'id', as:'exam_users' });
+      ExamUserMapping.belongsTo(models.Exam, { foreignKey: 'exam_id', targetKey: 'id', as: 'exams' });
+      ExamUserMapping.belongsTo(models.PaperSet, { foreignKey: 'paper_set_id', targetKey: 'id', as: 'paper_sets' });
+      ExamUserMapping.belongsTo(models.User, { foreignKey: 'user_id', targetKey: 'id', as: 'users' });
+      ExamUserMapping.hasMany(models.ExamUserResponse, { foreignKey: 'exam_user_attempt_id', sourceKey: 'id', as: 'exam_users' });
     }
   }
   ExamUserMapping.init({
@@ -26,8 +26,6 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       }
     },
-
-
     user_id: {
       allowNull: false,
       type: Sequelize.UUID,
@@ -48,22 +46,11 @@ module.exports = (sequelize, DataTypes) => {
 
     start_time: {
       allowNull: true,
-      type: Sequelize.TIME
+      type: Sequelize.DATE
     },
     submit_time: {
       allowNull: true,
-      type: Sequelize.TIME
-    },
-
-    date: {
-      allowNull: true,
-      type: Sequelize.DATEONLY
-    },
-
-
-    marks_per_question: {
-      allowNull: false,
-      type: Sequelize.INTEGER
+      type: Sequelize.DATE
     },
 
     total_questions: {
@@ -95,26 +82,12 @@ module.exports = (sequelize, DataTypes) => {
       type: Sequelize.BOOLEAN,
     },
 
-    created_at: {
-      allowNull: false,
-      type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW,
-    },
-    updated_at: {
-      allowNull: false,
-      type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW,
-    },
-    deleted_at: {
-      allowNull: true,
-      type: Sequelize.DATE,
-      defaultValue: null,
-    }
+  
   }, {
     sequelize,
     modelName: 'ExamUserMapping',
     tableName: 'exam_user_mapping',
-    paranoid:true
+    paranoid: true
   });
   return ExamUserMapping;
 };
