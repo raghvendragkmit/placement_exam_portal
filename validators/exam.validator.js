@@ -13,5 +13,11 @@ module.exports = {
             examPassingPercentage: Joi.number().min().precision(2)
         });
         validateRequest(req, res, next, schema, "body");
+    },
+    examIdSchema: async (req, res, next) => {
+        const schema = Joi.object({
+            examId: Joi.string().guid().required()
+        });
+        validateRequest(req, res, next, schema, "body");
     }
 };

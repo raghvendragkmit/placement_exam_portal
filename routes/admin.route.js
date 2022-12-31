@@ -179,11 +179,19 @@ router.post(
     '/exam',
     authMiddleware.checkAccessToken,
     authMiddleware.verifyAdmin,
+    validator.examValidator.createExamSchema,
     controllers.examController.createExam,
     genericResponse.sendResponse
 );
 
 
 
-
+router.delete(
+    '/exam/:examId',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    validator.examValidator.examIdSchema,
+    controllers.examController.deleteExam,
+    genericResponse.sendResponse
+);
 module.exports = router;

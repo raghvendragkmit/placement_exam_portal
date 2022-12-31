@@ -54,11 +54,27 @@ const createExam = async (payload) => {
         examEndTime: examCreated.exam_end_time,
         examDate: examCreated.exam_date
     }
-};
+}
 
+const deleteExam = async (payload, params) => {
+    const examId = params.examId
+    const currentTime = new Date();
+    const examUserMappingExist = await models.Exam.findOne({
+        where: {
+            id: examId
+        }
+    });
+    if (currentTime > examUserMappingExist.exam_start_time) {
+        throw new Error('Cannot delete exam');
+    }
+
+    await models.Exam.destroy({ id: examId });
+    return 'exam deleted successfully';
+}
 
 
 module.exports = {
     createExam,
-   
+    deleteExam,
+
 }
