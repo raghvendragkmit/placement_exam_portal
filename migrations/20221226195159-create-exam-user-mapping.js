@@ -18,8 +18,6 @@ module.exports = {
           key: 'id'
         }
       },
-
-
       user_id: {
         allowNull: false,
         type: Sequelize.UUID,
@@ -40,16 +38,11 @@ module.exports = {
 
       start_time: {
         allowNull: true,
-        type:Sequelize.TIME
+        type:Sequelize.DATE
       },
       submit_time: {
         allowNull: true,
-        type: Sequelize.TIME
-      },
-
-      date: {
-        allowNull: true,
-        type: Sequelize.DATEONLY
+        type: Sequelize.DATE
       },
 
       total_questions: {
