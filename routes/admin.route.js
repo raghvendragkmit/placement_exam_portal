@@ -194,4 +194,14 @@ router.delete(
     controllers.examController.deleteExam,
     genericResponse.sendResponse
 );
+
+router.get(
+    '/exams',
+    authMiddleware.checkAccessToken,
+    authMiddleware.verifyAdmin,
+    controllers.examController.getAllExam,
+    genericResponse.sendResponse
+);
+
+
 module.exports = router;

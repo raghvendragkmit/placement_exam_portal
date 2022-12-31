@@ -25,7 +25,21 @@ const deleteExam = async (req, res, next) => {
         commonErrorHandler(req, res, error.message, 400, error);
     }
 }
+
+
+
+const getAllExam = async (req, res, next) => {
+    try {
+        const { body: payload } = req;
+        const response = await services.examService.getAllExam(payload);
+        res.data = response;
+        next();
+    } catch (error) {
+        commonErrorHandler(req, res, error.message, 400, error);
+    }
+}
 module.exports = {
     createExam,
-    deleteExam
+    deleteExam,
+    getAllExam
 }

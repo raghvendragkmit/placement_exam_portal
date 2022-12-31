@@ -31,7 +31,6 @@ const createExam = async (payload) => {
     }
 
     const start_time = dateArray[0] + '-' + dateArray[1] + '-' + dateArray[2] + ' ' + startTime[0] + ':' + startTime[1] + ':' + startTime[2];
-
     const end_time = dateArray[0] + '-' + dateArray[1] + '-' + dateArray[2] + ' ' + endTime[0] + ':' + endTime[1] + ':' + endTime[2];
 
     const start_date_time = Date.parse(start_time);
@@ -72,9 +71,15 @@ const deleteExam = async (payload, params) => {
     return 'exam deleted successfully';
 }
 
+const getAllExam = async (payload) => {
+    const exams = await models.Exam.findAll({
+        attributes: { exclude: ["created_at", "deleted_at", "updated_at"] }
+    });
+    return exams;
+}
 
 module.exports = {
     createExam,
     deleteExam,
-
+    getAllExam
 }
