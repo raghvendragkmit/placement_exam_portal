@@ -78,6 +78,20 @@ const getAllExam = async (payload) => {
     return exams;
 }
 
+const getAllUpcomingExam = async (payload) => {
+    const exams = await models.Exam.findAll(
+        {
+            where: {
+                exam_start_time: {
+                    [Op.gt]: new Date(),
+                }
+            }
+        }
+    );
+    return exams;
+};
+
+
 module.exports = {
     createExam,
     deleteExam,

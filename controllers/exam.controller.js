@@ -38,8 +38,22 @@ const getAllExam = async (req, res, next) => {
         commonErrorHandler(req, res, error.message, 400, error);
     }
 }
+
+
+const getAllUpcomingExam = async (req, res, next) => {
+    try {
+        const { body: payload } = req;
+        const response = await services.examService.getAllUpcomingExam(payload);
+        res.data = response;
+        next();
+    } catch (error) {
+        commonErrorHandler(req, res, error.message, 400, error);
+    }
+}
+
 module.exports = {
     createExam,
     deleteExam,
-    getAllExam
+    getAllExam,
+    getAllUpcomingExam
 }
