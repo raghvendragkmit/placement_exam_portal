@@ -89,11 +89,100 @@ const getAllUpcomingExam = async (payload) => {
         }
     );
     return exams;
-};
+}
+
+
+
+
+
+const startExam = async (payload, params) => {
+    const examId = params.examId;
+    const userId = payload.userId;
+
+    const examExist = await models.Exam.findOne({
+        where: {
+            id: examId
+        }
+    });
+
+    if (!examExist) {
+        throw new Error('exam not found');
+    }
+
+    const userExist = await models.User.findOne({
+        where: {
+            id: userId
+        }
+    });
+
+    if (!userExist) {
+        throw new Error('user not found');
+    }
+
+    const examUserMappingExist = await models.ExamUserMapping.findOne({
+        where: {
+            [Op.and]: [
+                { exam_id: examId },
+                { user_id: userId }
+            ]
+        }
+    });
+
+    if (examUserMappingExist) {
+        throw new Error('cannot attempt exam twice');
+    }
+
+    const currentTime = new Date();
+
+
+    if (currentTime > examExist.exam_end_time) {
+        throw new Error("exam finished");
+    } else if (currentTime < examExist.dataValues.exam_start_time) {
+        console.log()
+        throw new Error("exam not started yet");
+    }
+
+    const paperSet = await models.PaperSet.findAll(
+        {
+            order: sequelize.random(),
+            limit: 1,
+            where: { subject_id: examExist.dataValues.subject_id }
+        }
+    );
+
+    const paperSetId = paperSet[0].dataValues.id;
+
+    const questionSets = await models.Question.findAll({
+        where: { paper_set_id: paperSetId },
+        include: [{
+            model: models.Answer,
+            as: 'answers',
+            attributes: { exclude: ["is_correct"] }
+        }]
+    });
+
+
+    const userExamMappingCreated = await models.ExamUserMapping.create({
+        exam_id: examId,
+        user_id: userId,
+        paper_set_id: paperSetId,
+        total_questions: questionSets.length,
+        start_time: new Date().toUTCString()
+    });
+
+
+    if (!userExamMappingCreated) {
+        throw new Error('Somthing went wrong');
+    }
+    return questionSets;
+}
+
 
 
 module.exports = {
     createExam,
     deleteExam,
-    getAllExam
+    getAllExam,
+    getAllUpcomingExam,
+    startExam
 }

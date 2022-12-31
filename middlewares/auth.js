@@ -63,8 +63,24 @@ const verifyAdmin = async (req, res, next) => {
     }
 }
 
+
+
+const verifyUser = async (req, res, next) => {
+    try {
+        console.log(req.user);
+        if (req.user.role == 'User') {
+            next();
+        }
+    } catch (error) {
+        return res.status(403).json({ error: error.message });
+
+    }
+}
+
+
 module.exports = {
     checkAccessToken,
     checkRefreshToken,
-    verifyAdmin
+    verifyAdmin,
+    verifyUser
 };

@@ -18,6 +18,6 @@ module.exports = {
         const schema = Joi.object({
             examId: Joi.string().guid().required()
         });
-        validateRequest(req, res, next, schema, "body");
-    }
+        validateRequest(req, res, next, schema, "params");
+    },
 };
