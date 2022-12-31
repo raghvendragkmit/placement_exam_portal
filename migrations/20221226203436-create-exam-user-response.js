@@ -9,13 +9,14 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('uuid_generate_v4()')
       },
-      exam_user_mapping_id: {
+
+      exam_user_attempt_id: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
           model: "exam_user_mapping",
           key: 'id'
-        }
+        },
       },
 
       question_id: {
@@ -40,7 +41,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.BOOLEAN,
       },
-      
+
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
