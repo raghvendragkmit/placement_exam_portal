@@ -37,6 +37,7 @@ router.get(
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
 	controllers.userController.getAllUser,
+	serializer.userSerializer.getAllUser,
 	genericResponse.sendResponse
 )
 
