@@ -62,12 +62,12 @@ const createQuestionAnswer = async (payload) => {
 }
 
 const createQuestionAnswers = async (payload) => {
-    const questionObject = payload.questionAnswers;
+	const questionObject = payload.questionAnswers
 	const responseObject = []
 	for (var key in questionObject) {
 		if (questionObject.hasOwnProperty(key)) {
 			item = questionObject[key]
-            const response = await createQuestionAnswer(item);
+			const response = await createQuestionAnswer(item)
 			if (response.error) throw new Error(response.error.message)
 			responseObject.push(item.questionDescription)
 		}
@@ -129,7 +129,7 @@ const updateQuestionDescription = async (payload, params) => {
 	}
 	const questionUpdated = await models.Question.update(
 		{
-			questionDescription: payload.questionDescription,
+			question_description: payload.questionDescription,
 		},
 		{ where: { id: questionId } }
 	)
@@ -145,7 +145,7 @@ const updateAnswerDescription = async (payload, params) => {
 	}
 	const answerUpdated = await models.Answer.update(
 		{
-			answerDescription: payload.answerDescription,
+			answer_description: payload.answerDescription,
 		},
 		{ where: { id: answerId } }
 	)
