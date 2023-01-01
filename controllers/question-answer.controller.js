@@ -8,7 +8,7 @@ const createQuestionAnswer = async (req, res, next) => {
 		const response =
 			await services.questionAnswerService.createQuestionAnswer(payload)
 		if (response.error) {
-			throw new Error(response.error.message)
+			throw new Error(response.error)
 		}
 		res.data = response.data
 		next()

@@ -6,135 +6,76 @@ const validator = require("../validators/index")
 const serializer = require("../serializers")
 const router = Router()
 
-// router.post(
-//     '/user',
-//     authMiddleware.checkAccessToken,
-//     authMiddleware.verifyAdmin,
-//     validator.userValidator.createUserSchema,
-//     controllers.userController.createUser,
-//     genericResponse.sendResponse
-// );
-
-
-// router.post('/login',
-//     validator.userValidator.loginSchema,
-//     controllers.userController.loginUser,
-//     genericResponse.sendResponse
-// );
-
-
-
-
-// router.delete(
-//     '/user/:userId',
-//     authMiddleware.checkAccessToken,
-//     authMiddleware.verifyAdmin,
-//     validator.userValidator.userIdSchema,
-//     controllers.userController.deleteUser,
-//     genericResponse.sendResponse
-// );
-
-
-// router.get(
-//     '/users',
-//     authMiddleware.checkAccessToken,
-//     authMiddleware.verifyAdmin,
-//     controllers.userController.getAllUser,
-//     genericResponse.sendResponse
-// );
-
-
-// router.get(
-//     "/refresh-token",
-//     authMiddleware.checkRefreshToken,
-//     controllers.userController.refreshToken,
-//     genericResponse.sendResponse
-// );
-
-// router.post(
-//     "/forget-password",
-//     validator.userValidator.forgetPassword,
-//     controllers.userController.forgetPassword,
-//     genericResponse.sendResponse
-// );
-
-// router.post(
-//     "/reset-password/:token",
-//     validator.userValidator.resetPasswordTokenSchema,
-//     validator.userValidator.resetPasswordSchema,
-//     controllers.userController.resetPassword,
-//     genericResponse.sendResponse
-// );
-
-
 router.post(
-    '/subject',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    validator.subjectValidator.createSubjectSchema,
-    controllers.subjectController.createSubject,
-    genericResponse.sendResponse
-);
-
+	"/subject",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	validator.subjectValidator.subjectNameSchema,
+	controllers.subjectController.createSubject,
+	genericResponse.sendResponse
+)
 
 router.get(
-    '/subjects',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.subjectController.getAllSubject,
-    genericResponse.sendResponse
-);
-
+	"/subjects",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	controllers.subjectController.getAllSubject,
+	serializer.subjectSerializer.getAllSubject,
+	genericResponse.sendResponse
+)
 
 router.delete(
-    '/subject/:subjectId',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    validator.subjectValidator.subjectIdSchema,
-    controllers.subjectController.deleteSubject,
-    genericResponse.sendResponse
-);
+	"/subject/:subjectId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	validator.subjectValidator.subjectIdSchema,
+	controllers.subjectController.deleteSubject,
+	genericResponse.sendResponse
+)
 
 router.post(
-    '/question-answer',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.questionAnswerController.createQuestionAnswer,
-    genericResponse.sendResponse
-);
-
+	"/question-answer",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	validator.questionAnswerValidator.questionAnswerSchema,
+	controllers.questionAnswerController.createQuestionAnswer,
+	genericResponse.sendResponse
+)
 
 router.post(
-    '/question-answers',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.questionAnswerController.createQuestionAnswers,
-    genericResponse.sendResponse
-);
+	"/question-answers",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	controllers.questionAnswerController.createQuestionAnswers,
+	genericResponse.sendResponse
+)
 
 router.get(
-    '/question-answers',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
+	"/question-answers",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
     controllers.questionAnswerController.getAllQuestionAnswer,
-    genericResponse.sendResponse
-);
+    serializer.questionAnswerSerializer.questionAnswers,
+	genericResponse.sendResponse
+)
 
 router.get(
-    '/question-answer/:questionId',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.questionAnswerController.getQuestionAnswerById,
-    genericResponse.sendResponse
-);
+	"/question-answer/:questionId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	validator.questionAnswerValidator.questionIdSchema,
+	controllers.questionAnswerController.getQuestionAnswerById,
+	serializer.questionAnswerSerializer.questionAnswer,
+	genericResponse.sendResponse
+)
 
 router.patch(
-    '/question/:questionId',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.questionAnswerController.updateQuestionDescription,
-    genericResponse.sendResponse
-);
+	"/question/:questionId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	controllers.questionAnswerController.updateQuestionDescription,
+	genericResponse.sendResponse
+)
 
 router.post(
 	"/user",
@@ -163,13 +104,13 @@ router.delete(
 )
 
 router.patch(
-    '/answer/:answerId',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.questionAnswerController.updateAnswerDescription,
-    genericResponse.sendResponse
-);
-module.exports = router;
+	"/answer/:answerId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	controllers.questionAnswerController.updateAnswerDescription,
+	genericResponse.sendResponse
+)
+
 router.get(
 	"/users",
 	authMiddleware.checkAccessToken,
