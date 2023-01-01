@@ -63,8 +63,21 @@ const questionAnswers = async (req, res, next) => {
 	next()
 }
 
+const paperSetNameId = async (req, res, next) => {
+	const data = res.data || null
+
+	const response = {
+		id: data.id,
+		subjectName: data.paper_set_name,
+	}
+
+	res.data = response
+	next()
+}
+
 module.exports = {
 	createPaperSet,
 	getALlPaperSet,
 	questionAnswers,
+	paperSetNameId,
 }

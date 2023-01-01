@@ -70,9 +70,41 @@ const getAllPaperSetQuestions = async (payload, params) => {
 	return paperSets
 }
 
+const updatePaperSet = async (payload, params) => {
+	const paperSetId = params.paperSetId
+	const paperSetName = payload.paperSetName
+	const paperSetExist = await models.PaperSet.findOne({
+		where: { id: paperSetId },
+	})
+	if (!paperSetExist) {
+		throw new Error("Paper Set not found")
+	}
+
+	const paperSetNameExist = await models.PaperSet.findOne({
+		where: { paper_set_name: paperSetName },
+	})
+
+	if (paperSetNameExist) {
+		throw new Error("Paper Set name already exist")
+	}
+
+	const paperSetPayload = {
+		paper_set_name: payload.paperSetName,
+	}
+	await models.PaperSet.update(paperSetPayload, {
+		where: { id: paperSetExist.dataValues.id },
+	})
+
+	const paperSetUpdated = await models.PaperSet.findOne({
+		where: { id: paperSetId },
+	})
+	return paperSetUpdated
+}
+
 module.exports = {
 	createPaperSet,
 	getAllPaperSet,
 	deletePaperSet,
 	getAllPaperSetQuestions,
+	updatePaperSet,
 }

@@ -81,6 +81,15 @@ router.get(
 	genericResponse.sendResponse
 )
 
+router.patch(
+	"/paper-set/:paperSetId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	controllers.paperSetController.updatePaperSet,
+	serializer.paperSetSerializer.paperSetNameId,
+	genericResponse.sendResponse
+)
+
 router.delete(
 	"/paper-set/:paperSetId",
 	authMiddleware.checkAccessToken,
