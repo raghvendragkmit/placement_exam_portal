@@ -87,6 +87,15 @@ const deleteUser = async (payload, params) => {
 	if (!userExist) {
 		throw new Error("user not found")
 	}
+
+	const examUserMappingExist = await models.ExamUserMapping.findOne({
+		where: { user_id: userId },
+	})
+
+	if (examUserMappingExist) {
+		throw new Error("Cannot delete user, user has given exams")
+	}
+
 	await models.User.destroy({ where: { id: userId } })
 	return "user deleted successfully"
 }
