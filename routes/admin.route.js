@@ -95,6 +95,7 @@ router.get(
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
 	controllers.paperSetController.getAllPaperSetQuestions,
+	serializer.paperSetSerializer.questionAnswers,
 	genericResponse.sendResponse
 )
 

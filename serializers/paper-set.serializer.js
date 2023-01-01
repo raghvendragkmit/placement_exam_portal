@@ -32,7 +32,39 @@ const getALlPaperSet = async (req, res, next) => {
 	next()
 }
 
+const questionAnswers = async (req, res, next) => {
+	console.log(res.data)
+	const data = res.data || null
+
+	const response = []
+	data.forEach((question) => {
+		const tempQuestion = {
+			id: question.id,
+			questionDescription: question.question_description,
+			paperSetId: question.paper_set_id,
+		}
+
+		const answers = []
+
+		question.answers.forEach((answer) => {
+			const tempAnswer = {
+				id: answer.id,
+				answerDescription: answer.answer_description,
+				isCorrect: answer.is_correct,
+			}
+			answers.push(tempAnswer)
+		})
+
+		tempQuestion.answers = answers
+		response.push(tempQuestion)
+	})
+
+	res.data = response
+	next()
+}
+
 module.exports = {
 	createPaperSet,
 	getALlPaperSet,
+	questionAnswers,
 }
