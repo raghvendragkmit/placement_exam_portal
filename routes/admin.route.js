@@ -46,6 +46,7 @@ router.post(
 	"/question-answers",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
+	validator.questionAnswerValidator.questionAnswersSchema,
 	controllers.questionAnswerController.createQuestionAnswers,
 	genericResponse.sendResponse
 )

@@ -62,11 +62,12 @@ const createQuestionAnswer = async (payload) => {
 }
 
 const createQuestionAnswers = async (payload) => {
+    const questionObject = payload.questionAnswers;
 	const responseObject = []
-	for (var key in payload) {
-		if (payload.hasOwnProperty(key)) {
-			item = payload[key]
-			const response = await createQuestionAnswer(item)
+	for (var key in questionObject) {
+		if (questionObject.hasOwnProperty(key)) {
+			item = questionObject[key]
+            const response = await createQuestionAnswer(item);
 			if (response.error) throw new Error(response.error.message)
 			responseObject.push(item.questionDescription)
 		}
