@@ -176,6 +176,25 @@ const resetPassword = async (payload, params) => {
 	return "Password reset successfully"
 }
 
+const adminResetPassword = async (payload, params) => {
+	const email = payload.email
+	const password = payload.password
+
+	const userExist = await models.User.findOne({ where: { email: email } })
+	if (!userExist) {
+		throw new Error("User Not Found")
+	}
+
+	await models.User.update(
+		{ password: await bcrypt.hash(password, 10) },
+		{ where: { email: userExist.dataValues.email } }
+	)
+	const email_body = `Admin reset password successfully \n Credentials \n email : ${email} \n password : ${password}`
+	const email_subject = `Password reset`
+	await sendMail(email_body, email_subject, userExist.dataValues.email)
+	return "Password reset successfully"
+}
+
 module.exports = {
 	createUser,
 	loginUser,
@@ -184,4 +203,5 @@ module.exports = {
 	refreshToken,
 	resetPassword,
 	forgetPassword,
+	adminResetPassword,
 }

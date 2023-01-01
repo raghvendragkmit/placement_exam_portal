@@ -79,6 +79,17 @@ const resetPassword = async (req, res, next) => {
 	}
 }
 
+const adminResetPassword = async (req, res, next) => {
+	try {
+		const { body: payload } = req
+		const data = await services.userService.adminResetPassword(payload)
+		res.data = data
+		next()
+	} catch (error) {
+		commonErrorHandler(req, res, error.message, 400, error)
+	}
+}
+
 const logoutUser = async (req, res, next) => {
 	try {
 		const data = await userService.logoutUser(requestToken)
@@ -97,4 +108,5 @@ module.exports = {
 	refreshToken,
 	forgetPassword,
 	resetPassword,
+	adminResetPassword,
 }

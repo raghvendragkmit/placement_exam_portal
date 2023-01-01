@@ -62,4 +62,13 @@ router.post(
 	genericResponse.sendResponse
 )
 
+router.post(
+	"/reset-user-password",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	validator.userValidator.adminResetUserPasswordSchema,
+	controllers.userController.adminResetPassword,
+	genericResponse.sendResponse
+)
+
 module.exports = router
