@@ -68,10 +68,13 @@ const forgetPassword = async (req, res, next) => {
 	}
 }
 
-const resetPassword = async (req, res, next) => {
+const resetPasswordByToken = async (req, res, next) => {
 	try {
 		const { body: payload, params } = req
-		const data = await services.userService.resetPassword(payload, params)
+		const data = await services.userService.resetPasswordByToken(
+			payload,
+			params
+		)
 		res.data = data
 		next()
 	} catch (error) {
@@ -83,6 +86,17 @@ const adminResetPassword = async (req, res, next) => {
 	try {
 		const { body: payload } = req
 		const data = await services.userService.adminResetPassword(payload)
+		res.data = data
+		next()
+	} catch (error) {
+		commonErrorHandler(req, res, error.message, 400, error)
+	}
+}
+
+const resetPassword = async (req, res, next) => {
+	try {
+		const { body: payload,user } = req
+		const data = await services.userService.resetPassword(payload,user)
 		res.data = data
 		next()
 	} catch (error) {
@@ -107,6 +121,7 @@ module.exports = {
 	getAllUser,
 	refreshToken,
 	forgetPassword,
-	resetPassword,
+    resetPassword,
+    resetPasswordByToken,
 	adminResetPassword,
 }

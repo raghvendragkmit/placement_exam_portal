@@ -70,5 +70,5 @@ module.exports = {
 			password: passwordComplexity(complexityOptions).required(),
 		})
 		validateRequest(req, res, next, schema, "body")
-	},
+    },
 }

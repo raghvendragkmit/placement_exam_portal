@@ -58,7 +58,7 @@ router.post(
 	"/reset-password/:token",
 	validator.userValidator.resetPasswordTokenSchema,
 	validator.userValidator.resetPasswordSchema,
-	controllers.userController.resetPassword,
+	controllers.userController.resetPasswordByToken,
 	genericResponse.sendResponse
 )
 
@@ -68,6 +68,14 @@ router.post(
 	authMiddleware.verifyAdmin,
 	validator.userValidator.adminResetUserPasswordSchema,
 	controllers.userController.adminResetPassword,
+	genericResponse.sendResponse
+)
+
+router.post(
+	"/reset-password",
+	authMiddleware.checkAccessToken,
+	validator.userValidator.resetPasswordSchema,
+	controllers.userController.resetPassword,
 	genericResponse.sendResponse
 )
 

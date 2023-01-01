@@ -151,7 +151,7 @@ const forgetPassword = async (payload) => {
 	return "send reset password link successfully"
 }
 
-const resetPassword = async (payload, params) => {
+const resetPasswordByToken = async (payload, params) => {
 	const resetToken = params.token
 	const password = payload.password
 	let key = resetToken + "-reset-password-link"
@@ -195,6 +195,20 @@ const adminResetPassword = async (payload, params) => {
 	return "Password reset successfully"
 }
 
+const resetPassword = async (payload, user) => {
+	const email = user.email
+	const password = payload.password
+
+	await models.User.update(
+		{ password: await bcrypt.hash(password, 10) },
+		{ where: { email: email } }
+	)
+	const email_body = `Reset password successfully \n Credentials \n email : ${email} \n password : ${password}`
+	const email_subject = `Password reset`
+	await sendMail(email_body, email_subject, email)
+	return "Password reset successfully"
+}
+
 module.exports = {
 	createUser,
 	loginUser,
@@ -202,6 +216,7 @@ module.exports = {
 	getAllUser,
 	refreshToken,
 	resetPassword,
+	resetPasswordByToken,
 	forgetPassword,
 	adminResetPassword,
 }
