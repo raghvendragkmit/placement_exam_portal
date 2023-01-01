@@ -43,7 +43,15 @@ module.exports = (sequelize, DataTypes) => {
 					model: "subject",
 					key: "id",
 				},
-				field: "subject_id",
+			},
+
+			paper_set_name: {
+				allowNull: false,
+				type: Sequelize.STRING,
+			},
+			marks_per_question: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
 			},
 		},
 		{

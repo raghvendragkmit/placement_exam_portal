@@ -6,24 +6,21 @@ const validator = require("../validators/index")
 const serializer = require("../serializers")
 const router = Router()
 
-
-
 router.post(
-    '/question-answer',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    validator.questionAnswerValidator.createQuestionAnswerSchema,
-    controllers.questionAnswerController.createQuestionAnswer,
-    genericResponse.sendResponse
-);
-
+	"/question-answer",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	validator.questionAnswerValidator.questionAnswerSchema,
+	controllers.questionAnswerController.createQuestionAnswer,
+	genericResponse.sendResponse
+)
 
 router.get(
 	"/question-answers",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-    controllers.questionAnswerController.getAllQuestionAnswer,
-    serializer.questionAnswerSerializer.questionAnswers,
+	controllers.questionAnswerController.getAllQuestionAnswer,
+	serializer.questionAnswerSerializer.questionAnswers,
 	genericResponse.sendResponse
 )
 
@@ -55,7 +52,6 @@ router.delete(
 	genericResponse.sendResponse
 )
 
-
 router.patch(
 	"/answer/:answerId",
 	authMiddleware.checkAccessToken,
@@ -66,50 +62,48 @@ router.patch(
 	genericResponse.sendResponse
 )
 
-
 router.post(
-    '/paper-set',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    validator.paperSetValidator.createPaperSetSchema,
-    controllers.paperSetController.createPaperSet,
-    genericResponse.sendResponse
-);
-
-
-
-router.get(
-    '/paper-sets',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.paperSetController.getAllPaperSet,
-    genericResponse.sendResponse
-);
-
-router.delete(
-    '/paper-set/:paperSetId',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    validator.paperSetValidator.paperSetIdSchema,
-    controllers.paperSetController.deletePaperSet,
-    genericResponse.sendResponse
-);
-
-router.get(
-    '/paper-set-question-answers/:paperSetId',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.paperSetController.getAllPaperSetQuestions,
-    genericResponse.sendResponse
+	"/paper-set",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	validator.paperSetValidator.createPaperSetSchema,
+	controllers.paperSetController.createPaperSet,
+	serializer.paperSetSerializer.createPaperSet,
+	genericResponse.sendResponse
 )
 
+router.get(
+	"/paper-sets",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	controllers.paperSetController.getAllPaperSet,
+	serializer.paperSetSerializer.getALlPaperSet,
+	genericResponse.sendResponse
+)
+
+router.delete(
+	"/paper-set/:paperSetId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	validator.paperSetValidator.paperSetIdSchema,
+	controllers.paperSetController.deletePaperSet,
+	genericResponse.sendResponse
+)
+
+router.get(
+	"/paper-set-question-answers/:paperSetId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	controllers.paperSetController.getAllPaperSetQuestions,
+	genericResponse.sendResponse
+)
 
 router.patch(
 	"/question/:questionId",
 	authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    validator.questionAnswerValidator.questionIdSchema,
-    validator.questionAnswerValidator.questionDescriptionSchema,
+	authMiddleware.verifyAdmin,
+	validator.questionAnswerValidator.questionIdSchema,
+	validator.questionAnswerValidator.questionDescriptionSchema,
 	controllers.questionAnswerController.updateQuestionDescription,
 	genericResponse.sendResponse
 )
