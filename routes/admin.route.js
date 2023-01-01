@@ -72,33 +72,43 @@ router.post(
 )
 
 router.post(
-    '/subject',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    validator.subjectValidator.createSubjectSchema,
-    controllers.subjectController.createSubject,
-    genericResponse.sendResponse
-);
-
-
-router.get(
-    '/subjects',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.subjectController.getAllSubject,
-    genericResponse.sendResponse
-);
-
-
-router.delete(
-    '/subject/:subjectId',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    validator.subjectValidator.subjectIdSchema,
-    controllers.subjectController.deleteSubject,
-    genericResponse.sendResponse
+	"/subject",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	validator.subjectValidator.subjectNameSchema,
+	controllers.subjectController.createSubject,
+	serializer.subjectSerializer.subjectNameId,
+	genericResponse.sendResponse
 )
 
+router.get(
+	"/subjects",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	controllers.subjectController.getAllSubject,
+	serializer.subjectSerializer.getAllSubject,
+	genericResponse.sendResponse
+)
+
+router.delete(
+	"/subject/:subjectId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	validator.subjectValidator.subjectIdSchema,
+	controllers.subjectController.deleteSubject,
+	genericResponse.sendResponse
+)
+
+router.patch(
+	"/subject/:subjectId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	validator.subjectValidator.subjectIdSchema,
+	validator.subjectValidator.subjectNameSchema,
+	controllers.subjectController.updateSubject,
+	serializer.subjectSerializer.subjectNameId,
+	genericResponse.sendResponse
+)
 
 router.post(
 	"/reset-password",
