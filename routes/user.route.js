@@ -14,14 +14,12 @@ const examSerializer = require("../serializers/exam.serializer")
 
 const router = Router()
 
-
 router.post(
 	"/login",
 	userValidator.loginSchema,
 	userController.loginUser,
 	genericResponse.sendResponse
 )
-
 
 router.get(
 	"/refresh-token",
@@ -30,14 +28,12 @@ router.get(
 	genericResponse.sendResponse
 )
 
-
 router.post(
 	"/forget-password",
 	userValidator.forgetPassword,
 	userController.forgetPassword,
 	genericResponse.sendResponse
 )
-
 
 router.post(
 	"/reset-password/:token",
@@ -46,7 +42,6 @@ router.post(
 	userController.resetPasswordByToken,
 	genericResponse.sendResponse
 )
-
 
 router.post(
 	"/reset-password",
@@ -83,14 +78,20 @@ router.post(
 	genericResponse.sendResponse
 )
 
-
 router.get(
 	"/exam-result/:examId",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyUser,
 	examValidator.examIdSchema,
-    examController.checkResult,
-    examSerializer.userResult,
+	examController.checkResult,
+	examSerializer.userResult,
+	genericResponse.sendResponse
+)
+
+router.post(
+	"/logout",
+	authMiddleware.checkAccessToken,
+	userController.logOutUser,
 	genericResponse.sendResponse
 )
 

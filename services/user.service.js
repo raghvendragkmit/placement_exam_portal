@@ -209,6 +209,17 @@ const resetPassword = async (payload, user) => {
 	return "Password reset successfully"
 }
 
+const logOutUser = async (payload, user) => {
+	const userId = user.id
+	const refreshTokenKey = userId + "-refresh-token"
+	const isCachedRefreshToken = redisClient.get(refreshTokenKey)
+
+	if (isCachedRefreshToken) {
+		redisClient.del(refreshTokenKey)
+	}
+	return "logout successfully"
+}
+
 module.exports = {
 	createUser,
 	loginUser,
@@ -219,4 +230,5 @@ module.exports = {
 	resetPasswordByToken,
 	forgetPassword,
 	adminResetPassword,
+	logOutUser,
 }
