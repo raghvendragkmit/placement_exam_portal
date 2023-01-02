@@ -1,17 +1,37 @@
 const { Router } = require("express")
-const controllers = require("../controllers")
+const userController = require("../controllers/user.controller")
+const subjectController = require("../controllers/subject.controller")
+const questionAnswerController = require("../controllers/question-answer.controller")
+const paperSetController = require("../controllers/paper-set.controller");
 const genericResponse = require("../helpers/common-function.helper")
 const authMiddleware = require("../middlewares/auth")
-const validator = require("../validators/index")
-const serializer = require("../serializers")
+
+const userValidator = require("../validators/user.validator")
+const subjectValidator = require("../validators/subject.validator")
+const questionAnswerValidator = require("../validators/question-answer.validator")
+const paperSetValidator = require("../validators/paper-set.validator");
+
+const userSerializer = require("../serializers/user.serializer")
+const subjectSerializer = require("../serializers/subject.serializer")
+const questionAnswerSerializer = require("../serializers/question-answer.serializer")
+const paperSetSerializer = require("../serializers/paper-set.serializer");
 const router = Router()
 
 router.post(
 	"/question-answer",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	validator.questionAnswerValidator.questionAnswerSchema,
-	controllers.questionAnswerController.createQuestionAnswer,
+	questionAnswerValidator.questionAnswerSchema,
+	questionAnswerController.createQuestionAnswer,
+	genericResponse.sendResponse
+)
+
+router.post(
+	"/question-answers",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	questionAnswerValidator.questionAnswersSchema,
+	questionAnswerController.createQuestionAnswers,
 	genericResponse.sendResponse
 )
 
@@ -19,18 +39,17 @@ router.get(
 	"/question-answers",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	controllers.questionAnswerController.getAllQuestionAnswer,
-	serializer.questionAnswerSerializer.questionAnswers,
+	questionAnswerController.getAllQuestionAnswer,
+	questionAnswerSerializer.questionAnswers,
 	genericResponse.sendResponse
 )
-
 router.get(
 	"/question-answer/:questionId",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	validator.questionAnswerValidator.questionIdSchema,
-	controllers.questionAnswerController.getQuestionAnswerById,
-	serializer.questionAnswerSerializer.questionAnswer,
+	questionAnswerValidator.questionIdSchema,
+	questionAnswerController.getQuestionAnswerById,
+	questionAnswerSerializer.questionAnswer,
 	genericResponse.sendResponse
 )
 
@@ -38,8 +57,8 @@ router.delete(
 	"/question-answer/:questionId",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	validator.questionAnswerValidator.questionIdSchema,
-	controllers.questionAnswerController.deleteQuestionById,
+	questionAnswerValidator.questionIdSchema,
+	questionAnswerController.deleteQuestionById,
 	genericResponse.sendResponse
 )
 
@@ -47,8 +66,8 @@ router.delete(
 	"/answer/:answerId",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	validator.questionAnswerValidator.answerIdSchema,
-	controllers.questionAnswerController.deleteAnswerById,
+	questionAnswerValidator.answerIdSchema,
+	questionAnswerController.deleteAnswerById,
 	genericResponse.sendResponse
 )
 
@@ -56,9 +75,9 @@ router.patch(
 	"/answer/:answerId",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	validator.questionAnswerValidator.answerIdSchema,
-	validator.questionAnswerValidator.answerDescriptionSchema,
-	controllers.questionAnswerController.updateAnswerDescription,
+	questionAnswerValidator.answerIdSchema,
+	questionAnswerValidator.answerDescriptionSchema,
+	questionAnswerController.updateAnswerDescription,
 	genericResponse.sendResponse
 )
 
@@ -66,9 +85,9 @@ router.post(
 	"/paper-set",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	validator.paperSetValidator.createPaperSetSchema,
-	controllers.paperSetController.createPaperSet,
-	serializer.paperSetSerializer.createPaperSet,
+	paperSetValidator.createPaperSetSchema,
+	paperSetController.createPaperSet,
+	paperSetSerializer.createPaperSet,
 	genericResponse.sendResponse
 )
 
@@ -76,8 +95,8 @@ router.get(
 	"/paper-sets",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	controllers.paperSetController.getAllPaperSet,
-	serializer.paperSetSerializer.getALlPaperSet,
+	paperSetController.getAllPaperSet,
+	paperSetSerializer.getALlPaperSet,
 	genericResponse.sendResponse
 )
 
@@ -85,8 +104,8 @@ router.patch(
 	"/paper-set/:paperSetId",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	controllers.paperSetController.updatePaperSet,
-	serializer.paperSetSerializer.paperSetNameId,
+	paperSetController.updatePaperSet,
+	paperSetSerializer.paperSetNameId,
 	genericResponse.sendResponse
 )
 
@@ -94,8 +113,8 @@ router.delete(
 	"/paper-set/:paperSetId",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	validator.paperSetValidator.paperSetIdSchema,
-	controllers.paperSetController.deletePaperSet,
+	paperSetValidator.paperSetIdSchema,
+	paperSetController.deletePaperSet,
 	genericResponse.sendResponse
 )
 
@@ -103,8 +122,8 @@ router.get(
 	"/paper-set-question-answers/:paperSetId",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	controllers.paperSetController.getAllPaperSetQuestions,
-	serializer.paperSetSerializer.questionAnswers,
+	paperSetController.getAllPaperSetQuestions,
+	paperSetSerializer.questionAnswers,
 	genericResponse.sendResponse
 )
 
@@ -112,9 +131,9 @@ router.patch(
 	"/question/:questionId",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	validator.questionAnswerValidator.questionIdSchema,
-	validator.questionAnswerValidator.questionDescriptionSchema,
-	controllers.questionAnswerController.updateQuestionDescription,
+	questionAnswerValidator.questionIdSchema,
+	questionAnswerValidator.questionDescriptionSchema,
+	questionAnswerController.updateQuestionDescription,
 	genericResponse.sendResponse
 )
 
@@ -122,16 +141,16 @@ router.post(
 	"/user",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	validator.userValidator.createUserSchema,
-	controllers.userController.createUser,
-	serializer.userSerializer.createUser,
+	userValidator.createUserSchema,
+	userController.createUser,
+	userSerializer.createUser,
 	genericResponse.sendResponse
 )
 
 router.post(
 	"/login",
-	validator.userValidator.loginSchema,
-	controllers.userController.loginUser,
+	userValidator.loginSchema,
+	userController.loginUser,
 	genericResponse.sendResponse
 )
 
@@ -139,8 +158,16 @@ router.delete(
 	"/user/:userId",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	validator.userValidator.userIdSchema,
-	controllers.userController.deleteUser,
+	userValidator.userIdSchema,
+	userController.deleteUser,
+	genericResponse.sendResponse
+)
+
+router.patch(
+	"/answer/:answerId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	questionAnswerController.updateAnswerDescription,
 	genericResponse.sendResponse
 )
 
@@ -148,30 +175,30 @@ router.get(
 	"/users",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	controllers.userController.getAllUser,
-	serializer.userSerializer.getAllUser,
+	userController.getAllUser,
+	userSerializer.getAllUser,
 	genericResponse.sendResponse
 )
 
 router.get(
 	"/refresh-token",
 	authMiddleware.checkRefreshToken,
-	controllers.userController.refreshToken,
+	userController.refreshToken,
 	genericResponse.sendResponse
 )
 
 router.post(
 	"/forget-password",
-	validator.userValidator.forgetPassword,
-	controllers.userController.forgetPassword,
+	userValidator.forgetPassword,
+	userController.forgetPassword,
 	genericResponse.sendResponse
 )
 
 router.post(
 	"/reset-password/:token",
-	validator.userValidator.resetPasswordTokenSchema,
-	validator.userValidator.resetPasswordSchema,
-	controllers.userController.resetPasswordByToken,
+	userValidator.resetPasswordTokenSchema,
+	userValidator.resetPasswordSchema,
+	userController.resetPasswordByToken,
 	genericResponse.sendResponse
 )
 
@@ -179,8 +206,8 @@ router.post(
 	"/reset-user-password",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	validator.userValidator.adminResetUserPasswordSchema,
-	controllers.userController.adminResetPassword,
+	userValidator.adminResetUserPasswordSchema,
+	userController.adminResetPassword,
 	genericResponse.sendResponse
 )
 
@@ -188,9 +215,9 @@ router.post(
 	"/subject",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	validator.subjectValidator.subjectNameSchema,
-	controllers.subjectController.createSubject,
-	serializer.subjectSerializer.subjectNameId,
+	subjectValidator.subjectNameSchema,
+	subjectController.createSubject,
+	subjectSerializer.subjectNameId,
 	genericResponse.sendResponse
 )
 
@@ -198,8 +225,8 @@ router.get(
 	"/subjects",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	controllers.subjectController.getAllSubject,
-	serializer.subjectSerializer.getAllSubject,
+	subjectController.getAllSubject,
+	subjectSerializer.getAllSubject,
 	genericResponse.sendResponse
 )
 
@@ -207,8 +234,8 @@ router.delete(
 	"/subject/:subjectId",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	validator.subjectValidator.subjectIdSchema,
-	controllers.subjectController.deleteSubject,
+	subjectValidator.subjectIdSchema,
+	subjectController.deleteSubject,
 	genericResponse.sendResponse
 )
 
@@ -216,18 +243,18 @@ router.patch(
 	"/subject/:subjectId",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
-	validator.subjectValidator.subjectIdSchema,
-	validator.subjectValidator.subjectNameSchema,
-	controllers.subjectController.updateSubject,
-	serializer.subjectSerializer.subjectNameId,
+	subjectValidator.subjectIdSchema,
+	subjectValidator.subjectNameSchema,
+	subjectController.updateSubject,
+	subjectSerializer.subjectNameId,
 	genericResponse.sendResponse
 )
 
 router.post(
 	"/reset-password",
 	authMiddleware.checkAccessToken,
-	validator.userValidator.resetPasswordSchema,
-	controllers.userController.resetPassword,
+	userValidator.resetPasswordSchema,
+	userController.resetPassword,
 	genericResponse.sendResponse
 )
 
