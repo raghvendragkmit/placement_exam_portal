@@ -1,16 +1,16 @@
 const { Router } = require("express")
-const controllers = require("../controllers")
+const examController = require("../controllers/exam.controller")
 const genericResponse = require("../helpers/common-function.helper")
 const authMiddleware = require("../middlewares/auth")
-const validator = require("../validators/index")
-const serializer = require("../serializers")
+const examValidator = require("../validators/exam.validator")
+const examSerializer = require("../serializers/exam.serializer")
 const router = Router()
 
 router.get(
 	"/upcoming-exams",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyUser,
-	controllers.examController.getAllUpcomingExam,
+	examController.getAllUpcomingExam,
 	genericResponse.sendResponse
 )
 
@@ -18,9 +18,9 @@ router.post(
 	"/start-exam/:examId",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyUser,
-	validator.examValidator.examIdSchema,
-	controllers.examController.startExam,
-	serializer.examSerializer.examQuestionAnswer,
+	examValidator.examIdSchema,
+	examController.startExam,
+	examSerializer.examQuestionAnswer,
 	genericResponse.sendResponse
 )
 
@@ -28,8 +28,8 @@ router.post(
 	"/submit-exam",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyUser,
-	validator.examValidator.submitExam,
-	controllers.examController.submitExam,
+	examValidator.submitExam,
+	examController.submitExam,
 	genericResponse.sendResponse
 )
 
@@ -38,9 +38,9 @@ router.get(
 	"/exam-result/:examId",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyUser,
-	validator.examValidator.examIdSchema,
-    controllers.examController.checkResult,
-    serializer.examSerializer.userResult,
+	examValidator.examIdSchema,
+    examController.checkResult,
+    examSerializer.userResult,
 	genericResponse.sendResponse
 )
 

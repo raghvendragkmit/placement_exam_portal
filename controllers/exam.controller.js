@@ -1,10 +1,10 @@
-const services = require("../services")
+const examServices = require("../services")
 const { commonErrorHandler } = require("../helpers/common-function.helper")
 
 const createExam = async (req, res, next) => {
 	try {
 		const { body: payload } = req
-		const response = await services.examService.createExam(payload)
+		const response = await examServices.createExam(payload)
 		res.data = response
 		next()
 	} catch (error) {
@@ -15,7 +15,7 @@ const createExam = async (req, res, next) => {
 const deleteExam = async (req, res, next) => {
 	try {
 		const { body: payload, params } = req
-		const response = await services.examService.deleteExam(payload, params)
+		const response = await examServices.deleteExam(payload, params)
 		res.data = response
 		next()
 	} catch (error) {
@@ -26,7 +26,7 @@ const deleteExam = async (req, res, next) => {
 const getAllExam = async (req, res, next) => {
 	try {
 		const { body: payload } = req
-		const response = await services.examService.getAllExam(payload)
+		const response = await examServices.getAllExam(payload)
 		res.data = response
 		next()
 	} catch (error) {
@@ -37,7 +37,7 @@ const getAllExam = async (req, res, next) => {
 const getAllUpcomingExam = async (req, res, next) => {
 	try {
 		const { body: payload } = req
-		const response = await services.examService.getAllUpcomingExam(payload)
+		const response = await examServices.getAllUpcomingExam(payload)
 		res.data = response
 		next()
 	} catch (error) {
@@ -48,7 +48,7 @@ const getAllUpcomingExam = async (req, res, next) => {
 const startExam = async (req, res, next) => {
 	try {
 		const { body: payload, params } = req
-		const response = await services.examService.startExam(payload, params)
+		const response = await examServices.startExam(payload, params)
 		res.data = response
 		next()
 	} catch (error) {
@@ -59,7 +59,7 @@ const startExam = async (req, res, next) => {
 const submitExam = async (req, res, next) => {
 	try {
 		const { body: payload, params } = req
-		const response = await services.examService.submitExam(payload, params)
+		const response = await examServices.submitExam(payload, params)
 		if (response.error) {
 			throw new Error(response.error)
 		}
@@ -73,7 +73,7 @@ const submitExam = async (req, res, next) => {
 const logResponse = async (req, res, next) => {
 	try {
 		const { body: payload, params } = req
-		const response = await services.examService.logResponse(payload, params)
+		const response = await examServices.logResponse(payload, params)
 		if (response.error) {
 			throw new Error(response.error)
 		}
@@ -87,7 +87,7 @@ const logResponse = async (req, res, next) => {
 const examResult = async (req, res, next) => {
 	try {
 		const { body: payload, params } = req
-		const response = await services.examService.examResult(payload, params)
+		const response = await examServices.examResult(payload, params)
 		res.data = response
 		next()
 	} catch (error) {
@@ -98,7 +98,7 @@ const examResult = async (req, res, next) => {
 const publishResult = async (req, res, next) => {
 	try {
 		const { body: payload, params } = req
-		const response = await services.examService.publishResult(
+		const response = await examServices.publishResult(
 			payload,
 			params
 		)
@@ -116,7 +116,7 @@ const publishResult = async (req, res, next) => {
 const checkResult = async (req, res, next) => {
 	try {
 		const { body: payload, params, user } = req
-		const response = await services.examService.checkResult(
+		const response = await examServices.checkResult(
 			payload,
 			user,
 			params

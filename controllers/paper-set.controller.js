@@ -1,12 +1,12 @@
 
-const services = require('../services');
+const paperSetServices = require("../services/paper-set.service")
 const { commonErrorHandler } = require("../helpers/common-function.helper");
 
 
 const createPaperSet = async (req, res, next) => {
     try {
         const { body: payload } = req;
-        const response = await services.paperSetService.createPaperSet(payload);
+        const response = await paperSetServices.createPaperSet(payload);
         res.data = response;
         next();
     } catch (error) {
@@ -19,7 +19,7 @@ const createPaperSet = async (req, res, next) => {
 const deletePaperSet = async (req, res, next) => {
     try {
         const { body: payload, params } = req;
-        const response = await services.paperSetService.deletePaperSet(payload, params);
+        const response = await paperSetServices.deletePaperSet(payload, params);
         res.data = response;
         next();
     } catch (error) {
@@ -31,7 +31,7 @@ const deletePaperSet = async (req, res, next) => {
 const getAllPaperSet = async (req, res, next) => {
     try {
         const { body: payload } = req;
-        const response = await services.paperSetService.getAllPaperSet();
+        const response = await paperSetServices.getAllPaperSet();
         res.data = response;
         next();
     } catch (error) {
@@ -43,7 +43,7 @@ const getAllPaperSet = async (req, res, next) => {
 const getAllPaperSetQuestions = async (req, res, next) => {
     try {
         const { body: payload, params } = req;
-        const response = await services.paperSetService.getAllPaperSetQuestions(payload, params);
+        const response = await paperSetServices.getAllPaperSetQuestions(payload, params);
         res.data = response;
         next();
     } catch (error) {
@@ -55,7 +55,7 @@ const getAllPaperSetQuestions = async (req, res, next) => {
 const updatePaperSet = async (req, res, next) => {
 	try {
 		const { body: payload, params } = req
-		const response = await services.paperSetService.updatePaperSet(
+		const response = await paperSetServices.updatePaperSet(
 			payload,
 			params
 		)
