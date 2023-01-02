@@ -2,16 +2,19 @@ const { Router } = require("express")
 const userController = require("../controllers/user.controller")
 const subjectController = require("../controllers/subject.controller")
 const questionAnswerController = require("../controllers/question-answer.controller")
+const paperSetController = require("../controllers/paper-set.controller");
 const genericResponse = require("../helpers/common-function.helper")
 const authMiddleware = require("../middlewares/auth")
 
 const userValidator = require("../validators/user.validator")
 const subjectValidator = require("../validators/subject.validator")
 const questionAnswerValidator = require("../validators/question-answer.validator")
+const paperSetValidator = require("../validators/paper-set.validator");
 
 const userSerializer = require("../serializers/user.serializer")
 const subjectSerializer = require("../serializers/subject.serializer")
 const questionAnswerSerializer = require("../serializers/question-answer.serializer")
+const paperSetSerializer = require("../serializers/paper-set.serializer");
 const router = Router()
 
 router.post(
@@ -40,7 +43,6 @@ router.get(
 	questionAnswerSerializer.questionAnswers,
 	genericResponse.sendResponse
 )
-
 router.get(
 	"/question-answer/:questionId",
 	authMiddleware.checkAccessToken,
@@ -51,10 +53,86 @@ router.get(
 	genericResponse.sendResponse
 )
 
+router.delete(
+	"/question-answer/:questionId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	questionAnswerValidator.questionIdSchema,
+	questionAnswerController.deleteQuestionById,
+	genericResponse.sendResponse
+)
+
+router.delete(
+	"/answer/:answerId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	questionAnswerValidator.answerIdSchema,
+	questionAnswerController.deleteAnswerById,
+	genericResponse.sendResponse
+)
+
+router.patch(
+	"/answer/:answerId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	questionAnswerValidator.answerIdSchema,
+	questionAnswerValidator.answerDescriptionSchema,
+	questionAnswerController.updateAnswerDescription,
+	genericResponse.sendResponse
+)
+
+router.post(
+	"/paper-set",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	paperSetValidator.createPaperSetSchema,
+	paperSetController.createPaperSet,
+	paperSetSerializer.createPaperSet,
+	genericResponse.sendResponse
+)
+
+router.get(
+	"/paper-sets",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	paperSetController.getAllPaperSet,
+	paperSetSerializer.getALlPaperSet,
+	genericResponse.sendResponse
+)
+
+router.patch(
+	"/paper-set/:paperSetId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	paperSetController.updatePaperSet,
+	paperSetSerializer.paperSetNameId,
+	genericResponse.sendResponse
+)
+
+router.delete(
+	"/paper-set/:paperSetId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	paperSetValidator.paperSetIdSchema,
+	paperSetController.deletePaperSet,
+	genericResponse.sendResponse
+)
+
+router.get(
+	"/paper-set-question-answers/:paperSetId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	paperSetController.getAllPaperSetQuestions,
+	paperSetSerializer.questionAnswers,
+	genericResponse.sendResponse
+)
+
 router.patch(
 	"/question/:questionId",
 	authMiddleware.checkAccessToken,
 	authMiddleware.verifyAdmin,
+	questionAnswerValidator.questionIdSchema,
+	questionAnswerValidator.questionDescriptionSchema,
 	questionAnswerController.updateQuestionDescription,
 	genericResponse.sendResponse
 )

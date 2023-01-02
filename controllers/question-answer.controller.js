@@ -72,6 +72,34 @@ const updateQuestionDescription = async (req, res, next) => {
 	}
 }
 
+const deleteQuestionById = async (req, res, next) => {
+	try {
+		const { body: payload, params } = req
+		const response = await questionAnswerServices.deleteQuestionById(
+			payload,
+			params
+		)
+		res.data = response
+		next()
+	} catch (error) {
+		commonErrorHandler(req, res, error.message, 400, error)
+	}
+}
+
+const deleteAnswerById = async (req, res, next) => {
+	try {
+		const { body: payload, params } = req
+		const response = await questionAnswerServices.deleteAnswerById(
+			payload,
+			params
+		)
+		res.data = response
+		next()
+	} catch (error) {
+		commonErrorHandler(req, res, error.message, 400, error)
+	}
+} 
+
 const updateAnswerDescription = async (req, res, next) => {
 	try {
 		const { body: payload, params } = req
@@ -85,7 +113,6 @@ const updateAnswerDescription = async (req, res, next) => {
 		commonErrorHandler(req, res, error.message, 400, error)
 	}
 }
-
 module.exports = {
 	createQuestionAnswer,
 	getAllQuestionAnswer,
@@ -93,4 +120,6 @@ module.exports = {
 	updateQuestionDescription,
 	updateAnswerDescription,
 	getQuestionAnswerById,
+	deleteQuestionById,
+	deleteAnswerById,
 }

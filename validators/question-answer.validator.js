@@ -20,6 +20,25 @@ module.exports = {
 		validateRequest(req, res, next, schema, "params")
 	},
 
+	questionDescriptionSchema: async (req, res, next) => {
+		const schema = Joi.object({
+			questionId: Joi.string().min(1).required(),
+		})
+		validateRequest(req, res, next, schema, "body")
+	},
+	answerDescriptionSchema: async (req, res, next) => {
+		const schema = Joi.object({
+			questionId: Joi.string().min(1).required(),
+		})
+		validateRequest(req, res, next, schema, "body")
+	},
+	answerIdSchema: async (req, res, next) => {
+		const schema = Joi.object({
+			questionId: Joi.string().guid().required(),
+		})
+		validateRequest(req, res, next, schema, "params")
+	},
+
 	questionAnswersSchema: async (req, res, next) => {
 		const questionAnswer = Joi.object().keys({
 			answerDescription: Joi.string().min(1).required(),
