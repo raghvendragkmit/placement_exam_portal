@@ -103,7 +103,6 @@ const getAllQuestionAnswer = async (payload) => {
 
 const getQuestionAnswerById = async (payload, params) => {
 	const questionId = params.questionId
-	console.log()
 	const questionAnswer = await models.Question.findOne({
 		where: { id: questionId },
 		include: [
