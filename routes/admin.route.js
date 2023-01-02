@@ -25,32 +25,30 @@ router.get(
 )
 
 router.post(
-    '/exam',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    validator.examValidator.createExamSchema,
-    controllers.examController.createExam,
-    genericResponse.sendResponse
-);
-
-
+	"/exam",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	validator.examValidator.createExamSchema,
+	controllers.examController.createExam,
+	genericResponse.sendResponse
+)
 
 router.delete(
-    '/exam/:examId',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    validator.examValidator.examIdSchema,
-    controllers.examController.deleteExam,
-    genericResponse.sendResponse
-);
+	"/exam/:examId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	validator.examValidator.examIdSchema,
+	controllers.examController.deleteExam,
+	genericResponse.sendResponse
+)
 
 router.get(
-    '/exams',
-    authMiddleware.checkAccessToken,
-    authMiddleware.verifyAdmin,
-    controllers.examController.getAllExam,
-    genericResponse.sendResponse
-);
+	"/exams",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	controllers.examController.getAllExam,
+	genericResponse.sendResponse
+)
 router.get(
 	"/question-answer/:questionId",
 	authMiddleware.checkAccessToken,
@@ -255,6 +253,16 @@ router.post(
 	authMiddleware.checkAccessToken,
 	validator.userValidator.resetPasswordSchema,
 	controllers.userController.resetPassword,
+	genericResponse.sendResponse
+)
+
+router.get(
+	"/exam-results/:examId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	validator.examValidator.examIdSchema,
+	controllers.examController.examResult,
+	serializer.examSerializer.examResult,
 	genericResponse.sendResponse
 )
 
