@@ -13,11 +13,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      subject_id: {
+      paper_set_id: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
-          model: "subject",
+          model: "paper_set",
           key: 'id'
         }
       },

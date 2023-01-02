@@ -11,60 +11,36 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Subject, { foreignKey: 'subjectId', targetKey: 'id' });
-      this.belongsToMany(models.User, { through: models.ExamUserPaperSetMapping, foreignKey: 'examId' });
+      Exam.belongsTo(models.Subject, { foreignKey: 'subject_id', targetKey: 'id', as: 'subjects' });
+      Exam.belongsToMany(models.User, { through: models.ExamUserMapping, foreignKey: 'exam_id', as: 'users' });
     }
   }
   Exam.init({
-    subjectId: {
+    subject_id: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
         model: "subject",
         key: 'id'
       },
-      field:'subject_id'
     },
-    examStartTime: {
-      allowNull: true,
-      type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW,
-      field:'exam_start_time'
-    },
-    examEndTime: {
-      allowNull: true,
-      type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW,
-      field:'exam_end_time'
-    },
-    examDuration: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      field:'exam_duration'
-    },
-    createdAt: {
+    exam_start_time: {
       allowNull: false,
       type: Sequelize.DATE,
-      // defaultValue: Sequelize.NOW,
-      field: 'created_at'
     },
-    updatedAt: {
+    exam_end_time: {
       allowNull: false,
       type: Sequelize.DATE,
-      // defaultValue: Sequelize.NOW,
-      field: 'updated_at'
     },
-    deletedAt: {
-      allowNull: true,
-      type: Sequelize.DATE,
-      defaultValue: null,
-      field: 'deleted_at'
-    }
+    exam_passing_percentage: {
+      allowNull: false,
+      type: Sequelize.FLOAT,
+    },
   }, {
     sequelize,
     modelName: 'Exam',
     tableName: 'exam',
-    paranoid:true
+    paranoid: true
   });
   return Exam;
 };

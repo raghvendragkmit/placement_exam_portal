@@ -11,49 +11,27 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Question, { foreignKey: 'questionId', targetKey: 'id' });
-      this.hasMany(models.ExamUserPaperSetResponse, { foreignKey: 'answerId', targetKey: 'id' });
-
+      Answer.belongsTo(models.Question, { foreignKey: 'question_id', targetKey: 'id', as:'questions' });
+      Answer.hasMany(models.ExamUserResponse, { foreignKey: 'answer_id', sourceKey: 'id',as:'exam_user_responses' });
     }
   }
   Answer.init({
-    answerDescription: {
+    answer_description: {
       type: Sequelize.STRING,
       allowNull: false,
-      field:'answer_description'
     },
-    questionId: {
+    question_id: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
         model: "question",
         key: 'id'
       },
-      field:'question_id'
     },
-    isCorrect: {
+    is_correct: {
       type: Sequelize.BOOLEAN,
       allowNull: false,
-      field:'is_correct'
     },
-    createdAt: {
-      allowNull: false,
-      type: Sequelize.DATE,
-      // defaultValue: Sequelize.NOW,
-      field: 'created_at'
-    },
-    updatedAt: {
-      allowNull: false,
-      type: Sequelize.DATE,
-      // defaultValue: Sequelize.NOW,
-      field: 'updated_at'
-    },
-    deletedAt: {
-      allowNull: true,
-      type: Sequelize.DATE,
-      defaultValue: null,
-      field: 'deleted_at'
-    }
   }, {
     sequelize,
     modelName: 'Answer',

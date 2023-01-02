@@ -11,14 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Subject, { foreignKey: 'subjectId', targetKey: 'id' });
-      this.belongsToMany(models.Question, { through: models.PaperSetQuestionMapping, foreignKey: 'paperSetId' });
-      this.hasMany(models.ExamUserPaperSetMapping, { foreignKey: 'paperSetId', targetKey: 'id' });
-
+      PaperSet.belongsTo(models.Subject, { foreignKey: 'subject_id', targetKey: 'id',as:'subjects' });
+      PaperSet.hasMany(models.Question, {  foreignKey: 'paper_set_id',sourceKey:'id',as:'questions' });
+      PaperSet.hasMany(models.ExamUserMapping, { foreignKey: 'paper_set_id', sourceKey: 'id', as: 'exam_users' });
     }
   }
   PaperSet.init({
-
     subject_id: {
       allowNull: false,
       type: Sequelize.UUID,
@@ -27,25 +25,6 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id'
       }
     },
-    createdAt: {
-      allowNull: false,
-      type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW,
-      field: 'created_at'
-    },
-    updatedAt: {
-      allowNull: false,
-      type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW,
-      field: 'updated_at'
-    },
-    deletedAt: {
-      allowNull: true,
-      type: Sequelize.DATE,
-      defaultValue: null,
-      field: 'deleted_at'
-    }
-
   }, {
     sequelize,
     modelName: 'PaperSet',

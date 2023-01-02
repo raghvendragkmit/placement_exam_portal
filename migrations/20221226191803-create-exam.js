@@ -9,27 +9,27 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal('uuid_generate_v4()')
       },
+
+     
       subject_id: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
           model: "subject",
           key: 'id'
-        }
-      }, 
+        },
+      },
       exam_start_time: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.DATE,
-        defaultValue:Sequelize.NOW
       },
       exam_end_time: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
       },
-      exam_duration: {
-        type: Sequelize.INTEGER,
-        allowNull:false
+      exam_passing_percentage: {
+        allowNull: false,
+        type: Sequelize.DECIMAL,
       },
       created_at: {
         allowNull: false,
