@@ -1,10 +1,60 @@
 const { Router } = require("express")
+const userController = require("../controllers/user.controller")
+
 const examController = require("../controllers/exam.controller")
+
 const genericResponse = require("../helpers/common-function.helper")
 const authMiddleware = require("../middlewares/auth")
+
+const userValidator = require("../validators/user.validator")
+
 const examValidator = require("../validators/exam.validator")
+
 const examSerializer = require("../serializers/exam.serializer")
+
 const router = Router()
+
+
+router.post(
+	"/login",
+	userValidator.loginSchema,
+	userController.loginUser,
+	genericResponse.sendResponse
+)
+
+
+router.get(
+	"/refresh-token",
+	authMiddleware.checkRefreshToken,
+	userController.refreshToken,
+	genericResponse.sendResponse
+)
+
+
+router.post(
+	"/forget-password",
+	userValidator.forgetPassword,
+	userController.forgetPassword,
+	genericResponse.sendResponse
+)
+
+
+router.post(
+	"/reset-password/:token",
+	userValidator.resetPasswordTokenSchema,
+	userValidator.resetPasswordSchema,
+	userController.resetPasswordByToken,
+	genericResponse.sendResponse
+)
+
+
+router.post(
+	"/reset-password",
+	authMiddleware.checkAccessToken,
+	userValidator.resetPasswordSchema,
+	userController.resetPassword,
+	genericResponse.sendResponse
+)
 
 router.get(
 	"/upcoming-exams",

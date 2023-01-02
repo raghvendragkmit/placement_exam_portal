@@ -9,7 +9,7 @@ const genericResponse = require("../helpers/common-function.helper")
 const authMiddleware = require("../middlewares/auth")
 
 const userValidator = require("../validators/user.validator")
-const subjectValidator = require("../validators/subject.validator")
+const subjectValidator = require("../validators/subject.validator");
 const questionAnswerValidator = require("../validators/question-answer.validator")
 const paperSetValidator = require("../validators/paper-set.validator");
 const examValidator = require("../validators/exam.validator");
@@ -178,12 +178,7 @@ router.post(
 	genericResponse.sendResponse
 )
 
-router.post(
-	"/login",
-	userValidator.loginSchema,
-	userController.loginUser,
-	genericResponse.sendResponse
-)
+
 
 router.delete(
 	"/user/:userId",
@@ -211,27 +206,10 @@ router.get(
 	genericResponse.sendResponse
 )
 
-router.get(
-	"/refresh-token",
-	authMiddleware.checkRefreshToken,
-	userController.refreshToken,
-	genericResponse.sendResponse
-)
 
-router.post(
-	"/forget-password",
-	userValidator.forgetPassword,
-	userController.forgetPassword,
-	genericResponse.sendResponse
-)
 
-router.post(
-	"/reset-password/:token",
-	userValidator.resetPasswordTokenSchema,
-	userValidator.resetPasswordSchema,
-	userController.resetPasswordByToken,
-	genericResponse.sendResponse
-)
+
+
 
 router.post(
 	"/reset-user-password",
@@ -281,13 +259,7 @@ router.patch(
 	genericResponse.sendResponse
 )
 
-router.post(
-	"/reset-password",
-	authMiddleware.checkAccessToken,
-	userValidator.resetPasswordSchema,
-	userController.resetPassword,
-	genericResponse.sendResponse
-)
+
 
 router.get(
 	"/exam-results/:examId",

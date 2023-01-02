@@ -1,4 +1,4 @@
-const examServices = require("../services")
+const examServices = require("../services/exam.service")
 const { commonErrorHandler } = require("../helpers/common-function.helper")
 
 const createExam = async (req, res, next) => {
