@@ -1,4 +1,4 @@
-const subjectServices = require("../services")
+const subjectServices = require("../services/subject.service")
 const { commonErrorHandler } = require("../helpers/common-function.helper")
 
 const createSubject = async (req, res, next) => {
