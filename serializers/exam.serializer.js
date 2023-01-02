@@ -22,6 +22,36 @@ const examResult = async (req, res, next) => {
 	next()
 }
 
+const examQuestionAnswer = async (req, res, next) => {
+	const data = res.data || null
+	const response = []
+
+	data.forEach((questionAnswer) => {
+		const answers = []
+
+		questionAnswer.answers.forEach((answer) => {
+			const tempObj = {
+				id: answer.id,
+				answerDescription: answer.answer_description,
+			}
+			answers.push(tempObj)
+		})
+
+		const tempObj = {
+			id: questionAnswer.id,
+			questionDescription: questionAnswer.question_description,
+			paperSetId: questionAnswer.paper_set_id,
+			answers: answers,
+		}
+
+		response.push(tempObj)
+	})
+
+	res.data = response
+	next()
+}
+
 module.exports = {
 	examResult,
+	examQuestionAnswer,
 }
