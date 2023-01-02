@@ -1,10 +1,10 @@
-const services = require("../services")
+const subjectServices = require("../services")
 const { commonErrorHandler } = require("../helpers/common-function.helper")
 
 const createSubject = async (req, res, next) => {
 	try {
 		const { body: payload } = req
-		const response = await services.subjectService.createSubject(payload)
+		const response = await subjectServices.createSubject(payload)
 		res.data = response
 		next()
 	} catch (error) {
@@ -15,7 +15,7 @@ const createSubject = async (req, res, next) => {
 const deleteSubject = async (req, res, next) => {
 	try {
 		const { body: payload, params } = req
-		const response = await services.subjectService.deleteSubject(
+		const response = await subjectServices.deleteSubject(
 			payload,
 			params
 		)
@@ -29,7 +29,7 @@ const deleteSubject = async (req, res, next) => {
 const getAllSubject = async (req, res, next) => {
 	try {
 		const { body: payload } = req
-		const response = await services.subjectService.getAllSubject(payload)
+		const response = await subjectServices.getAllSubject(payload)
 		res.data = response
 		next()
 	} catch (error) {
@@ -40,7 +40,7 @@ const getAllSubject = async (req, res, next) => {
 const updateSubject = async (req, res, next) => {
 	try {
 		const { body: payload, params } = req
-		const response = await services.subjectService.updateSubject(
+		const response = await subjectServices.updateSubject(
 			payload,
 			params
 		)

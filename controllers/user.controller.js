@@ -1,10 +1,10 @@
-const services = require('../services');
-const { commonErrorHandler } = require("../helpers/common-function.helper");
+const userServices = require("../services/user.service")
+const { commonErrorHandler } = require("../helpers/common-function.helper")
 
 const createUser = async (req, res, next) => {
 	try {
 		const { body: payload } = req
-		const response = await services.userService.createUser(payload)
+		const response = await userServices.createUser(payload)
 		res.data = response
 		next()
 	} catch (error) {
@@ -15,7 +15,7 @@ const createUser = async (req, res, next) => {
 const loginUser = async (req, res, next) => {
 	try {
 		const { body: payload } = req
-		const response = await services.userService.loginUser(payload)
+		const response = await userServices.loginUser(payload)
 		res.data = response
 		next()
 	} catch (error) {
@@ -26,7 +26,7 @@ const loginUser = async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
 	try {
 		const { body: payload, params } = req
-		const response = await services.userService.deleteUser(payload, params)
+		const response = await userServices.deleteUser(payload, params)
 		res.data = response
 		next()
 	} catch (error) {
@@ -37,7 +37,7 @@ const deleteUser = async (req, res, next) => {
 const getAllUser = async (req, res, next) => {
 	try {
 		const { body: payload } = req
-		const response = await services.userService.getAllUser()
+		const response = await userServices.getAllUser()
 		res.data = response
 		next()
 	} catch (error) {
@@ -49,7 +49,7 @@ const refreshToken = async (req, res, next) => {
 	try {
 		const { body: payload } = req.body
 
-		const data = await services.userService.refreshToken(payload)
+		const data = await userServices.refreshToken(payload)
 		res.data = data
 		next()
 	} catch (error) {
@@ -60,7 +60,7 @@ const refreshToken = async (req, res, next) => {
 const forgetPassword = async (req, res, next) => {
 	try {
 		const { body: payload } = req
-		const data = await services.userService.forgetPassword(payload)
+		const data = await userServices.forgetPassword(payload)
 		res.data = data
 		next()
 	} catch (error) {
@@ -71,7 +71,7 @@ const forgetPassword = async (req, res, next) => {
 const resetPasswordByToken = async (req, res, next) => {
 	try {
 		const { body: payload, params } = req
-		const data = await services.userService.resetPasswordByToken(
+		const data = await userServices.resetPasswordByToken(
 			payload,
 			params
 		)
@@ -85,7 +85,7 @@ const resetPasswordByToken = async (req, res, next) => {
 const adminResetPassword = async (req, res, next) => {
 	try {
 		const { body: payload } = req
-		const data = await services.userService.adminResetPassword(payload)
+		const data = await userServices.adminResetPassword(payload)
 		res.data = data
 		next()
 	} catch (error) {
@@ -96,7 +96,7 @@ const adminResetPassword = async (req, res, next) => {
 const resetPassword = async (req, res, next) => {
 	try {
 		const { body: payload,user } = req
-		const data = await services.userService.resetPassword(payload,user)
+		const data = await userServices.resetPassword(payload,user)
 		res.data = data
 		next()
 	} catch (error) {
