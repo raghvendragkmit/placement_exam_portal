@@ -1,134 +1,124 @@
-const examServices = require("../services/exam.service")
-const { commonErrorHandler } = require("../helpers/common-function.helper")
+const examServices = require('../services/exam.service');
+const { commonErrorHandler } = require('../helpers/common-function.helper');
 
 const createExam = async (req, res, next) => {
 	try {
-		const { body: payload } = req
-		const response = await examServices.createExam(payload)
-		res.data = response
-		next()
+		const { body: payload } = req;
+		const response = await examServices.createExam(payload);
+		res.data = response;
+		next();
 	} catch (error) {
-		commonErrorHandler(req, res, error.message, 400, error)
+		commonErrorHandler(req, res, error.message, 400, error);
 	}
-}
+};
 
 const deleteExam = async (req, res, next) => {
 	try {
-		const { body: payload, params } = req
-		const response = await examServices.deleteExam(payload, params)
-		res.data = response
-		next()
+		const { body: payload, params } = req;
+		const response = await examServices.deleteExam(payload, params);
+		res.data = response;
+		next();
 	} catch (error) {
-		commonErrorHandler(req, res, error.message, 400, error)
+		commonErrorHandler(req, res, error.message, 400, error);
 	}
-}
+};
 
 const getAllExam = async (req, res, next) => {
 	try {
-		const { body: payload } = req
-		const response = await examServices.getAllExam(payload)
-		res.data = response
-		next()
+		const { body: payload } = req;
+		const response = await examServices.getAllExam(payload);
+		res.data = response;
+		next();
 	} catch (error) {
-		commonErrorHandler(req, res, error.message, 400, error)
+		commonErrorHandler(req, res, error.message, 400, error);
 	}
-}
+};
 
 const getAllUpcomingExam = async (req, res, next) => {
 	try {
-		const { body: payload } = req
-		const response = await examServices.getAllUpcomingExam(payload)
-		res.data = response
-		next()
+		const { body: payload } = req;
+		const response = await examServices.getAllUpcomingExam(payload);
+		res.data = response;
+		next();
 	} catch (error) {
-		commonErrorHandler(req, res, error.message, 400, error)
+		commonErrorHandler(req, res, error.message, 400, error);
 	}
-}
+};
 
 const startExam = async (req, res, next) => {
 	try {
-		const { body: payload, params } = req
-		const response = await examServices.startExam(payload, params)
-		res.data = response
-		next()
+		const { body: payload, params } = req;
+		const response = await examServices.startExam(payload, params);
+		res.data = response;
+		next();
 	} catch (error) {
-		commonErrorHandler(req, res, error.message, 400, error)
+		commonErrorHandler(req, res, error.message, 400, error);
 	}
-}
+};
 
 const submitExam = async (req, res, next) => {
 	try {
-		const { body: payload, params } = req
-		const response = await examServices.submitExam(payload, params)
+		const { body: payload, params } = req;
+		const response = await examServices.submitExam(payload, params);
 		if (response.error) {
-			throw new Error(response.error)
+			throw new Error(response.error);
 		}
-		res.data = response.data
-		next()
+		res.data = response.data;
+		next();
 	} catch (error) {
-		commonErrorHandler(req, res, error.message, 400, error)
+		commonErrorHandler(req, res, error.message, 400, error);
 	}
-}
+};
 
 const logResponse = async (req, res, next) => {
 	try {
-		const { body: payload, params } = req
-		const response = await examServices.logResponse(payload, params)
+		const { body: payload, params } = req;
+		const response = await examServices.logResponse(payload, params);
 		if (response.error) {
-			throw new Error(response.error)
+			throw new Error(response.error);
 		}
-		res.data = response.data
-		next()
+		res.data = response.data;
+		next();
 	} catch (error) {
-		commonErrorHandler(req, res, error.message, 400, error)
+		commonErrorHandler(req, res, error.message, 400, error);
 	}
-}
+};
 
 const examResult = async (req, res, next) => {
 	try {
-		const { body: payload, params } = req
-		const response = await examServices.examResult(payload, params)
-		res.data = response
-		next()
+		const { body: payload, params } = req;
+		const response = await examServices.examResult(payload, params);
+		res.data = response;
+		next();
 	} catch (error) {
-		commonErrorHandler(req, res, error.message, 400, error)
+		commonErrorHandler(req, res, error.message, 400, error);
 	}
-}
+};
 
 const publishResult = async (req, res, next) => {
 	try {
-		const { body: payload, params } = req
-		const response = await examServices.publishResult(
-			payload,
-			params
-		)
+		const { body: payload, params } = req;
+		const response = await examServices.publishResult(payload, params);
 		if (response.error) {
-			throw new Error(response.error)
+			throw new Error(response.error);
 		}
-		res.data = response.data
-		next()
+		res.data = response.data;
+		next();
 	} catch (error) {
-		commonErrorHandler(req, res, error.message, 400, error)
+		commonErrorHandler(req, res, error.message, 400, error);
 	}
-}
-
+};
 
 const checkResult = async (req, res, next) => {
 	try {
-		const { body: payload, params, user } = req
-		const response = await examServices.checkResult(
-			payload,
-			user,
-			params
-		)
-		res.data = response
-		next()
+		const { body: payload, params, user } = req;
+		const response = await examServices.checkResult(payload, user, params);
+		res.data = response;
+		next();
 	} catch (error) {
-		commonErrorHandler(req, res, error.message, 400, error)
+		commonErrorHandler(req, res, error.message, 400, error);
 	}
-}
-
-
+};
 
 module.exports = {
 	createExam,
@@ -141,4 +131,4 @@ module.exports = {
 	examResult,
 	publishResult,
 	checkResult,
-}
+};

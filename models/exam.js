@@ -1,5 +1,5 @@
-"use strict"
-const { Model, Sequelize } = require("sequelize")
+'use strict';
+const { Model, Sequelize } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
 	class Exam extends Model {
 		/**
@@ -10,15 +10,15 @@ module.exports = (sequelize, DataTypes) => {
 		static associate(models) {
 			// define association here
 			Exam.belongsTo(models.Subject, {
-				foreignKey: "subject_id",
-				targetKey: "id",
-				as: "subjects",
-			})
+				foreignKey: 'subject_id',
+				targetKey: 'id',
+				as: 'subjects',
+			});
 			Exam.belongsToMany(models.User, {
 				through: models.ExamUserMapping,
-				foreignKey: "exam_id",
-				as: "users",
-			})
+				foreignKey: 'exam_id',
+				as: 'users',
+			});
 		}
 	}
 	Exam.init(
@@ -27,8 +27,8 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				type: Sequelize.UUID,
 				references: {
-					model: "subject",
-					key: "id",
+					model: 'subject',
+					key: 'id',
 				},
 			},
 			exam_start_time: {
@@ -46,10 +46,10 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		{
 			sequelize,
-			modelName: "Exam",
-			tableName: "exam",
+			modelName: 'Exam',
+			tableName: 'exam',
 			paranoid: true,
 		}
-	)
-	return Exam
-}
+	);
+	return Exam;
+};

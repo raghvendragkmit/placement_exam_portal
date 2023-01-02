@@ -1,5 +1,5 @@
-"use strict"
-const { Model, Sequelize } = require("sequelize")
+'use strict';
+const { Model, Sequelize } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
 	class Answer extends Model {
 		/**
@@ -10,15 +10,15 @@ module.exports = (sequelize, DataTypes) => {
 		static associate(models) {
 			// define association here
 			Answer.belongsTo(models.Question, {
-				foreignKey: "question_id",
-				targetKey: "id",
-				as: "questions",
-			})
+				foreignKey: 'question_id',
+				targetKey: 'id',
+				as: 'questions',
+			});
 			Answer.hasMany(models.ExamUserResponse, {
-				foreignKey: "answer_id",
-				sourceKey: "id",
-				as: "exam_user_responses",
-			})
+				foreignKey: 'answer_id',
+				sourceKey: 'id',
+				as: 'exam_user_responses',
+			});
 		}
 		toJSON() {
 			return {
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
 				createdAt: undefined,
 				updatedAt: undefined,
 				deletedAt: undefined,
-			}
+			};
 		}
 	}
 	Answer.init(
@@ -39,8 +39,8 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				type: Sequelize.UUID,
 				references: {
-					model: "question",
-					key: "id",
+					model: 'question',
+					key: 'id',
 				},
 			},
 			is_correct: {
@@ -50,10 +50,10 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		{
 			sequelize,
-			modelName: "Answer",
-			tableName: "answer",
+			modelName: 'Answer',
+			tableName: 'answer',
 			paranoid: true,
 		}
-	)
-	return Answer
-}
+	);
+	return Answer;
+};

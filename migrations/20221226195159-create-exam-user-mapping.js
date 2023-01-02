@@ -1,29 +1,29 @@
-"use strict"
+'use strict';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		await queryInterface.createTable("exam_user_mapping", {
+		await queryInterface.createTable('exam_user_mapping', {
 			id: {
 				allowNull: false,
 				primaryKey: true,
 				type: Sequelize.UUID,
-				defaultValue: Sequelize.literal("uuid_generate_v4()"),
+				defaultValue: Sequelize.literal('uuid_generate_v4()'),
 			},
 
 			exam_id: {
 				allowNull: false,
 				type: Sequelize.UUID,
 				references: {
-					model: "exam",
-					key: "id",
+					model: 'exam',
+					key: 'id',
 				},
 			},
 			user_id: {
 				allowNull: false,
 				type: Sequelize.UUID,
 				references: {
-					model: "user",
-					key: "id",
+					model: 'user',
+					key: 'id',
 				},
 			},
 
@@ -31,8 +31,8 @@ module.exports = {
 				allowNull: false,
 				type: Sequelize.UUID,
 				references: {
-					model: "paper_set",
-					key: "id",
+					model: 'paper_set',
+					key: 'id',
 				},
 			},
 
@@ -89,9 +89,9 @@ module.exports = {
 				type: Sequelize.DATE,
 				defaultValue: null,
 			},
-		})
+		});
 	},
 	async down(queryInterface, Sequelize) {
-		await queryInterface.dropTable("exam_user_mapping")
+		await queryInterface.dropTable('exam_user_mapping');
 	},
-}
+};

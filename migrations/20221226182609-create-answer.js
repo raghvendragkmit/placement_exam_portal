@@ -1,13 +1,13 @@
-"use strict"
+'use strict';
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		await queryInterface.createTable("answer", {
+		await queryInterface.createTable('answer', {
 			id: {
 				allowNull: false,
 				primaryKey: true,
 				type: Sequelize.UUID,
-				defaultValue: Sequelize.literal("uuid_generate_v4()"),
+				defaultValue: Sequelize.literal('uuid_generate_v4()'),
 			},
 			answer_description: {
 				type: Sequelize.STRING,
@@ -17,8 +17,8 @@ module.exports = {
 				allowNull: false,
 				type: Sequelize.UUID,
 				references: {
-					model: "question",
-					key: "id",
+					model: 'question',
+					key: 'id',
 				},
 			},
 			is_correct: {
@@ -40,9 +40,9 @@ module.exports = {
 				type: Sequelize.DATE,
 				defaultValue: null,
 			},
-		})
+		});
 	},
 	async down(queryInterface, Sequelize) {
-		await queryInterface.dropTable("answer")
+		await queryInterface.dropTable('answer');
 	},
-}
+};

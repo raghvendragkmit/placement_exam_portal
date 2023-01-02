@@ -1,6 +1,6 @@
-const Joi = require("joi")
-const passwordComplexity = require("joi-password-complexity")
-const { validateRequest } = require("../helpers/validate.helper")
+const Joi = require('joi');
+const passwordComplexity = require('joi-password-complexity');
+const { validateRequest } = require('../helpers/validate.helper');
 
 const complexityOptions = {
 	min: 4,
@@ -9,7 +9,7 @@ const complexityOptions = {
 	upperCase: 1,
 	numeric: 1,
 	symbol: 1,
-}
+};
 
 module.exports = {
 	createUserSchema: async (req, res, next) => {
@@ -19,56 +19,56 @@ module.exports = {
 			email: Joi.string().email().lowercase().required(),
 			password: passwordComplexity(complexityOptions).required(),
 			organization: Joi.string().min(1).required(),
-			role: Joi.string().valid("Admin", "User").required(),
+			role: Joi.string().valid('Admin', 'User').required(),
 			contactNumber: Joi.string()
 				.length(10)
 				.pattern(/^[0-9]+$/)
 				.required(),
-		})
+		});
 
-		validateRequest(req, res, next, schema, "body")
+		validateRequest(req, res, next, schema, 'body');
 	},
 
 	loginSchema: async (req, res, next) => {
 		const schema = Joi.object({
 			email: Joi.string().email().lowercase().required(),
 			password: Joi.string().required(),
-		})
-		validateRequest(req, res, next, schema, "body")
+		});
+		validateRequest(req, res, next, schema, 'body');
 	},
 
 	userIdSchema: async (req, res, next) => {
 		const schema = Joi.object({
 			userId: Joi.string().guid().required(),
-		})
-		validateRequest(req, res, next, schema, "params")
+		});
+		validateRequest(req, res, next, schema, 'params');
 	},
 
 	forgetPassword: async (req, res, next) => {
 		const schema = Joi.object({
 			email: Joi.string().email().lowercase().required(),
-		})
-		validateRequest(req, res, next, schema, "body")
+		});
+		validateRequest(req, res, next, schema, 'body');
 	},
 
 	resetPasswordTokenSchema: async (req, res, next) => {
 		const schema = Joi.object({
 			token: Joi.string().alphanum().min(32).required(),
-		})
-		validateRequest(req, res, next, schema, "params")
+		});
+		validateRequest(req, res, next, schema, 'params');
 	},
 
 	resetPasswordSchema: async (req, res, next) => {
 		const schema = Joi.object({
 			password: passwordComplexity(complexityOptions).required(),
-		})
-		validateRequest(req, res, next, schema, "body")
+		});
+		validateRequest(req, res, next, schema, 'body');
 	},
 	adminResetUserPasswordSchema: async (req, res, next) => {
-        const schema = Joi.object({
+		const schema = Joi.object({
 			email: Joi.string().email().lowercase().required(),
 			password: passwordComplexity(complexityOptions).required(),
-		})
-		validateRequest(req, res, next, schema, "body")
-    },
-}
+		});
+		validateRequest(req, res, next, schema, 'body');
+	},
+};

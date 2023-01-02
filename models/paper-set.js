@@ -1,5 +1,5 @@
-"use strict"
-const { Model, Sequelize } = require("sequelize")
+'use strict';
+const { Model, Sequelize } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
 	class PaperSet extends Model {
 		/**
@@ -10,20 +10,20 @@ module.exports = (sequelize, DataTypes) => {
 		static associate(models) {
 			// define association here
 			PaperSet.belongsTo(models.Subject, {
-				foreignKey: "subject_id",
-				targetKey: "id",
-				as: "subjects",
-			})
+				foreignKey: 'subject_id',
+				targetKey: 'id',
+				as: 'subjects',
+			});
 			PaperSet.hasMany(models.Question, {
-				foreignKey: "paper_set_id",
-				sourceKey: "id",
-				as: "questions",
-			})
+				foreignKey: 'paper_set_id',
+				sourceKey: 'id',
+				as: 'questions',
+			});
 			PaperSet.hasMany(models.ExamUserMapping, {
-				foreignKey: "paper_set_id",
-				sourceKey: "id",
-				as: "exam_users",
-			})
+				foreignKey: 'paper_set_id',
+				sourceKey: 'id',
+				as: 'exam_users',
+			});
 		}
 		toJSON() {
 			return {
@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
 				createdAt: undefined,
 				updatedAt: undefined,
 				deletedAt: undefined,
-			}
+			};
 		}
 	}
 	PaperSet.init(
@@ -40,8 +40,8 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				type: Sequelize.UUID,
 				references: {
-					model: "subject",
-					key: "id",
+					model: 'subject',
+					key: 'id',
 				},
 			},
 
@@ -56,10 +56,10 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		{
 			sequelize,
-			modelName: "PaperSet",
-			tableName: "paper_set",
+			modelName: 'PaperSet',
+			tableName: 'paper_set',
 			paranoid: true,
 		}
-	)
-	return PaperSet
-}
+	);
+	return PaperSet;
+};

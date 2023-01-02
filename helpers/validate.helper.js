@@ -1,38 +1,38 @@
-const { commonErrorHandler } = require("./common-function.helper")
-const _ = require("lodash")
+const { commonErrorHandler } = require('./common-function.helper');
+const _ = require('lodash');
 
 const validateRequest = (req, res, next, schema, requestParamterType) => {
-	let requestData = {}
-	if (requestParamterType === "body") {
-		requestData = req.body
-	} else if (requestParamterType === "query") {
-		requestData = req.query
+	let requestData = {};
+	if (requestParamterType === 'body') {
+		requestData = req.body;
+	} else if (requestParamterType === 'query') {
+		requestData = req.query;
 	} else {
-		requestData = req.params
+		requestData = req.params;
 	}
 
-	const { error, value } = schema.validate(requestData)
+	const { error, value } = schema.validate(requestData);
 
 	if (!error) {
-		if (requestParamterType === "body") {
-			req.body = value
-		} else if (requestParamterType === "query") {
-			req.query = value
+		if (requestParamterType === 'body') {
+			req.body = value;
+		} else if (requestParamterType === 'query') {
+			req.query = value;
 		} else {
-			req.params = value
+			req.params = value;
 		}
-		return next()
+		return next();
 	}
 
-	const { details } = error
+	const { details } = error;
 
 	//to make "password" -> password
 	const message = details
-		.map((i) => i.message.replace(/("([a-z]*)")/gm, "$2"))
-		.join(",")
-	return commonErrorHandler(req, res, message, 422)
-}
+		.map((i) => i.message.replace(/("([a-z]*)")/gm, '$2'))
+		.join(',');
+	return commonErrorHandler(req, res, message, 422);
+};
 
 module.exports = {
 	validateRequest,
-}
+};

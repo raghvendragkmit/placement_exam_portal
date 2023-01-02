@@ -1,5 +1,5 @@
-"use strict"
-const { Model, Sequelize } = require("sequelize")
+'use strict';
+const { Model, Sequelize } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
 	class ExamUserMapping extends Model {
 		/**
@@ -10,25 +10,25 @@ module.exports = (sequelize, DataTypes) => {
 		static associate(models) {
 			// define association here
 			ExamUserMapping.belongsTo(models.Exam, {
-				foreignKey: "exam_id",
-				targetKey: "id",
-				as: "exams",
-			})
+				foreignKey: 'exam_id',
+				targetKey: 'id',
+				as: 'exams',
+			});
 			ExamUserMapping.belongsTo(models.PaperSet, {
-				foreignKey: "paper_set_id",
-				targetKey: "id",
-				as: "paper_sets",
-			})
+				foreignKey: 'paper_set_id',
+				targetKey: 'id',
+				as: 'paper_sets',
+			});
 			ExamUserMapping.belongsTo(models.User, {
-				foreignKey: "user_id",
-				targetKey: "id",
-				as: "users",
-			})
+				foreignKey: 'user_id',
+				targetKey: 'id',
+				as: 'users',
+			});
 			ExamUserMapping.hasMany(models.ExamUserResponse, {
-				foreignKey: "exam_user_attempt_id",
-				sourceKey: "id",
-				as: "exam_users",
-			})
+				foreignKey: 'exam_user_attempt_id',
+				sourceKey: 'id',
+				as: 'exam_users',
+			});
 		}
 	}
 	ExamUserMapping.init(
@@ -37,16 +37,16 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				type: Sequelize.UUID,
 				references: {
-					model: "exam",
-					key: "id",
+					model: 'exam',
+					key: 'id',
 				},
 			},
 			user_id: {
 				allowNull: false,
 				type: Sequelize.UUID,
 				references: {
-					model: "user",
-					key: "id",
+					model: 'user',
+					key: 'id',
 				},
 			},
 
@@ -54,8 +54,8 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				type: Sequelize.UUID,
 				references: {
-					model: "paper_set",
-					key: "id",
+					model: 'paper_set',
+					key: 'id',
 				},
 			},
 
@@ -103,10 +103,10 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		{
 			sequelize,
-			modelName: "ExamUserMapping",
-			tableName: "exam_user_mapping",
+			modelName: 'ExamUserMapping',
+			tableName: 'exam_user_mapping',
 			paranoid: true,
 		}
-	)
-	return ExamUserMapping
-}
+	);
+	return ExamUserMapping;
+};

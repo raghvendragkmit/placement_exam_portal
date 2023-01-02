@@ -1,71 +1,63 @@
-
-const paperSetServices = require("../services/paper-set.service")
-const { commonErrorHandler } = require("../helpers/common-function.helper");
-
+const paperSetServices = require('../services/paper-set.service');
+const { commonErrorHandler } = require('../helpers/common-function.helper');
 
 const createPaperSet = async (req, res, next) => {
-    try {
-        const { body: payload } = req;
-        const response = await paperSetServices.createPaperSet(payload);
-        res.data = response;
-        next();
-    } catch (error) {
-        commonErrorHandler(req, res, error.message, 400, error);
-    }
+	try {
+		const { body: payload } = req;
+		const response = await paperSetServices.createPaperSet(payload);
+		res.data = response;
+		next();
+	} catch (error) {
+		commonErrorHandler(req, res, error.message, 400, error);
+	}
 };
-
-
 
 const deletePaperSet = async (req, res, next) => {
-    try {
-        const { body: payload, params } = req;
-        const response = await paperSetServices.deletePaperSet(payload, params);
-        res.data = response;
-        next();
-    } catch (error) {
-        commonErrorHandler(req, res, error.message, 400, error);
-    }
+	try {
+		const { body: payload, params } = req;
+		const response = await paperSetServices.deletePaperSet(payload, params);
+		res.data = response;
+		next();
+	} catch (error) {
+		commonErrorHandler(req, res, error.message, 400, error);
+	}
 };
-
 
 const getAllPaperSet = async (req, res, next) => {
-    try {
-        const { body: payload } = req;
-        const response = await paperSetServices.getAllPaperSet();
-        res.data = response;
-        next();
-    } catch (error) {
-        commonErrorHandler(req, res, error.message, 400, error);
-    }
+	try {
+		const { body: payload } = req;
+		const response = await paperSetServices.getAllPaperSet();
+		res.data = response;
+		next();
+	} catch (error) {
+		commonErrorHandler(req, res, error.message, 400, error);
+	}
 };
-
 
 const getAllPaperSetQuestions = async (req, res, next) => {
-    try {
-        const { body: payload, params } = req;
-        const response = await paperSetServices.getAllPaperSetQuestions(payload, params);
-        res.data = response;
-        next();
-    } catch (error) {
-        commonErrorHandler(req, res, error.message, 400, error);
-    }
+	try {
+		const { body: payload, params } = req;
+		const response = await paperSetServices.getAllPaperSetQuestions(
+			payload,
+			params
+		);
+		res.data = response;
+		next();
+	} catch (error) {
+		commonErrorHandler(req, res, error.message, 400, error);
+	}
 };
-
 
 const updatePaperSet = async (req, res, next) => {
 	try {
-		const { body: payload, params } = req
-		const response = await paperSetServices.updatePaperSet(
-			payload,
-			params
-		)
-		res.data = response
-		next()
+		const { body: payload, params } = req;
+		const response = await paperSetServices.updatePaperSet(payload, params);
+		res.data = response;
+		next();
 	} catch (error) {
-		commonErrorHandler(req, res, error.message, 400, error)
+		commonErrorHandler(req, res, error.message, 400, error);
 	}
-}
-
+};
 
 module.exports = {
 	createPaperSet,
@@ -73,4 +65,4 @@ module.exports = {
 	deletePaperSet,
 	getAllPaperSetQuestions,
 	updatePaperSet,
-}
+};

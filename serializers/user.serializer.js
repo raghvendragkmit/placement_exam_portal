@@ -1,5 +1,5 @@
 const createUser = async (req, res, next) => {
-	const data = res.data || null
+	const data = res.data || null;
 
 	const response = {
 		id: data.id,
@@ -9,16 +9,16 @@ const createUser = async (req, res, next) => {
 		role: data.role,
 		organization: data.organization,
 		contactNumber: data.contactNumber,
-	}
+	};
 
-	res.data = response
-	next()
-}
+	res.data = response;
+	next();
+};
 
 const getAllUser = async (req, res, next) => {
-	const data = res.data || null
+	const data = res.data || null;
 
-	const response = []
+	const response = [];
 
 	data.forEach((obj) => {
 		const tempObj = {
@@ -29,15 +29,15 @@ const getAllUser = async (req, res, next) => {
 			role: obj.role,
 			organization: obj.organization,
 			contactNumber: obj.contactNumber,
-		}
-		response.push(tempObj)
-	})
+		};
+		response.push(tempObj);
+	});
 
-	res.data = response
-	next()
-}
+	res.data = response;
+	next();
+};
 
 module.exports = {
 	createUser,
 	getAllUser,
-}
+};

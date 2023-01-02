@@ -1,5 +1,5 @@
-"use strict"
-const { Model, Sequelize } = require("sequelize")
+'use strict';
+const { Model, Sequelize } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
 	class ExamUserResponse extends Model {
 		/**
@@ -10,20 +10,20 @@ module.exports = (sequelize, DataTypes) => {
 		static associate(models) {
 			// define association here
 			ExamUserResponse.belongsTo(models.ExamUserMapping, {
-				foreignKey: "exam_user_attempt_id",
-				targetKey: "id",
-				as: "exam_user_attempt",
-			})
+				foreignKey: 'exam_user_attempt_id',
+				targetKey: 'id',
+				as: 'exam_user_attempt',
+			});
 			ExamUserResponse.belongsTo(models.Question, {
-				foreignKey: "question_id",
-				targetKey: "id",
-				as: "questions",
-			})
+				foreignKey: 'question_id',
+				targetKey: 'id',
+				as: 'questions',
+			});
 			ExamUserResponse.belongsTo(models.Answer, {
-				foreignKey: "answer_id",
-				targetKey: "id",
-				as: "answers",
-			})
+				foreignKey: 'answer_id',
+				targetKey: 'id',
+				as: 'answers',
+			});
 		}
 	}
 	ExamUserResponse.init(
@@ -32,8 +32,8 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				type: Sequelize.UUID,
 				references: {
-					model: "exam_user_mapping",
-					key: " id",
+					model: 'exam_user_mapping',
+					key: ' id',
 				},
 			},
 
@@ -41,8 +41,8 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				type: Sequelize.UUID,
 				references: {
-					model: "question",
-					key: "id",
+					model: 'question',
+					key: 'id',
 				},
 			},
 
@@ -50,8 +50,8 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: false,
 				type: Sequelize.UUID,
 				references: {
-					model: "answer",
-					key: "id",
+					model: 'answer',
+					key: 'id',
 				},
 			},
 
@@ -62,10 +62,10 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		{
 			sequelize,
-			modelName: "ExamUserResponse",
-			tableName: "exam_user_response",
+			modelName: 'ExamUserResponse',
+			tableName: 'exam_user_response',
 			paranoid: true,
 		}
-	)
-	return ExamUserResponse
-}
+	);
+	return ExamUserResponse;
+};
