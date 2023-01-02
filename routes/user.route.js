@@ -33,4 +33,15 @@ router.post(
 	genericResponse.sendResponse
 )
 
+
+router.get(
+	"/exam-result/:examId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyUser,
+	validator.examValidator.examIdSchema,
+    controllers.examController.checkResult,
+    serializer.examSerializer.userResult,
+	genericResponse.sendResponse
+)
+
 module.exports = router

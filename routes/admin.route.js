@@ -266,4 +266,13 @@ router.get(
 	genericResponse.sendResponse
 )
 
+router.post(
+	"/publish-exam-results/:examId",
+	authMiddleware.checkAccessToken,
+	authMiddleware.verifyAdmin,
+	validator.examValidator.examIdSchema,
+	controllers.examController.publishResult,
+	genericResponse.sendResponse
+)
+
 module.exports = router

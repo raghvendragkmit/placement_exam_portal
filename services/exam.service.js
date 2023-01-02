@@ -663,6 +663,29 @@ const publishResult = async (payload, params) => {
 	}
 }
 
+const checkResult = async (payload, user, params) => {
+	const examId = params.examId
+	const userId = user.id
+
+	console.log(examId, userId)
+
+	const isResultPublished = await models.ExamUserMapping.findOne({
+		where: {
+			[Op.and]: [
+				{ user_id: userId },
+				{ exam_id: examId },
+				{ publish_result: true },
+			],
+		},
+	})
+
+	if (!isResultPublished) {
+		throw new Error("results not published yet")
+	}
+
+	return isResultPublished
+}
+
 module.exports = {
 	createExam,
 	deleteExam,
@@ -673,4 +696,5 @@ module.exports = {
 	logResponse,
 	examResult,
 	publishResult,
+	checkResult,
 }

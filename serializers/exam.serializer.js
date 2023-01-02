@@ -51,7 +51,27 @@ const examQuestionAnswer = async (req, res, next) => {
 	next()
 }
 
+const userResult = async (req, res, next) => {
+	const data = res.data || null
+
+	const studentResult = data.result ? "Pass" : "Fail"
+
+	const response = {
+		userId: data.user_id,
+		paperSetId: data.paper_set_id,
+		startTime: data.start_time,
+		submitTime: data.submit_time,
+		totalQuestions: data.total_questions,
+		totalQuestionAttempted: data.total_question_attempted,
+		totalCorrectAnswers: data.total_correct_answers,
+		totalMarksObtained: data.total_marks_obtained,
+		result: studentResult,
+	}
+	res.data = response
+	next()
+}
 module.exports = {
 	examResult,
 	examQuestionAnswer,
+	userResult,
 }
