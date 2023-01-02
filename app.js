@@ -21,7 +21,7 @@ app.use(compression());
 app.disable('x-powered-by');
 
 app.use('/health', (_req, res) => {
-	res.send({ message: 'Application runing successfully!' });
+  res.send({ message: 'Application runing successfully!' });
 });
 
 // REST API entry point
@@ -29,8 +29,8 @@ routes.registerRoutes(app);
 
 // 404 Error Handling
 app.use((req, res) => {
-	const message = 'Invalid endpoint';
-	commonErrorHandler(req, res, message, 400);
+  const message = 'Invalid endpoint';
+  commonErrorHandler(req, res, message, 400);
 });
 
 module.exports = app;

@@ -12,22 +12,24 @@ const hash = bcrypt.hashSync(password, 10);
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-	async up(queryInterface, Sequelize) {
-		await queryInterface.bulkInsert('user', [
-			{
-				first_name: first_name,
-				last_name: last_name,
-				email: email,
-				password: hash,
-				role: 'admin',
-				organization: organization,
-				contact_number: '7987895418',
-				created_at: new Date(),
-				updated_at: new Date(),
-			},
-		]);
-	},
-	async down(queryInterface, Sequelize) {
-		await queryInterface.bulkDelete('user', null, {});
-	},
+  // eslint-disable-next-line no-unused-vars
+  async up(queryInterface, Sequelize) {
+    await queryInterface.bulkInsert('user', [
+      {
+        first_name: first_name,
+        last_name: last_name,
+        email: email,
+        password: hash,
+        role: 'admin',
+        organization: organization,
+        contact_number: '7987895418',
+        created_at: new Date(),
+        updated_at: new Date()
+      }
+    ]);
+  },
+  // eslint-disable-next-line no-unused-vars
+  async down(queryInterface, Sequelize) {
+    await queryInterface.bulkDelete('user', null, {});
+  }
 };
