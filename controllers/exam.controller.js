@@ -95,6 +95,24 @@ const examResult = async (req, res, next) => {
 	}
 }
 
+const publishResult = async (req, res, next) => {
+	try {
+		const { body: payload, params } = req
+		const response = await services.examService.publishResult(
+			payload,
+			params
+		)
+		if (response.error) {
+			throw new Error(response.error)
+		}
+		res.data = response.data
+		next()
+	} catch (error) {
+		commonErrorHandler(req, res, error.message, 400, error)
+	}
+}
+
+
 module.exports = {
 	createExam,
 	deleteExam,
@@ -104,4 +122,6 @@ module.exports = {
 	submitExam,
 	logResponse,
 	examResult,
+	publishResult,
+	checkResult,
 }

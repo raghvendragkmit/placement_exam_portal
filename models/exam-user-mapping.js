@@ -96,6 +96,10 @@ module.exports = (sequelize, DataTypes) => {
 				allowNull: true,
 				type: Sequelize.BOOLEAN,
 			},
+			publish_result: {
+				allowNull: true,
+				type: Sequelize.BOOLEAN,
+			},
 		},
 		{
 			sequelize,

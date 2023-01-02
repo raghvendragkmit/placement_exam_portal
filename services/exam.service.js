@@ -614,6 +614,55 @@ const examResult = async (payload, params) => {
 	return allResults
 }
 
+const publishResult = async (payload, params) => {
+	const trans = await sequelize.transaction()
+	try {
+		const examId = params.examId
+		const currentTime = new Date()
+		const examExist = await models.Exam.findOne(
+			{
+				where: {
+					id: examId,
+				},
+			},
+			{ transaction: trans }
+		)
+
+		if (!examExist) {
+			throw new Error("exam not found")
+		}
+
+		if (currentTime <= examExist.exam_end_time) {
+			throw new Error("cannot publish result now")
+		}
+
+		console.log("here")
+
+		const resultPublished = await models.ExamUserMapping.update(
+			{
+				publish_result: true,
+			},
+			{
+				where: {
+					[Op.and]: [
+						{ exam_id: examId },
+						{ result: { [Op.not]: null } },
+					],
+				},
+			},
+			{ transaction: trans }
+		)
+		if (!resultPublished) {
+			throw new Error("error in publishing result")
+		}
+		await trans.commit()
+		return { data: "results published successfully", error: null }
+	} catch (error) {
+		await trans.rollback()
+		return { data: null, error: error.message }
+	}
+}
+
 module.exports = {
 	createExam,
 	deleteExam,
@@ -623,4 +672,5 @@ module.exports = {
 	submitExam,
 	logResponse,
 	examResult,
+	publishResult,
 }
