@@ -11,7 +11,9 @@ module.exports = {
       examEndTime: Joi.string()
         .regex(/^([0-9]{2}:)([0-9]{2}:)([0-9]{2})$/)
         .required(),
-      examDate: Joi.date().required(),
+      examDate: Joi.string()
+        .regex(/^([0-9]{4}-)([0-9]{2}-)([0-9]{2})$/)
+        .required(),
       examPassingPercentage: Joi.number().min(33).precision(2)
     });
     validateRequest(req, res, next, schema, 'body');
