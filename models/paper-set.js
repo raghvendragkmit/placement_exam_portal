@@ -52,11 +52,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       marks_per_question: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.FLOAT,
+        defaultValue: 0
       },
       negative_marks_per_question: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         defaultValue: 0
       }
     },
