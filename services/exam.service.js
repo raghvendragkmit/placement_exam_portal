@@ -109,7 +109,7 @@ const getAllExam = async (payload) => {
 const getAllUpcomingExam = async (payload) => {
   const exams = await models.Exam.findAll({
     where: {
-      exam_start_time: {
+      exam_end_time: {
         [Op.gt]: new Date()
       }
     }
@@ -117,9 +117,9 @@ const getAllUpcomingExam = async (payload) => {
   return exams;
 };
 
-const startExam = async (payload, params) => {
+const startExam = async (payload, user, params) => {
   const examId = params.examId;
-  const userId = payload.userId;
+  const userId = user.id;
 
   const examExist = await models.Exam.findOne({
     where: {
@@ -198,7 +198,7 @@ const submitExam = async (payload, user) => {
   const trans = await sequelize.transaction();
   try {
     const examId = payload.examId;
-    const userId = payload.userId;
+    const userId = user.id;
     const paperSetId = payload.paperSetId;
 
     console.log(examId, paperSetId, userId);
@@ -432,11 +432,11 @@ const submitExam = async (payload, user) => {
   }
 };
 
-const logResponse = async (payload) => {
+const logResponse = async (payload, user) => {
   const trans = await sequelize.transaction();
   try {
     const examId = payload.examId;
-    const userId = payload.userId;
+    const userId = user.id;
     const paperSetId = payload.paperSetId;
     const questionId = payload.questionId;
     const answerId = payload.answerId;

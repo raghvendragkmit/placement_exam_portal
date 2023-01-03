@@ -47,8 +47,9 @@ const getAllUpcomingExam = async (req, res, next) => {
 
 const startExam = async (req, res, next) => {
   try {
-    const { body: payload, params } = req;
-    const response = await examServices.startExam(payload, params);
+    // eslint-disable-next-line no-unused-vars
+    const { body: payload, params, user } = req;
+    const response = await examServices.startExam(payload, user, params);
     res.data = response;
     next();
   } catch (error) {
@@ -58,8 +59,8 @@ const startExam = async (req, res, next) => {
 
 const submitExam = async (req, res, next) => {
   try {
-    const { body: payload, params } = req;
-    const response = await examServices.submitExam(payload, params);
+    const { body: payload, user, params } = req;
+    const response = await examServices.submitExam(payload, user, params);
     if (response.error) {
       throw new Error(response.error);
     }
@@ -72,8 +73,8 @@ const submitExam = async (req, res, next) => {
 
 const logResponse = async (req, res, next) => {
   try {
-    const { body: payload, params } = req;
-    const response = await examServices.logResponse(payload, params);
+    const { body: payload, user } = req;
+    const response = await examServices.logResponse(payload, user);
     if (response.error) {
       throw new Error(response.error);
     }
