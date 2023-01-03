@@ -9,7 +9,7 @@
     "seed": "npx sequelize db:seed:all",
     "generate": "npx sequelize db:seed:all",
     "undo": "npx sequelize db:migrate:undo:all",
-   "prepare": "husky install client/.husky"
+    "prepare": "husky install client/.husky"
   },
   "repository": {
     "type": "git",
@@ -33,9 +33,11 @@
     "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
+    "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.8.0",
     "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",
+    "read-excel-file": "^5.5.3",
     "redis": "^4.5.1",
     "sequelize": "^6.28.0"
   },
@@ -54,5 +56,5 @@
       "pre-commit": "npx pretty-quick --staged ng lint ng test",
       "pre-push": "ng build --aot true"
     }
-}
+  }
 }
