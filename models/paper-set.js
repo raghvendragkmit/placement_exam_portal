@@ -53,6 +53,11 @@ module.exports = (sequelize, DataTypes) => {
       marks_per_question: {
         allowNull: false,
         type: Sequelize.INTEGER
+      },
+      negative_marks_per_question: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        defaultValue: 0
       }
     },
     {
