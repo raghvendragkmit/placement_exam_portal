@@ -208,28 +208,6 @@ const deleteQuestionById = async (payload, params) => {
   }
 };
 
-const questionAnswerByFile = async (payload, file) => {
-  try {
-    const path = 'uploads/' + file.originalname;
-    console.log(file);
-
-    const responseObject = [];
-    const questionAnswerArray = await convertExcelToJson(path);
-    for (const key of questionAnswerArray) {
-      // eslint-disable-next-line no-prototype-builtins
-      const response = await createQuestionAnswer(key);
-      console.log(response);
-      if (response.error) throw new Error(response.error);
-      responseObject.push(key.questionDescription);
-    }
-    responseObject.push('Question Answers added successfully');
-    return { data: responseObject, error: null };
-  } catch (error) {
-    console.log('here');
-    return { data: null, error: error.message };
-  }
-};
-
 module.exports = {
   createQuestionAnswer,
   getAllQuestionAnswer,
@@ -238,6 +216,5 @@ module.exports = {
   updateQuestionDescription,
   updateAnswerDescription,
   deleteQuestionById,
-  deleteAnswerById,
-  questionAnswerByFile
+  deleteAnswerById
 };

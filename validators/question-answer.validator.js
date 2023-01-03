@@ -38,7 +38,6 @@ module.exports = {
     });
     validateRequest(req, res, next, schema, 'params');
   },
-
   questionAnswersSchema: async (req, res, next) => {
     const questionAnswer = Joi.object().keys({
       answerDescription: Joi.string().min(1).required(),

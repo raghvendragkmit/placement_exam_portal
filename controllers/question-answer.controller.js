@@ -113,22 +113,6 @@ const updateAnswerDescription = async (req, res, next) => {
   }
 };
 
-const questionAnswerByFile = async (req, res, next) => {
-  try {
-    const { body: payload, file } = req;
-    const response = await questionAnswerServices.questionAnswerByFile(
-      payload,
-      file
-    );
-    if (response.error) {
-      throw new Error(response.error);
-    }
-    res.data = response.data;
-    next();
-  } catch (error) {
-    commonErrorHandler(req, res, error.message, 400, error);
-  }
-};
 module.exports = {
   createQuestionAnswer,
   getAllQuestionAnswer,
@@ -137,6 +121,5 @@ module.exports = {
   updateAnswerDescription,
   getQuestionAnswerById,
   deleteQuestionById,
-  deleteAnswerById,
-  questionAnswerByFile
+  deleteAnswerById
 };
