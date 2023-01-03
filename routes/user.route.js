@@ -50,6 +50,7 @@ router.get(
   authMiddleware.checkAccessToken,
   authMiddleware.verifyUser,
   examController.getAllUpcomingExam,
+  examSerializer.upcomingExam,
   genericResponse.sendResponse
 );
 
@@ -79,6 +80,14 @@ router.get(
   examValidator.examIdSchema,
   examController.checkResult,
   examSerializer.userResult,
+  genericResponse.sendResponse
+);
+
+router.post(
+  '/log-exam-response',
+  authMiddleware.checkAccessToken,
+  authMiddleware.verifyUser,
+  examController.logResponse,
   genericResponse.sendResponse
 );
 
