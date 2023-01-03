@@ -6,8 +6,8 @@ module.exports = {
     const schema = Joi.object({
       subjectName: Joi.string().min(1).required(),
       paperSetName: Joi.string().min(1).required(),
-      marksPerQuestion: Joi.number().min(1).required(),
-      negativeMarksPerWrongAnswer: Joi.number().min(1).required()
+      marksPerQuestion: Joi.number().min(1).precision(2),
+      negativeMarksPerWrongAnswer: Joi.number().min(0).precision(2)
     });
 
     validateRequest(req, res, next, schema, 'body');
