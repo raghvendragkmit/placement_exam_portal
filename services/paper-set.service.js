@@ -20,7 +20,8 @@ const createPaperSet = async (payload) => {
   const paperSetPayload = {
     paper_set_name: payload.paperSetName,
     subject_id: subjectExist.dataValues.id,
-    marks_per_question: payload.marksPerQuestion
+    marks_per_question: payload.marksPerQuestion,
+    negative_marks_per_question: payload.negativeMarksPerWrongAnswer
   };
   const paperSetCreated = await models.PaperSet.create(paperSetPayload);
   return paperSetCreated;
