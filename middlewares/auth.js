@@ -67,6 +67,8 @@ const verifyUser = async (req, res, next) => {
     console.log(req.user);
     if (req.user.role == 'User') {
       next();
+    } else {
+      throw new Error('user not authorised');
     }
   } catch (error) {
     return res.status(403).json({ error: error.message });
