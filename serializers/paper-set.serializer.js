@@ -23,7 +23,8 @@ const getALlPaperSet = async (req, res, next) => {
       subjectId: obj.subjects.id,
       subjectName: obj.subjects.subject_name,
       paperSetName: obj.paper_set_name,
-      marksPerQuestion: obj.marks_per_question
+      marksPerQuestion: obj.marks_per_question,
+      negativeMarksPerWrongAnswer: obj.negative_marks_per_question
     };
     response.push(tempObj);
   });
