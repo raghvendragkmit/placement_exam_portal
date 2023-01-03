@@ -291,7 +291,12 @@ const submitExam = async (payload, user) => {
       console.log(correctAnswers, questionsAttempted);
 
       const marksPerQuestion = paperSetExist.marks_per_question;
-      const totalMarksObtained = marksPerQuestion * correctAnswers;
+      const negativeMarksPerWrongAnswer =
+        paperSetExist.negative_marks_per_question;
+
+      const totalMarksObtained =
+        marksPerQuestion * correctAnswers -
+        (questionsAttempted - correctAnswers) * negativeMarksPerWrongAnswer;
       const passingPercentage = examExist.exam_passing_percentage;
       const totalQuestions = examUserMappingExist.total_questions;
       const percentageObtained =
@@ -399,7 +404,12 @@ const submitExam = async (payload, user) => {
     }
 
     const marksPerQuestion = paperSetExist.marks_per_question;
-    const totalMarksObtained = marksPerQuestion * correctAnswers;
+    const negativeMarksPerWrongAnswer =
+      paperSetExist.negative_marks_per_question;
+    const totalMarksObtained =
+      marksPerQuestion * correctAnswers -
+      (questionsAttempted - correctAnswers) * negativeMarksPerWrongAnswer;
+
     const passingPercentage = examExist.exam_passing_percentage;
     const totalQuestions = examUserMappingExist.total_questions;
     const percentageObtained =
