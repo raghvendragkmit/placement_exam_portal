@@ -294,9 +294,13 @@ const submitExam = async (payload, user) => {
       const negativeMarksPerWrongAnswer =
         paperSetExist.negative_marks_per_question;
 
-      const totalMarksObtained =
+      let totalMarksObtained =
         marksPerQuestion * correctAnswers -
         (questionsAttempted - correctAnswers) * negativeMarksPerWrongAnswer;
+
+      if (totalMarksObtained < 0) {
+        totalMarksObtained = 0;
+      }
       const passingPercentage = examExist.exam_passing_percentage;
       const totalQuestions = examUserMappingExist.total_questions;
       const percentageObtained =
@@ -406,9 +410,13 @@ const submitExam = async (payload, user) => {
     const marksPerQuestion = paperSetExist.marks_per_question;
     const negativeMarksPerWrongAnswer =
       paperSetExist.negative_marks_per_question;
-    const totalMarksObtained =
+    let totalMarksObtained =
       marksPerQuestion * correctAnswers -
       (questionsAttempted - correctAnswers) * negativeMarksPerWrongAnswer;
+
+    if (totalMarksObtained < 0) {
+      totalMarksObtained = 0;
+    }
 
     const passingPercentage = examExist.exam_passing_percentage;
     const totalQuestions = examUserMappingExist.total_questions;
