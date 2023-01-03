@@ -160,6 +160,8 @@ const startExam = async (payload, user, params) => {
     throw new Error('exam not started yet');
   }
 
+  console.log('iwiwiyewvhiwvhcvh');
+
   const paperSet = await models.PaperSet.findAll({
     order: sequelize.random(),
     limit: 1,
@@ -167,6 +169,7 @@ const startExam = async (payload, user, params) => {
   });
 
   const paperSetId = paperSet[0].dataValues.id;
+  console.log(paperSetId, '---------<');
 
   const questionSets = await models.Question.findAll({
     where: { paper_set_id: paperSetId },
@@ -240,6 +243,23 @@ const submitExam = async (payload, user) => {
 
     if (!paperSetExist) {
       throw new Error('paperSet not found');
+    }
+
+    const examUserPaperMappingExist = await models.ExamUserMapping.findOne(
+      {
+        where: {
+          [Op.and]: [
+            { exam_id: examId },
+            { user_id: userId },
+            { paper_set_id: paperSetId }
+          ]
+        }
+      },
+      { transaction: trans }
+    );
+
+    if (!examUserPaperMappingExist) {
+      throw new Error('Invalid paperSetId');
     }
 
     const examUserMappingExist = await models.ExamUserMapping.findOne(
