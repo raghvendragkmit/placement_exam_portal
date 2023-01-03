@@ -121,6 +121,17 @@ const checkResult = async (req, res, next) => {
   }
 };
 
+const updateExam = async (req, res, next) => {
+  try {
+    const { body: payload, params } = req;
+    const response = await examServices.updateExam(payload, params);
+    res.data = response;
+    next();
+  } catch (error) {
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   createExam,
   deleteExam,
@@ -131,5 +142,6 @@ module.exports = {
   logResponse,
   examResult,
   publishResult,
-  checkResult
+  checkResult,
+  updateExam
 };
