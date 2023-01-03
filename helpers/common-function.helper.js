@@ -56,8 +56,22 @@ const convertExcelToJson = async (path) => {
   const questionAnswersObj = [];
   await readXlsxFile(fs.createReadStream(path)).then((rows) => {
     rows.forEach((row) => {
-      row.shift();
-      console.log(row);
+      // row.shift();
+      // console.log(row);
+      // if (
+      //   !row[0] ||
+      //   !row[1] ||
+      //   !row[2] ||
+      //   !row[3] ||
+      //   !row[4] ||
+      //   !row[5] ||
+      //   !row[6] ||
+      //   !row[7] ||
+      //   !row[8] ||
+      //   !row[9]
+      // ) {
+      //   throw new Error('file contain null values');
+      // }
       const tempObj = {
         paperSetName: row[0],
         questionDescription: row[1],

@@ -74,63 +74,63 @@ const createQuestionAnswers = async (payload) => {
   try {
     for (let key in questionObject) {
       // eslint-disable-next-line no-prototype-builtins
-      if (questionObject.hasOwnProperty(key)) {
-        const item = questionObject[key];
-        const paperSetExist = await models.PaperSet.findOne(
-          {
-            where: { paper_set_name: item.paperSetName }
-          },
-          { transaction: trans }
-        );
+      // if (questionObject.hasOwnProperty(key)) {
+      const item = questionObject[key];
+      console.log(item, 'cuouhcughuwuewu');
+      const paperSetExist = await models.PaperSet.findOne(
+        {
+          where: { paper_set_name: item.paperSetName }
+        },
+        { transaction: trans }
+      );
 
-        if (!paperSetExist) {
-          throw new Error('paperSet not found');
+      if (!paperSetExist) {
+        throw new Error('paperSet not found');
+      }
+
+      const questionExist = await models.Question.findOne({
+        where: { question_description: item.questionDescription }
+      });
+
+      if (questionExist) {
+        throw new Error('Question already exist');
+      }
+
+      const questionCreated = await models.Question.create(
+        {
+          question_description: item.questionDescription,
+          paper_set_id: paperSetExist.dataValues.id
+        },
+        { transaction: trans }
+      );
+
+      if (!questionCreated) {
+        throw new Error('question not created');
+      }
+
+      const answerOptions = item.options;
+      let countTrue = 0;
+      const answerArray = [];
+      for (let i = 0; i < answerOptions.length; ++i) {
+        const answerDescription = answerOptions[i].answerDescription;
+        const isCorrect = answerOptions[i].isCorrect;
+        if (isCorrect) {
+          countTrue++;
         }
-
-        const questionExist = await models.Question.findOne({
-          where: { question_description: item.questionDescription }
-        });
-
-        if (questionExist) {
-          throw new Error('Question already exist');
+        if (countTrue > 1) {
+          throw new Error('one out of 4 options must be true');
         }
-
-        const questionCreated = await models.Question.create(
-          {
-            question_description: item.questionDescription,
-            paper_set_id: paperSetExist.dataValues.id
-          },
-          { transaction: trans }
-        );
-
-        if (!questionCreated) {
-          throw new Error('question not created');
-        }
-
-        const answerOptions = item.options;
-        let countTrue = 0;
-        const answerArray = [];
-        for (let i = 0; i < answerOptions.length; ++i) {
-          const answerDescription = answerOptions[i].answerDescription;
-          const isCorrect = answerOptions[i].isCorrect;
-          if (isCorrect) {
-            countTrue++;
-          }
-          if (countTrue > 1) {
-            throw new Error('one out of 4 options must be true');
-          }
-          answerArray.push({
-            answer_description: answerDescription,
-            is_correct: isCorrect,
-            question_id: questionCreated.id
-          });
-        }
-
-        const answerCreated = await models.Answer.bulkCreate(answerArray, {
-          transaction: trans
+        answerArray.push({
+          answer_description: answerDescription,
+          is_correct: isCorrect,
+          question_id: questionCreated.id
         });
       }
+      const answerCreated = await models.Answer.bulkCreate(answerArray, {
+        transaction: trans
+      });
     }
+
     await trans.commit();
     return { data: 'Question Answer Created Successfully', error: null };
   } catch (error) {
@@ -266,6 +266,19 @@ const deleteQuestionById = async (payload, params) => {
   }
 };
 
+const questionAnswerByFile = async (payload, file) => {
+  const path = 'uploads/' + file.originalname;
+  const questionAnswerArray = await convertExcelToJson(path);
+  console.log(questionAnswerArray, 'bdhhhbkdhbk');
+  const response = await createQuestionAnswers({
+    questionAnswers: questionAnswerArray
+  });
+  if (response.error) {
+    throw new Error(response.error);
+  }
+  return 'Question Answers uploaded successfully';
+};
+
 module.exports = {
   createQuestionAnswer,
   getAllQuestionAnswer,
@@ -274,5 +287,6 @@ module.exports = {
   updateQuestionDescription,
   updateAnswerDescription,
   deleteQuestionById,
-  deleteAnswerById
+  deleteAnswerById,
+  questionAnswerByFile
 };

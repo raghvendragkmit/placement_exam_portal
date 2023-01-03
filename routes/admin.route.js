@@ -16,6 +16,8 @@ const subjectSerializer = require('../serializers/subject.serializer');
 const questionAnswerSerializer = require('../serializers/question-answer.serializer');
 const paperSetSerializer = require('../serializers/paper-set.serializer');
 const examSerializer = require('../serializers/exam.serializer');
+const { fileUpload } = require('../helpers/file-upload.helper');
+const fileUploadValidator = require('../validators/file-upload.validator');
 const router = Router();
 
 router.post(
@@ -264,6 +266,16 @@ router.post(
   authMiddleware.verifyAdmin,
   examValidator.examIdSchema,
   examController.publishResult,
+  genericResponse.sendResponse
+);
+
+router.post(
+  '/question-answer-file',
+  authMiddleware.checkAccessToken,
+  authMiddleware.verifyAdmin,
+  fileUpload.single('myfile'),
+  fileUploadValidator.fileSchema,
+  questionAnswerController.questionAnswerByFile,
   genericResponse.sendResponse
 );
 

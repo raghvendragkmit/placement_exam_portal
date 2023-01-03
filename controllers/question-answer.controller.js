@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 const questionAnswerServices = require('../services/question-answer.service');
 const { commonErrorHandler } = require('../helpers/common-function.helper');
+const { convertExcelToJson } = require('../helpers/common-function.helper');
 
 const createQuestionAnswer = async (req, res, next) => {
   try {
@@ -116,6 +117,20 @@ const updateAnswerDescription = async (req, res, next) => {
   }
 };
 
+const questionAnswerByFile = async (req, res, next) => {
+  try {
+    const { body: payload, file } = req;
+    const response = await questionAnswerServices.questionAnswerByFile(
+      payload,
+      file
+    );
+    res.data = response;
+    next();
+  } catch (error) {
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   createQuestionAnswer,
   getAllQuestionAnswer,
@@ -124,5 +139,6 @@ module.exports = {
   updateAnswerDescription,
   getQuestionAnswerById,
   deleteQuestionById,
-  deleteAnswerById
+  deleteAnswerById,
+  questionAnswerByFile
 };
