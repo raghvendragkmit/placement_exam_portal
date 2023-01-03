@@ -70,8 +70,29 @@ const userResult = async (req, res, next) => {
   res.data = response;
   next();
 };
+
+const upcomingExam = async (req, res, next) => {
+  const data = res.data || null;
+
+  const response = [];
+
+  data.forEach((exam) => {
+    const tempObj = {
+      id: exam.id,
+      subjectId: exam.subject_id,
+      examStartTime: exam.exam_start_time,
+      examEndTime: exam.exam_end_time,
+      examPassingPercentage: exam.exam_passing_percentage
+    };
+    response.push(tempObj);
+  });
+
+  res.data = response;
+  next();
+};
 module.exports = {
   examResult,
   examQuestionAnswer,
-  userResult
+  userResult,
+  upcomingExam
 };
