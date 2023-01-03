@@ -9,7 +9,7 @@ module.exports = {
     const schema = Joi.object({
       paperSetName: Joi.string().min(1).required(),
       questionDescription: Joi.string().min(1).required(),
-      options: Joi.array().items(questionAnswer)
+      options: Joi.array().items(questionAnswer).max(4)
     });
     validateRequest(req, res, next, schema, 'body');
   },
@@ -47,7 +47,7 @@ module.exports = {
     const PaperSet = Joi.object().keys({
       paperSetName: Joi.string().min(1).required(),
       questionDescription: Joi.string().min(1).required(),
-      options: Joi.array().items(questionAnswer)
+      options: Joi.array().items(questionAnswer).max(4)
     });
 
     const schema = Joi.object({
