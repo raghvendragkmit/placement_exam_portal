@@ -41,22 +41,26 @@ const loginUser = async (payload) => {
 
   console.log(payload);
 
-  const user = await models.User.findOne({
+  const userExist = await models.User.findOne({
     where: {
       email: email
     }
   });
-  console.log(user);
 
-  let key = user.dataValues.id + '-refresh-token';
+  if (!userExist) {
+    throw new Error(`user with ${email} is not authorised`);
+  }
+  console.log(userExist);
+
+  let key = userExist.dataValues.id + '-refresh-token';
   let refreshToken = await redisClient.get(key);
   if (!refreshToken) {
-    const match = await bcrypt.compare(password, user.dataValues.password);
+    const match = await bcrypt.compare(password, userExist.dataValues.password);
     if (!match) {
       throw new Error('Wrong email or password');
     }
     refreshToken = jwt.sign(
-      { userId: user.dataValues.id },
+      { userId: userExist.dataValues.id },
       process.env.SECRET_KEY_REFRESH,
       {
         expiresIn: process.env.JWT_REFRESH_EXPIRATION
@@ -65,7 +69,7 @@ const loginUser = async (payload) => {
   }
 
   const accessToken = jwt.sign(
-    { userId: user.dataValues.id },
+    { userId: userExist.dataValues.id },
     process.env.SECRET_KEY_ACCESS,
     {
       expiresIn: process.env.JWT_ACCESS_EXPIRATION
@@ -75,8 +79,8 @@ const loginUser = async (payload) => {
   await redisClient.set(key, refreshToken, 60 * 24);
 
   return {
-    id: user.id,
-    email: user.email,
+    id: userExist.id,
+    email: userExist.email,
     accessToken: accessToken,
     refreshToken: refreshToken
   };

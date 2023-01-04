@@ -20,7 +20,8 @@ const createPaperSet = async (payload) => {
   const paperSetPayload = {
     paper_set_name: payload.paperSetName,
     subject_id: subjectExist.dataValues.id,
-    marks_per_question: payload.marksPerQuestion
+    marks_per_question: payload.marksPerQuestion,
+    negative_marks_per_question: payload.negativeMarksPerWrongAnswer
   };
   const paperSetCreated = await models.PaperSet.create(paperSetPayload);
   return paperSetCreated;
@@ -71,6 +72,8 @@ const getAllPaperSetQuestions = async (payload, params) => {
 const updatePaperSet = async (payload, params) => {
   const paperSetId = params.paperSetId;
   const paperSetName = payload.paperSetName;
+  const positiveMarks = payload.marksPerQuestion;
+  const negativeMarks = payload.negativeMarksPerWrongAnswer;
   const paperSetExist = await models.PaperSet.findOne({
     where: { id: paperSetId }
   });
@@ -87,7 +90,9 @@ const updatePaperSet = async (payload, params) => {
   }
 
   const paperSetPayload = {
-    paper_set_name: payload.paperSetName
+    paper_set_name: payload.paperSetName,
+    marks_per_question: positiveMarks,
+    negative_marks_per_question: negativeMarks
   };
   await models.PaperSet.update(paperSetPayload, {
     where: { id: paperSetExist.dataValues.id }

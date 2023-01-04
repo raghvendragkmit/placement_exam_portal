@@ -112,6 +112,7 @@ const updateAnswerDescription = async (req, res, next) => {
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
+
 module.exports = {
   createQuestionAnswer,
   getAllQuestionAnswer,

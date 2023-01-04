@@ -89,7 +89,7 @@ module.exports = (sequelize, DataTypes) => {
 
       total_marks_obtained: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         defaultValue: 0
       },
 

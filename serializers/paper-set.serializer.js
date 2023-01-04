@@ -5,7 +5,8 @@ const createPaperSet = async (req, res, next) => {
     id: data.id,
     subjectId: data.subject_id,
     paperSetName: data.paper_set_name,
-    marksPerQuestion: data.marks_per_question
+    marksPerQuestion: data.marks_per_question,
+    negativeMarksPerWrongAnswer: data.negative_marks_per_question
   };
 
   res.data = response;
@@ -23,7 +24,8 @@ const getALlPaperSet = async (req, res, next) => {
       subjectId: obj.subjects.id,
       subjectName: obj.subjects.subject_name,
       paperSetName: obj.paper_set_name,
-      marksPerQuestion: obj.marks_per_question
+      marksPerQuestion: obj.marks_per_question,
+      negativeMarksPerWrongAnswer: obj.negative_marks_per_question
     };
     response.push(tempObj);
   });

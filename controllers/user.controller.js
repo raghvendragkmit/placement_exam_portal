@@ -20,7 +20,7 @@ const loginUser = async (req, res, next) => {
     res.data = response;
     next();
   } catch (error) {
-    commonErrorHandler(req, res, error.message, 400, error);
+    commonErrorHandler(req, res, error.message, 401, error);
   }
 };
 

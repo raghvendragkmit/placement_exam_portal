@@ -2,6 +2,7 @@
 const jwt = require('jsonwebtoken');
 const models = require('../models');
 const redisClient = require('../helpers/redis.helper');
+const { commonErrorHandler } = require('../helpers/common-function.helper');
 require('dotenv').config();
 
 const checkAccessToken = async (req, res, next) => {
@@ -24,7 +25,10 @@ const checkAccessToken = async (req, res, next) => {
 
     next();
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    if (error.message == 'Access denied') {
+      commonErrorHandler(req, res, error.message, 400, error);
+    }
+    commonErrorHandler(req, res, error.message, 404, error);
   }
 };
 
@@ -45,7 +49,10 @@ const checkRefreshToken = async (req, res, next) => {
     req.body.token = refreshToken;
     next();
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    if (error.message == 'Access denied') {
+      commonErrorHandler(req, res, error.message, 400, error);
+    }
+    commonErrorHandler(req, res, error.message, 401, error);
   }
 };
 
@@ -58,7 +65,7 @@ const verifyAdmin = async (req, res, next) => {
       throw new Error('admin access required');
     }
   } catch (error) {
-    return res.status(403).json({ error: error.message });
+    commonErrorHandler(req, res, error.message, 403, error);
   }
 };
 
@@ -67,9 +74,11 @@ const verifyUser = async (req, res, next) => {
     console.log(req.user);
     if (req.user.role == 'User') {
       next();
+    } else {
+      throw new Error('user not authorised');
     }
   } catch (error) {
-    return res.status(403).json({ error: error.message });
+    commonErrorHandler(req, res, error.message, 403, error);
   }
 };
 

@@ -1,3 +1,5 @@
+const readXlsxFile = require('read-excel-file/node');
+const fs = require('fs');
 const commonErrorHandler = async (
   req,
   res,
@@ -50,8 +52,45 @@ const sendResponse = async (req, res) => {
   return res.status(200).json(response);
 };
 
+const convertExcelToJson = async (path) => {
+  const questionAnswersObj = [];
+  await readXlsxFile(fs.createReadStream(path)).then((rows) => {
+    rows.forEach((row) => {
+      row.shift();
+      console.log(row);
+      const tempObj = {
+        paperSetName: row[0],
+        questionDescription: row[1],
+        options: [
+          {
+            answerDescription: row[2],
+            isCorrect: row[3]
+          },
+          {
+            answerDescription: row[4],
+            isCorrect: row[5]
+          },
+          {
+            answerDescription: row[6],
+            isCorrect: row[7]
+          },
+          {
+            answerDescription: row[8],
+            isCorrect: row[9]
+          }
+        ]
+      };
+      console.log(tempObj);
+      questionAnswersObj.push(tempObj);
+    });
+  });
+
+  return questionAnswersObj;
+};
+
 module.exports = {
   commonErrorHandler,
   generateRandom,
-  sendResponse
+  sendResponse,
+  convertExcelToJson
 };

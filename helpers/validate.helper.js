@@ -29,7 +29,7 @@ const validateRequest = (req, res, next, schema, requestParamterType) => {
 
   //to make "password" -> password
   const message = details
-    .map((i) => i.message.replace(/("([a-z]*)")/gm, '$2'))
+    .map((i) => i.message.replace(/("([a-zA-Z0-9-:]*))/gm, '$2'))
     .join(',');
   return commonErrorHandler(req, res, message, 422);
 };

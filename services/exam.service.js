@@ -109,7 +109,7 @@ const getAllExam = async (payload) => {
 const getAllUpcomingExam = async (payload) => {
   const exams = await models.Exam.findAll({
     where: {
-      exam_start_time: {
+      exam_end_time: {
         [Op.gt]: new Date()
       }
     }
@@ -117,9 +117,9 @@ const getAllUpcomingExam = async (payload) => {
   return exams;
 };
 
-const startExam = async (payload, params) => {
+const startExam = async (payload, user, params) => {
   const examId = params.examId;
-  const userId = payload.userId;
+  const userId = user.id;
 
   const examExist = await models.Exam.findOne({
     where: {
@@ -160,6 +160,8 @@ const startExam = async (payload, params) => {
     throw new Error('exam not started yet');
   }
 
+  console.log('iwiwiyewvhiwvhcvh');
+
   const paperSet = await models.PaperSet.findAll({
     order: sequelize.random(),
     limit: 1,
@@ -167,6 +169,7 @@ const startExam = async (payload, params) => {
   });
 
   const paperSetId = paperSet[0].dataValues.id;
+  console.log(paperSetId, '---------<');
 
   const questionSets = await models.Question.findAll({
     where: { paper_set_id: paperSetId },
@@ -198,7 +201,7 @@ const submitExam = async (payload, user) => {
   const trans = await sequelize.transaction();
   try {
     const examId = payload.examId;
-    const userId = payload.userId;
+    const userId = user.id;
     const paperSetId = payload.paperSetId;
 
     console.log(examId, paperSetId, userId);
@@ -240,6 +243,23 @@ const submitExam = async (payload, user) => {
 
     if (!paperSetExist) {
       throw new Error('paperSet not found');
+    }
+
+    const examUserPaperMappingExist = await models.ExamUserMapping.findOne(
+      {
+        where: {
+          [Op.and]: [
+            { exam_id: examId },
+            { user_id: userId },
+            { paper_set_id: paperSetId }
+          ]
+        }
+      },
+      { transaction: trans }
+    );
+
+    if (!examUserPaperMappingExist) {
+      throw new Error('Invalid paperSetId');
     }
 
     const examUserMappingExist = await models.ExamUserMapping.findOne(
@@ -291,7 +311,16 @@ const submitExam = async (payload, user) => {
       console.log(correctAnswers, questionsAttempted);
 
       const marksPerQuestion = paperSetExist.marks_per_question;
-      const totalMarksObtained = marksPerQuestion * correctAnswers;
+      const negativeMarksPerWrongAnswer =
+        paperSetExist.negative_marks_per_question;
+
+      let totalMarksObtained =
+        marksPerQuestion * correctAnswers -
+        (questionsAttempted - correctAnswers) * negativeMarksPerWrongAnswer;
+
+      if (totalMarksObtained < 0) {
+        totalMarksObtained = 0;
+      }
       const passingPercentage = examExist.exam_passing_percentage;
       const totalQuestions = examUserMappingExist.total_questions;
       const percentageObtained =
@@ -399,7 +428,16 @@ const submitExam = async (payload, user) => {
     }
 
     const marksPerQuestion = paperSetExist.marks_per_question;
-    const totalMarksObtained = marksPerQuestion * correctAnswers;
+    const negativeMarksPerWrongAnswer =
+      paperSetExist.negative_marks_per_question;
+    let totalMarksObtained =
+      marksPerQuestion * correctAnswers -
+      (questionsAttempted - correctAnswers) * negativeMarksPerWrongAnswer;
+
+    if (totalMarksObtained < 0) {
+      totalMarksObtained = 0;
+    }
+
     const passingPercentage = examExist.exam_passing_percentage;
     const totalQuestions = examUserMappingExist.total_questions;
     const percentageObtained =
@@ -432,11 +470,11 @@ const submitExam = async (payload, user) => {
   }
 };
 
-const logResponse = async (payload) => {
+const logResponse = async (payload, user) => {
   const trans = await sequelize.transaction();
   try {
     const examId = payload.examId;
-    const userId = payload.userId;
+    const userId = user.id;
     const paperSetId = payload.paperSetId;
     const questionId = payload.questionId;
     const answerId = payload.answerId;
@@ -680,6 +718,94 @@ const checkResult = async (payload, user, params) => {
   return isResultPublished;
 };
 
+const updateExam = async (payload, params) => {
+  const examId = params.examId;
+
+  const examExist = await models.Exam.findOne({
+    where: {
+      id: examId
+    }
+  });
+
+  if (!examExist) {
+    throw new Error('exam not found');
+  }
+
+  const subjectExist = await models.Subject.findOne({
+    where: { subject_name: payload.subjectName }
+  });
+  if (!subjectExist) {
+    throw new Error('subject not found');
+  }
+
+  if (payload.examStartTime >= payload.examEndTime) {
+    throw new Error('examEndTime must be greater than examStartTime');
+  }
+
+  const startTime = new String(payload.examStartTime).split(':');
+  const endTime = new String(payload.examEndTime).split(':');
+  const dateArray = new String(payload.examDate).split('-');
+
+  const currentDate = moment().format('YYYY-MM-DD');
+  console.log(startTime, 'bchd');
+  console.log(endTime, 'cbeerbver');
+
+  const currentTime = moment().format('HH:mm:ss');
+  if (payload.examDate < currentDate) {
+    throw new Error('please pick an upcoming date');
+  } else if (
+    payload.examDate == currentDate &&
+    payload.examStartTime <= currentTime
+  ) {
+    console.log(currentTime);
+    throw new Error('please pick valid time');
+  }
+
+  const start_time =
+    dateArray[0] +
+    '-' +
+    dateArray[1] +
+    '-' +
+    dateArray[2] +
+    ' ' +
+    startTime[0] +
+    ':' +
+    startTime[1] +
+    ':' +
+    startTime[2];
+  const end_time =
+    dateArray[0] +
+    '-' +
+    dateArray[1] +
+    '-' +
+    dateArray[2] +
+    ' ' +
+    endTime[0] +
+    ':' +
+    endTime[1] +
+    ':' +
+    endTime[2];
+
+  const start_date_time = Date.parse(start_time);
+  const end_date_time = Date.parse(end_time);
+
+  const examPayload = {
+    subject_id: subjectExist.id,
+    exam_start_time: start_date_time,
+    exam_end_time: end_date_time,
+    exam_date: payload.examDate,
+    exam_passing_percentage: payload.examPassingPercentage
+  };
+
+  const examCreated = await models.Exam.update(examPayload, {
+    where: {
+      id: examId
+    }
+  });
+
+  return 'exam updated successfully';
+};
+
 module.exports = {
   createExam,
   deleteExam,
@@ -690,5 +816,6 @@ module.exports = {
   logResponse,
   examResult,
   publishResult,
-  checkResult
+  checkResult,
+  updateExam
 };
