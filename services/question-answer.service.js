@@ -75,7 +75,6 @@ const createQuestionAnswers = async (payload) => {
       // eslint-disable-next-line no-prototype-builtins
       // if (questionObject.hasOwnProperty(key)) {
       const item = questionObject[key];
-      console.log(item, 'cuouhcughuwuewu');
       const paperSetExist = await models.PaperSet.findOne(
         {
           where: { paper_set_name: item.paperSetName }

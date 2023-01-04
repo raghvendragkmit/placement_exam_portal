@@ -6,7 +6,6 @@ const { convertExcelToJson } = require('../helpers/common-function.helper');
 const createQuestionAnswer = async (req, res, next) => {
   try {
     const { body: payload } = req;
-    console.log(payload);
     const response = await questionAnswerServices.createQuestionAnswer(payload);
     if (response.error) {
       throw new Error(response.error);
@@ -21,7 +20,6 @@ const createQuestionAnswer = async (req, res, next) => {
 const getQuestionAnswerById = async (req, res, next) => {
   try {
     const { body: payload, params } = req;
-    console.log(payload);
     const response = await questionAnswerServices.getQuestionAnswerById(
       payload,
       params
@@ -36,7 +34,6 @@ const getQuestionAnswerById = async (req, res, next) => {
 const createQuestionAnswers = async (req, res, next) => {
   try {
     const { body: payload } = req;
-    console.log(payload);
     const response = await questionAnswerServices.createQuestionAnswers(
       payload
     );

@@ -24,7 +24,6 @@ const convertUserExcelToJson = async (req, res, next) => {
     users: userObjArray
   };
 
-  console.log(req.body);
   next();
 };
 
@@ -56,7 +55,6 @@ const convertQuestionExcelToJson = async (req, res, next) => {
           }
         ]
       };
-      console.log(tempObj);
       questionAnswersObj.push(tempObj);
     });
   });
@@ -64,7 +62,6 @@ const convertQuestionExcelToJson = async (req, res, next) => {
     questionAnswers: questionAnswersObj
   };
 
-  console.log(req.body);
   next();
 };
 

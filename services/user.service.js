@@ -40,8 +40,6 @@ const createUser = async (payload) => {
 const loginUser = async (payload) => {
   const { email, password } = payload;
 
-  console.log(payload);
-
   const userExist = await models.User.findOne({
     where: {
       email: email
@@ -51,7 +49,6 @@ const loginUser = async (payload) => {
   if (!userExist) {
     throw new Error(`user with ${email} is not authorised`);
   }
-  console.log(userExist);
 
   let key = userExist.dataValues.id + '-refresh-token';
   let refreshToken = await redisClient.get(key);

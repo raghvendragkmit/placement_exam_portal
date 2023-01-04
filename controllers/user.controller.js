@@ -116,7 +116,6 @@ const logOutUser = async (req, res, next) => {
 const userByFile = async (req, res, next) => {
   try {
     const { body: payload } = req;
-    console.log(payload, 'bckbwchkvwchvwvch');
     const response = await userServices.userByFile(payload);
     if (response.error) {
       throw new Error(response.error);
