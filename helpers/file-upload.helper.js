@@ -2,19 +2,19 @@ const multer = require('multer');
 const fileStorage = multer.diskStorage({
   // Destination to store file
   destination: 'uploads',
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
+  filename: (req, file, callback) => {
+    callback(null, file.originalname);
   }
 });
 
 const fileUpload = multer({
   storage: fileStorage,
-  fileFilter(req, file, cb) {
+  fileFilter(req, file, callback) {
     if (!file.originalname.match(/\.xlsx/)) {
       // upload only xlsx file
-      return cb(undefined, false);
+      return callback(undefined, false);
     }
-    cb(undefined, true);
+    callback(undefined, true);
   }
 });
 
