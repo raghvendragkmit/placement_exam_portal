@@ -2,9 +2,13 @@
 const models = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { generateRandom } = require('../helpers/common-function.helper');
 const { sendMail } = require('../helpers/mailer.helper');
 const redisClient = require('../helpers/redis.helper');
+const {
+  convertUserExcelToJson,
+  generateRandom
+} = require('../helpers/common-function.helper');
+const { sequelize } = require('../models');
 
 const createUser = async (payload) => {
   const userExist = await models.User.findOne({
@@ -229,6 +233,34 @@ const logOutUser = async (payload, user) => {
   return 'logout successfully';
 };
 
+const userByFile = async (payload, file) => {
+  const trans = await sequelize.transaction();
+  try {
+    const path = 'uploads/' + file.originalname;
+    const userArray = await convertUserExcelToJson(path);
+    for (let key of userArray) {
+      console.log(key);
+      const password = generateRandom(10, true);
+      console.log(password);
+      const hashPassword = await bcrypt.hash(password, 10);
+      key.password = hashPassword;
+      const userCreated = await models.User.create(key, { transaction: trans });
+      if (!userCreated) {
+        throw new Error('users not created');
+      }
+      key.password = password;
+    }
+    await trans.commit();
+    userArray.forEach((user) => {
+      const mailBody = `Login Credentails \nemail: ${user.email}\npassword: ${user.password}`;
+      sendMail(mailBody, 'User login credentials', user.email);
+    });
+    return { data: 'users created successfully', error: null };
+  } catch (error) {
+    return { data: null, error: error.message };
+  }
+};
+
 module.exports = {
   createUser,
   loginUser,
@@ -239,5 +271,6 @@ module.exports = {
   resetPasswordByToken,
   forgetPassword,
   adminResetPassword,
-  logOutUser
+  logOutUser,
+  userByFile
 };

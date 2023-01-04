@@ -113,6 +113,20 @@ const logOutUser = async (req, res, next) => {
   }
 };
 
+const userByFile = async (req, res, next) => {
+  try {
+    const { body: payload, file } = req;
+    const response = await userServices.userByFile(payload, file);
+    if (response.error) {
+      throw new Error(response.error);
+    }
+    res.data = response.data;
+    next();
+  } catch (error) {
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   createUser,
   loginUser,
@@ -123,5 +137,6 @@ module.exports = {
   resetPassword,
   resetPasswordByToken,
   adminResetPassword,
-  logOutUser
+  logOutUser,
+  userByFile
 };

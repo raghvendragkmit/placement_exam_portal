@@ -279,4 +279,14 @@ router.post(
   genericResponse.sendResponse
 );
 
+router.post(
+  '/users-file',
+  authMiddleware.checkAccessToken,
+  authMiddleware.verifyAdmin,
+  fileUpload.single('myfile'),
+  fileUploadValidator.fileSchema,
+  userController.userByFile,
+  genericResponse.sendResponse
+);
+
 module.exports = router;

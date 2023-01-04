@@ -7,8 +7,8 @@ const complexityOptions = {
   max: 16,
   lowerCase: 1,
   upperCase: 1,
-  numeric: 1,
-  symbol: 1
+  numeric: 1
+  // symbol: 1
 };
 
 module.exports = {

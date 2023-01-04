@@ -102,9 +102,29 @@ const convertExcelToJson = async (path) => {
   return questionAnswersObj;
 };
 
+const convertUserExcelToJson = async (path) => {
+  const userObjArray = [];
+  await readXlsxFile(fs.createReadStream(path)).then((rows) => {
+    rows.forEach((row) => {
+      const tempObj = {
+        first_name: row[0],
+        last_name: row[1],
+        email: row[2],
+        role: row[3],
+        organization: row[4],
+        contact_number: row[5]
+      };
+      console.log(tempObj);
+      userObjArray.push(tempObj);
+    });
+  });
+  return userObjArray;
+};
+
 module.exports = {
   commonErrorHandler,
   generateRandom,
   sendResponse,
-  convertExcelToJson
+  convertExcelToJson,
+  convertUserExcelToJson
 };
