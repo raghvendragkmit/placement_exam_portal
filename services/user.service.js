@@ -111,9 +111,6 @@ const getAllUser = async (query) => {
   let page = query.page < 2 ? 0 : query.page;
 
   const users = await models.User.findAll({
-    // attributes: {
-    //   exclude: ['password', 'createdAt', 'updatedAt', 'deletedAt']
-    // },
     limit: limit,
     offset: page * limit
   });
