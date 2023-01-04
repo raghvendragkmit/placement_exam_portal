@@ -22,19 +22,19 @@ module.exports = {
 
   questionDescriptionSchema: async (req, res, next) => {
     const schema = Joi.object({
-      questionId: Joi.string().min(1).required()
+      questionDescription: Joi.string().min(1).required()
     });
     validateRequest(req, res, next, schema, 'body');
   },
   answerDescriptionSchema: async (req, res, next) => {
     const schema = Joi.object({
-      questionId: Joi.string().min(1).required()
+      answerDescription: Joi.string().min(1).required()
     });
     validateRequest(req, res, next, schema, 'body');
   },
   answerIdSchema: async (req, res, next) => {
     const schema = Joi.object({
-      questionId: Joi.string().guid().required()
+      answerId: Joi.string().guid().required()
     });
     validateRequest(req, res, next, schema, 'params');
   },
@@ -54,5 +54,12 @@ module.exports = {
       questionAnswers: Joi.array().items(PaperSet)
     });
     validateRequest(req, res, next, schema, 'body');
+  },
+  limitPageSchema: async (req, res, next) => {
+    const schema = Joi.object({
+      page: Joi.number().positive().allow(0).required(),
+      limit: Joi.number().positive().min(1).required()
+    });
+    validateRequest(req, res, next, schema, 'query');
   }
 };
