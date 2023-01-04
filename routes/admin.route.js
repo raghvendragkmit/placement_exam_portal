@@ -35,6 +35,7 @@ router.post(
   authMiddleware.checkAccessToken,
   authMiddleware.verifyAdmin,
   questionAnswerValidator.questionAnswersSchema,
+  questionAnswerValidator.limitPageSchema,
   questionAnswerController.createQuestionAnswers,
   genericResponse.sendResponse
 );
@@ -183,14 +184,6 @@ router.delete(
   authMiddleware.verifyAdmin,
   userValidator.userIdSchema,
   userController.deleteUser,
-  genericResponse.sendResponse
-);
-
-router.patch(
-  '/answer/:answerId',
-  authMiddleware.checkAccessToken,
-  authMiddleware.verifyAdmin,
-  questionAnswerController.updateAnswerDescription,
   genericResponse.sendResponse
 );
 

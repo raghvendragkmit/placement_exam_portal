@@ -98,9 +98,13 @@ const deleteExam = async (payload, params) => {
 };
 
 // eslint-disable-next-line no-unused-vars
-const getAllExam = async (payload) => {
+const getAllExam = async (query) => {
+  let limit = query.page == 0 ? null : query.limit;
+  let page = query.page < 2 ? 0 : query.page;
   const exams = await models.Exam.findAll({
-    attributes: { exclude: ['created_at', 'deleted_at', 'updated_at'] }
+    attributes: { exclude: ['created_at', 'deleted_at', 'updated_at'] },
+    limit: limit,
+    offset: page * limit
   });
   return exams;
 };
