@@ -137,9 +137,11 @@ const createQuestionAnswers = async (payload) => {
   }
 };
 
-const getAllQuestionAnswer = async (payload) => {
+const getAllQuestionAnswer = async (query) => {
   const trans = await sequelize.transaction();
   try {
+    let limit = query.page == 0 ? null : query.limit;
+    let page = query.page < 2 ? 0 : query.page;
     const questions = await models.Question.findAll(
       {
         include: [
@@ -147,7 +149,9 @@ const getAllQuestionAnswer = async (payload) => {
             model: models.Answer,
             as: 'answers'
           }
-        ]
+        ],
+        limit: limit,
+        offset: page * limit
       },
       { transaction: trans }
     );

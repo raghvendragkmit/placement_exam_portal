@@ -52,9 +52,12 @@ const createQuestionAnswers = async (req, res, next) => {
 
 const getAllQuestionAnswer = async (req, res, next) => {
   try {
-    const { body: payload } = req;
-    const response = await questionAnswerServices.getAllQuestionAnswer();
-    res.data = response;
+    const { body: payload, query } = req;
+    const response = await questionAnswerServices.getAllQuestionAnswer(query);
+    if (response.error) {
+      throw new Error(response.error);
+    }
+    res.data = response.data;
     next();
   } catch (error) {
     commonErrorHandler(req, res, error.message, 400, error);
