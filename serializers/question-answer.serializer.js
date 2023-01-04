@@ -24,8 +24,7 @@ const questionAnswer = async (req, res, next) => {
 };
 
 const questionAnswers = async (req, res, next) => {
-  const data = res.data.data || null;
-
+  const data = res.data || null;
   const response = [];
   data.forEach((question) => {
     const tempQuestion = {
