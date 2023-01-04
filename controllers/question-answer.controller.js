@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 const questionAnswerServices = require('../services/question-answer.service');
 const { commonErrorHandler } = require('../helpers/common-function.helper');
+const { convertExcelToJson } = require('../helpers/common-function.helper');
 
 const createQuestionAnswer = async (req, res, next) => {
   try {
     const { body: payload } = req;
-    console.log(payload);
     const response = await questionAnswerServices.createQuestionAnswer(payload);
     if (response.error) {
       throw new Error(response.error);
@@ -20,7 +20,6 @@ const createQuestionAnswer = async (req, res, next) => {
 const getQuestionAnswerById = async (req, res, next) => {
   try {
     const { body: payload, params } = req;
-    console.log(payload);
     const response = await questionAnswerServices.getQuestionAnswerById(
       payload,
       params
@@ -35,7 +34,6 @@ const getQuestionAnswerById = async (req, res, next) => {
 const createQuestionAnswers = async (req, res, next) => {
   try {
     const { body: payload } = req;
-    console.log(payload);
     const response = await questionAnswerServices.createQuestionAnswers(
       payload
     );
@@ -51,9 +49,12 @@ const createQuestionAnswers = async (req, res, next) => {
 
 const getAllQuestionAnswer = async (req, res, next) => {
   try {
-    const { body: payload } = req;
-    const response = await questionAnswerServices.getAllQuestionAnswer();
-    res.data = response;
+    const { body: payload, query } = req;
+    const response = await questionAnswerServices.getAllQuestionAnswer(query);
+    if (response.error) {
+      throw new Error(response.error);
+    }
+    res.data = response.data;
     next();
   } catch (error) {
     commonErrorHandler(req, res, error.message, 400, error);
@@ -116,6 +117,17 @@ const updateAnswerDescription = async (req, res, next) => {
   }
 };
 
+const questionAnswerByFile = async (req, res, next) => {
+  try {
+    const { body: payload } = req;
+    const response = await questionAnswerServices.questionAnswerByFile(payload);
+    res.data = response;
+    next();
+  } catch (error) {
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   createQuestionAnswer,
   getAllQuestionAnswer,
@@ -124,5 +136,6 @@ module.exports = {
   updateAnswerDescription,
   getQuestionAnswerById,
   deleteQuestionById,
-  deleteAnswerById
+  deleteAnswerById,
+  questionAnswerByFile
 };

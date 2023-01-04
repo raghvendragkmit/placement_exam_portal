@@ -37,8 +37,8 @@ const deleteUser = async (req, res, next) => {
 
 const getAllUser = async (req, res, next) => {
   try {
-    const { body: payload } = req;
-    const response = await userServices.getAllUser();
+    const { body: payload, query } = req;
+    const response = await userServices.getAllUser(query);
     res.data = response;
     next();
   } catch (error) {
@@ -113,6 +113,20 @@ const logOutUser = async (req, res, next) => {
   }
 };
 
+const userByFile = async (req, res, next) => {
+  try {
+    const { body: payload } = req;
+    const response = await userServices.userByFile(payload);
+    if (response.error) {
+      throw new Error(response.error);
+    }
+    res.data = response.data;
+    next();
+  } catch (error) {
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   createUser,
   loginUser,
@@ -123,5 +137,6 @@ module.exports = {
   resetPassword,
   resetPasswordByToken,
   adminResetPassword,
-  logOutUser
+  logOutUser,
+  userByFile
 };

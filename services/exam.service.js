@@ -20,8 +20,6 @@ const createExam = async (payload) => {
   const dateArray = new String(payload.examDate).split('-');
 
   const currentDate = moment().format('YYYY-MM-DD');
-  console.log(startTime, 'bchd');
-  console.log(endTime, 'cbeerbver');
 
   const currentTime = moment().format('HH:mm:ss');
   if (payload.examDate < currentDate) {
@@ -30,7 +28,6 @@ const createExam = async (payload) => {
     payload.examDate == currentDate &&
     payload.examStartTime <= currentTime
   ) {
-    console.log(currentTime);
     throw new Error('please pick valid time');
   }
 
@@ -98,9 +95,13 @@ const deleteExam = async (payload, params) => {
 };
 
 // eslint-disable-next-line no-unused-vars
-const getAllExam = async (payload) => {
+const getAllExam = async (query) => {
+  let limit = query.page == 0 ? null : query.limit;
+  let page = query.page < 2 ? 0 : query.page;
   const exams = await models.Exam.findAll({
-    attributes: { exclude: ['created_at', 'deleted_at', 'updated_at'] }
+    attributes: { exclude: ['created_at', 'deleted_at', 'updated_at'] },
+    limit: limit,
+    offset: page * limit
   });
   return exams;
 };
@@ -156,11 +157,8 @@ const startExam = async (payload, user, params) => {
   if (currentTime > examExist.exam_end_time) {
     throw new Error('exam finished');
   } else if (currentTime < examExist.dataValues.exam_start_time) {
-    console.log();
     throw new Error('exam not started yet');
   }
-
-  console.log('iwiwiyewvhiwvhcvh');
 
   const paperSet = await models.PaperSet.findAll({
     order: sequelize.random(),
@@ -169,7 +167,6 @@ const startExam = async (payload, user, params) => {
   });
 
   const paperSetId = paperSet[0].dataValues.id;
-  console.log(paperSetId, '---------<');
 
   const questionSets = await models.Question.findAll({
     where: { paper_set_id: paperSetId },
@@ -203,8 +200,6 @@ const submitExam = async (payload, user) => {
     const examId = payload.examId;
     const userId = user.id;
     const paperSetId = payload.paperSetId;
-
-    console.log(examId, paperSetId, userId);
 
     const currentTime = new Date();
 
@@ -308,8 +303,6 @@ const submitExam = async (payload, user) => {
         { transaction: trans }
       );
 
-      console.log(correctAnswers, questionsAttempted);
-
       const marksPerQuestion = paperSetExist.marks_per_question;
       const negativeMarksPerWrongAnswer =
         paperSetExist.negative_marks_per_question;
@@ -348,8 +341,6 @@ const submitExam = async (payload, user) => {
     }
 
     const userResponse = payload.response;
-    console.log(userResponse);
-    console.log(attempt_id);
 
     let questionsAttempted = userResponse.length;
     let correctAnswers = 0;
@@ -465,7 +456,6 @@ const submitExam = async (payload, user) => {
     return { data: 'Exam submitted successfully', error: null };
   } catch (error) {
     await trans.rollback();
-    console.log(error.message);
     return { data: null, error: error.message };
   }
 };
@@ -478,8 +468,6 @@ const logResponse = async (payload, user) => {
     const paperSetId = payload.paperSetId;
     const questionId = payload.questionId;
     const answerId = payload.answerId;
-
-    console.log(examId, paperSetId, userId, questionId, answerId);
 
     const currentTime = new Date();
 
@@ -671,8 +659,6 @@ const publishResult = async (payload, params) => {
       throw new Error('cannot publish result now');
     }
 
-    console.log('here');
-
     const resultPublished = await models.ExamUserMapping.update(
       {
         publish_result: true
@@ -698,8 +684,6 @@ const publishResult = async (payload, params) => {
 const checkResult = async (payload, user, params) => {
   const examId = params.examId;
   const userId = user.id;
-
-  console.log(examId, userId);
 
   const isResultPublished = await models.ExamUserMapping.findOne({
     where: {
@@ -747,8 +731,6 @@ const updateExam = async (payload, params) => {
   const dateArray = new String(payload.examDate).split('-');
 
   const currentDate = moment().format('YYYY-MM-DD');
-  console.log(startTime, 'bchd');
-  console.log(endTime, 'cbeerbver');
 
   const currentTime = moment().format('HH:mm:ss');
   if (payload.examDate < currentDate) {
@@ -757,7 +739,6 @@ const updateExam = async (payload, params) => {
     payload.examDate == currentDate &&
     payload.examStartTime <= currentTime
   ) {
-    console.log(currentTime);
     throw new Error('please pick valid time');
   }
 

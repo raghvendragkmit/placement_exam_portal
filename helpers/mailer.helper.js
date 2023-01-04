@@ -40,7 +40,6 @@ async function sendMail(body, subject, recipient) {
     };
 
     const result = await transport.sendMail(mailOptions);
-    console.log(result);
     return result;
   } catch (error) {
     return error;

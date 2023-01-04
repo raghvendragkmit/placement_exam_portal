@@ -58,7 +58,6 @@ const checkRefreshToken = async (req, res, next) => {
 
 const verifyAdmin = async (req, res, next) => {
   try {
-    console.log(req.user);
     if (req.user.role == 'admin') {
       next();
     } else {
@@ -71,8 +70,7 @@ const verifyAdmin = async (req, res, next) => {
 
 const verifyUser = async (req, res, next) => {
   try {
-    console.log(req.user);
-    if (req.user.role == 'User') {
+    if (req.user.role == 'user') {
       next();
     } else {
       throw new Error('user not authorised');

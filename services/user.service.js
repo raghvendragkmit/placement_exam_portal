@@ -2,9 +2,10 @@
 const models = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { generateRandom } = require('../helpers/common-function.helper');
 const { sendMail } = require('../helpers/mailer.helper');
 const redisClient = require('../helpers/redis.helper');
+const { sequelize } = require('../models');
+const { generateRandom } = require('../helpers/common-function.helper');
 
 const createUser = async (payload) => {
   const userExist = await models.User.findOne({
@@ -39,8 +40,6 @@ const createUser = async (payload) => {
 const loginUser = async (payload) => {
   const { email, password } = payload;
 
-  console.log(payload);
-
   const userExist = await models.User.findOne({
     where: {
       email: email
@@ -50,7 +49,6 @@ const loginUser = async (payload) => {
   if (!userExist) {
     throw new Error(`user with ${email} is not authorised`);
   }
-  console.log(userExist);
 
   let key = userExist.dataValues.id + '-refresh-token';
   let refreshToken = await redisClient.get(key);
@@ -105,11 +103,13 @@ const deleteUser = async (payload, params) => {
   return 'user deleted successfully';
 };
 
-const getAllUser = async () => {
+const getAllUser = async (query) => {
+  let limit = query.page == 0 ? null : query.limit;
+  let page = query.page < 2 ? 0 : query.page;
+
   const users = await models.User.findAll({
-    attributes: {
-      exclude: ['password', 'createdAt', 'updatedAt', 'deletedAt']
-    }
+    limit: limit,
+    offset: page * limit
   });
   return users;
 };
@@ -229,6 +229,49 @@ const logOutUser = async (payload, user) => {
   return 'logout successfully';
 };
 
+const userByFile = async (payload) => {
+  const trans = await sequelize.transaction();
+  try {
+    const userEmailPassword = [];
+    for (let key of payload.users) {
+      const hashPassword = await bcrypt.hash(key.password, 10);
+      const userObject = {
+        first_name: key.firstName,
+        last_name: key.lastName,
+        email: key.email,
+        password: hashPassword,
+        role: key.role,
+        organization: key.organization,
+        contact_number: key.contactNumber
+      };
+
+      const userExist = await models.User.findOne({
+        where: { email: key.email }
+      });
+      if (userExist) {
+        throw new Error('user already exist');
+      }
+
+      const userCreated = await models.User.create(userObject, {
+        transaction: trans
+      });
+      if (!userCreated) {
+        throw new Error('Cannot create user');
+      }
+      userEmailPassword.push({ email: key.email, password: key.password });
+    }
+    await trans.commit();
+    userEmailPassword.forEach((user) => {
+      const mailBody = `Login Credentails \nemail: ${user.email}\npassword: ${user.password}`;
+      sendMail(mailBody, 'User login credentials', user.email);
+    });
+    return { data: 'users created successfully', error: null };
+  } catch (error) {
+    await trans.rollback();
+    return { data: null, error: error.message };
+  }
+};
+
 module.exports = {
   createUser,
   loginUser,
@@ -239,5 +282,6 @@ module.exports = {
   resetPasswordByToken,
   forgetPassword,
   adminResetPassword,
-  logOutUser
+  logOutUser,
+  userByFile
 };

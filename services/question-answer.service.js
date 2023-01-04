@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 const models = require('../models');
 const { sequelize } = require('../models');
-const { convertExcelToJson } = require('../helpers/common-function.helper');
 
 const createQuestionAnswer = async (payload) => {
   const trans = await sequelize.transaction();
@@ -74,63 +73,62 @@ const createQuestionAnswers = async (payload) => {
   try {
     for (let key in questionObject) {
       // eslint-disable-next-line no-prototype-builtins
-      if (questionObject.hasOwnProperty(key)) {
-        const item = questionObject[key];
-        const paperSetExist = await models.PaperSet.findOne(
-          {
-            where: { paper_set_name: item.paperSetName }
-          },
-          { transaction: trans }
-        );
+      // if (questionObject.hasOwnProperty(key)) {
+      const item = questionObject[key];
+      const paperSetExist = await models.PaperSet.findOne(
+        {
+          where: { paper_set_name: item.paperSetName }
+        },
+        { transaction: trans }
+      );
 
-        if (!paperSetExist) {
-          throw new Error('paperSet not found');
+      if (!paperSetExist) {
+        throw new Error('paperSet not found');
+      }
+
+      const questionExist = await models.Question.findOne({
+        where: { question_description: item.questionDescription }
+      });
+
+      if (questionExist) {
+        throw new Error('Question already exist');
+      }
+
+      const questionCreated = await models.Question.create(
+        {
+          question_description: item.questionDescription,
+          paper_set_id: paperSetExist.dataValues.id
+        },
+        { transaction: trans }
+      );
+
+      if (!questionCreated) {
+        throw new Error('question not created');
+      }
+
+      const answerOptions = item.options;
+      let countTrue = 0;
+      const answerArray = [];
+      for (let i = 0; i < answerOptions.length; ++i) {
+        const answerDescription = answerOptions[i].answerDescription;
+        const isCorrect = answerOptions[i].isCorrect;
+        if (isCorrect) {
+          countTrue++;
         }
-
-        const questionExist = await models.Question.findOne({
-          where: { question_description: item.questionDescription }
-        });
-
-        if (questionExist) {
-          throw new Error('Question already exist');
+        if (countTrue > 1) {
+          throw new Error('one out of 4 options must be true');
         }
-
-        const questionCreated = await models.Question.create(
-          {
-            question_description: item.questionDescription,
-            paper_set_id: paperSetExist.dataValues.id
-          },
-          { transaction: trans }
-        );
-
-        if (!questionCreated) {
-          throw new Error('question not created');
-        }
-
-        const answerOptions = item.options;
-        let countTrue = 0;
-        const answerArray = [];
-        for (let i = 0; i < answerOptions.length; ++i) {
-          const answerDescription = answerOptions[i].answerDescription;
-          const isCorrect = answerOptions[i].isCorrect;
-          if (isCorrect) {
-            countTrue++;
-          }
-          if (countTrue > 1) {
-            throw new Error('one out of 4 options must be true');
-          }
-          answerArray.push({
-            answer_description: answerDescription,
-            is_correct: isCorrect,
-            question_id: questionCreated.id
-          });
-        }
-
-        const answerCreated = await models.Answer.bulkCreate(answerArray, {
-          transaction: trans
+        answerArray.push({
+          answer_description: answerDescription,
+          is_correct: isCorrect,
+          question_id: questionCreated.id
         });
       }
+      const answerCreated = await models.Answer.bulkCreate(answerArray, {
+        transaction: trans
+      });
     }
+
     await trans.commit();
     return { data: 'Question Answer Created Successfully', error: null };
   } catch (error) {
@@ -138,9 +136,11 @@ const createQuestionAnswers = async (payload) => {
   }
 };
 
-const getAllQuestionAnswer = async (payload) => {
+const getAllQuestionAnswer = async (query) => {
   const trans = await sequelize.transaction();
   try {
+    let limit = query.page == 0 ? null : query.limit;
+    let page = query.page < 2 ? 0 : query.page;
     const questions = await models.Question.findAll(
       {
         include: [
@@ -148,7 +148,9 @@ const getAllQuestionAnswer = async (payload) => {
             model: models.Answer,
             as: 'answers'
           }
-        ]
+        ],
+        limit: limit,
+        offset: page * limit
       },
       { transaction: trans }
     );
@@ -266,6 +268,14 @@ const deleteQuestionById = async (payload, params) => {
   }
 };
 
+const questionAnswerByFile = async (payload, file) => {
+  const response = await createQuestionAnswers(payload);
+  if (response.error) {
+    throw new Error(response.error);
+  }
+  return 'Question Answers uploaded successfully';
+};
+
 module.exports = {
   createQuestionAnswer,
   getAllQuestionAnswer,
@@ -274,5 +284,6 @@ module.exports = {
   updateQuestionDescription,
   updateAnswerDescription,
   deleteQuestionById,
-  deleteAnswerById
+  deleteAnswerById,
+  questionAnswerByFile
 };

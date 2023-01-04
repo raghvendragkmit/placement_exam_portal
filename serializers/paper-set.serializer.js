@@ -35,7 +35,6 @@ const getALlPaperSet = async (req, res, next) => {
 };
 
 const questionAnswers = async (req, res, next) => {
-  console.log(res.data);
   const data = res.data || null;
 
   const response = [];

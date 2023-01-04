@@ -16,6 +16,9 @@ const subjectSerializer = require('../serializers/subject.serializer');
 const questionAnswerSerializer = require('../serializers/question-answer.serializer');
 const paperSetSerializer = require('../serializers/paper-set.serializer');
 const examSerializer = require('../serializers/exam.serializer');
+const { fileUpload } = require('../helpers/file-upload.helper');
+const fileUploadValidator = require('../validators/file-upload.validator');
+const fileMiddleware = require('../middlewares/convert-excel-to-json');
 const router = Router();
 
 router.post(
@@ -32,6 +35,7 @@ router.post(
   authMiddleware.checkAccessToken,
   authMiddleware.verifyAdmin,
   questionAnswerValidator.questionAnswersSchema,
+  questionAnswerValidator.limitPageSchema,
   questionAnswerController.createQuestionAnswers,
   genericResponse.sendResponse
 );
@@ -183,18 +187,11 @@ router.delete(
   genericResponse.sendResponse
 );
 
-router.patch(
-  '/answer/:answerId',
-  authMiddleware.checkAccessToken,
-  authMiddleware.verifyAdmin,
-  questionAnswerController.updateAnswerDescription,
-  genericResponse.sendResponse
-);
-
 router.get(
   '/users',
   authMiddleware.checkAccessToken,
   authMiddleware.verifyAdmin,
+  userValidator.limitPageSchema,
   userController.getAllUser,
   userSerializer.getAllUser,
   genericResponse.sendResponse
@@ -264,6 +261,30 @@ router.post(
   authMiddleware.verifyAdmin,
   examValidator.examIdSchema,
   examController.publishResult,
+  genericResponse.sendResponse
+);
+
+router.post(
+  '/question-answer-file',
+  authMiddleware.checkAccessToken,
+  authMiddleware.verifyAdmin,
+  fileUpload.single('myfile'),
+  fileUploadValidator.fileSchema,
+  fileMiddleware.convertQuestionExcelToJson,
+  questionAnswerValidator.questionAnswersSchema,
+  questionAnswerController.questionAnswerByFile,
+  genericResponse.sendResponse
+);
+
+router.post(
+  '/users-file',
+  authMiddleware.checkAccessToken,
+  authMiddleware.verifyAdmin,
+  fileUpload.single('myfile'),
+  fileUploadValidator.fileSchema,
+  fileMiddleware.convertUserExcelToJson,
+  userValidator.createUsersSchema,
+  userController.userByFile,
   genericResponse.sendResponse
 );
 
