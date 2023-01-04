@@ -276,6 +276,8 @@ router.post(
   authMiddleware.verifyAdmin,
   fileUpload.single('myfile'),
   fileUploadValidator.fileSchema,
+  fileMiddleware.convertQuestionExcelToJson,
+  questionAnswerValidator.questionAnswersSchema,
   questionAnswerController.questionAnswerByFile,
   genericResponse.sendResponse
 );

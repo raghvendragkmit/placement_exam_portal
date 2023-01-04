@@ -27,6 +27,46 @@ const convertUserExcelToJson = async (req, res, next) => {
   next();
 };
 
+const convertQuestionExcelToJson = async (req, res, next) => {
+  const questionAnswersObj = [];
+  const path = 'uploads/' + req.file.originalname;
+  await readXlsxFile(fs.createReadStream(path)).then((rows) => {
+    rows.forEach((row) => {
+      const tempObj = {
+        paperSetName: row[0],
+        questionDescription: row[1],
+        options: [
+          {
+            answerDescription: row[2],
+            isCorrect: row[3]
+          },
+          {
+            answerDescription: row[4],
+            isCorrect: row[5]
+          },
+          {
+            answerDescription: row[6],
+            isCorrect: row[7]
+          },
+          {
+            answerDescription: row[8],
+            isCorrect: row[9]
+          }
+        ]
+      };
+      console.log(tempObj);
+      questionAnswersObj.push(tempObj);
+    });
+  });
+  req.body = {
+    questionAnswers: questionAnswersObj
+  };
+
+  console.log(req.body);
+  next();
+};
+
 module.exports = {
-  convertUserExcelToJson
+  convertUserExcelToJson,
+  convertQuestionExcelToJson
 };

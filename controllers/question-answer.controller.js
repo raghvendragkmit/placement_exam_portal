@@ -119,11 +119,8 @@ const updateAnswerDescription = async (req, res, next) => {
 
 const questionAnswerByFile = async (req, res, next) => {
   try {
-    const { body: payload, file } = req;
-    const response = await questionAnswerServices.questionAnswerByFile(
-      payload,
-      file
-    );
+    const { body: payload } = req;
+    const response = await questionAnswerServices.questionAnswerByFile(payload);
     res.data = response;
     next();
   } catch (error) {

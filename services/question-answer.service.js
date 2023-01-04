@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 const models = require('../models');
 const { sequelize } = require('../models');
-const { convertExcelToJson } = require('../helpers/common-function.helper');
 
 const createQuestionAnswer = async (payload) => {
   const trans = await sequelize.transaction();
@@ -267,12 +266,7 @@ const deleteQuestionById = async (payload, params) => {
 };
 
 const questionAnswerByFile = async (payload, file) => {
-  const path = 'uploads/' + file.originalname;
-  const questionAnswerArray = await convertExcelToJson(path);
-  console.log(questionAnswerArray, 'bdhhhbkdhbk');
-  const response = await createQuestionAnswers({
-    questionAnswers: questionAnswerArray
-  });
+  const response = await createQuestionAnswers(payload);
   if (response.error) {
     throw new Error(response.error);
   }
