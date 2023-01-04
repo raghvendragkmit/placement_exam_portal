@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const { sendMail } = require('../helpers/mailer.helper');
 const redisClient = require('../helpers/redis.helper');
 const { sequelize } = require('../models');
+const { generateRandom } = require('../helpers/common-function.helper');
 
 const createUser = async (payload) => {
   const userExist = await models.User.findOne({
@@ -105,11 +106,16 @@ const deleteUser = async (payload, params) => {
   return 'user deleted successfully';
 };
 
-const getAllUser = async () => {
+const getAllUser = async (query) => {
+  let limit = query.page == 0 ? null : query.limit;
+  let page = query.page < 2 ? 0 : query.page;
+
   const users = await models.User.findAll({
-    attributes: {
-      exclude: ['password', 'createdAt', 'updatedAt', 'deletedAt']
-    }
+    // attributes: {
+    //   exclude: ['password', 'createdAt', 'updatedAt', 'deletedAt']
+    // },
+    limit: limit,
+    offset: page * limit
   });
   return users;
 };

@@ -89,5 +89,12 @@ module.exports = {
       password: passwordComplexity(complexityOptions).required()
     });
     validateRequest(req, res, next, schema, 'body');
+  },
+  limitPageSchema: async (req, res, next) => {
+    const schema = Joi.object({
+      page: Joi.number().positive().allow(0).required(),
+      limit: Joi.number().positive().min(1).max(10).required()
+    });
+    validateRequest(req, res, next, schema, 'query');
   }
 };

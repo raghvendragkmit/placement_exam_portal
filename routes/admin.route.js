@@ -198,6 +198,7 @@ router.get(
   '/users',
   authMiddleware.checkAccessToken,
   authMiddleware.verifyAdmin,
+  userValidator.limitPageSchema,
   userController.getAllUser,
   userSerializer.getAllUser,
   genericResponse.sendResponse

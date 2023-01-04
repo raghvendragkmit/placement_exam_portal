@@ -37,8 +37,8 @@ const deleteUser = async (req, res, next) => {
 
 const getAllUser = async (req, res, next) => {
   try {
-    const { body: payload } = req;
-    const response = await userServices.getAllUser();
+    const { body: payload, query } = req;
+    const response = await userServices.getAllUser(query);
     res.data = response;
     next();
   } catch (error) {
