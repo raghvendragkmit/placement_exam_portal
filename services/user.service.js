@@ -4,10 +4,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { sendMail } = require('../helpers/mailer.helper');
 const redisClient = require('../helpers/redis.helper');
-const {
-  convertUserExcelToJson,
-  generateRandom
-} = require('../helpers/common-function.helper');
 const { sequelize } = require('../models');
 
 const createUser = async (payload) => {
@@ -233,30 +229,45 @@ const logOutUser = async (payload, user) => {
   return 'logout successfully';
 };
 
-const userByFile = async (payload, file) => {
+const userByFile = async (payload) => {
   const trans = await sequelize.transaction();
   try {
-    const path = 'uploads/' + file.originalname;
-    const userArray = await convertUserExcelToJson(path);
-    for (let key of userArray) {
-      console.log(key);
-      const password = generateRandom(10, true);
-      console.log(password);
-      const hashPassword = await bcrypt.hash(password, 10);
-      key.password = hashPassword;
-      const userCreated = await models.User.create(key, { transaction: trans });
-      if (!userCreated) {
-        throw new Error('users not created');
+    const userEmailPassword = [];
+    for (let key of payload.users) {
+      const hashPassword = await bcrypt.hash(key.password, 10);
+      const userObject = {
+        first_name: key.firstName,
+        last_name: key.lastName,
+        email: key.email,
+        password: hashPassword,
+        role: key.role,
+        organization: key.organization,
+        contact_number: key.contactNumber
+      };
+
+      const userExist = await models.User.findOne({
+        where: { email: key.email }
+      });
+      if (userExist) {
+        throw new Error('user already exist');
       }
-      key.password = password;
+
+      const userCreated = await models.User.create(userObject, {
+        transaction: trans
+      });
+      if (!userCreated) {
+        throw new Error('Cannot create user');
+      }
+      userEmailPassword.push({ email: key.email, password: key.password });
     }
     await trans.commit();
-    userArray.forEach((user) => {
+    userEmailPassword.forEach((user) => {
       const mailBody = `Login Credentails \nemail: ${user.email}\npassword: ${user.password}`;
       sendMail(mailBody, 'User login credentials', user.email);
     });
     return { data: 'users created successfully', error: null };
   } catch (error) {
+    await trans.rollback();
     return { data: null, error: error.message };
   }
 };

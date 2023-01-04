@@ -6,8 +6,8 @@ const complexityOptions = {
   min: 4,
   max: 16,
   lowerCase: 1,
-  upperCase: 1,
-  numeric: 1
+  upperCase: 1
+  // numeric: 1
   // symbol: 1
 };
 
@@ -24,6 +24,27 @@ module.exports = {
         .length(10)
         .pattern(/^[0-9]+$/)
         .required()
+    });
+
+    validateRequest(req, res, next, schema, 'body');
+  },
+
+  createUsersSchema: async (req, res, next) => {
+    const userObject = Joi.object().keys({
+      firstName: Joi.string().min(1).required(),
+      lastName: Joi.string().min(1).required(),
+      email: Joi.string().email().lowercase().required(),
+      password: passwordComplexity(complexityOptions).required(),
+      organization: Joi.string().min(1).required(),
+      role: Joi.string().valid('user').required(),
+      contactNumber: Joi.string()
+        .length(10)
+        .pattern(/^[0-9]+$/)
+        .required()
+    });
+
+    const schema = Joi.object({
+      users: Joi.array().items(userObject)
     });
 
     validateRequest(req, res, next, schema, 'body');

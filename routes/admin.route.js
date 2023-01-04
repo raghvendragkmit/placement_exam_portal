@@ -18,6 +18,7 @@ const paperSetSerializer = require('../serializers/paper-set.serializer');
 const examSerializer = require('../serializers/exam.serializer');
 const { fileUpload } = require('../helpers/file-upload.helper');
 const fileUploadValidator = require('../validators/file-upload.validator');
+const fileMiddleware = require('../middlewares/convert-excel-to-json');
 const router = Router();
 
 router.post(
@@ -285,6 +286,8 @@ router.post(
   authMiddleware.verifyAdmin,
   fileUpload.single('myfile'),
   fileUploadValidator.fileSchema,
+  fileMiddleware.convertUserExcelToJson,
+  userValidator.createUsersSchema,
   userController.userByFile,
   genericResponse.sendResponse
 );
