@@ -6,6 +6,7 @@ const convertUserExcelToJson = async (req, res, next) => {
   const userObjArray = [];
   const path = 'uploads/' + req.file.originalname;
   await readXlsxFile(fs.createReadStream(path)).then((rows) => {
+    rows.shift();
     rows.forEach((row) => {
       const tempObj = {
         firstName: row[0],
@@ -31,6 +32,7 @@ const convertQuestionExcelToJson = async (req, res, next) => {
   const questionAnswersObj = [];
   const path = 'uploads/' + req.file.originalname;
   await readXlsxFile(fs.createReadStream(path)).then((rows) => {
+    rows.shift();
     rows.forEach((row) => {
       const tempObj = {
         paperSetName: row[0],
